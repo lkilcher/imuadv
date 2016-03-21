@@ -1,0 +1,13 @@
+*~
+
+*.aux
+*.bbl
+*.blg
+*.fff
+*.lof
+*.log
+*.out
+
+ams/
+auto/
+tmp/

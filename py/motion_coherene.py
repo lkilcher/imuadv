@@ -5,6 +5,7 @@ import ttm.sm2015 as data_api
 import numpy as np
 import dolfyn.adv.api as avm
 import dolfyn.tools.psd as psd
+import matplotlib.dates as dt
 plt.ion()
 
 flag = {}
@@ -65,8 +66,8 @@ if 'dat' not in vars():
         if filt_freq > 0:
             datmc._u += datmc.ubt  # Add the bt to the vel
         datmc.rotate_vars.update({'ubt', 'ubt2'})
-        # avm.rotate.inst2earth(datmc)
-        # avm.rotate.earth2principal(datmc)
+        avm.rotate.inst2earth(datmc)
+        avm.rotate.earth2principal(datmc)
         dat_filt[filt_tag] = datmc
 
         datnow = datmc
@@ -110,7 +111,7 @@ inds = within(np.abs(bnow.U), 1.0, 1.5)
 n_fft = binner.n_bin
 
 ubt = dnow.ubt
-#ubt = dnow.ubt2
+ubt = dnow.ubt2
 
 if flag.get('show cohere', False):
 
@@ -133,10 +134,10 @@ if flag.get('show cohere', False):
     cohr = ((np.abs(cpsdr[:, inds].mean(1)) ** 2) /
             (sp_rot[:, inds].mean(1) * sp_bt[:, inds].mean(1)))
 
-    fig = plt.figure(300, figsize=[4, 9])
+    fig = plt.figure(300, figsize=[6, 9])
     fig.clf()
     fig, axs = plt.subplots(3, 1, num=fig.number,
-                            gridspec_kw=dict(right=0.95,
+                            gridspec_kw=dict(right=0.75,
                                              left=0.1,
                                              top=0.96,
                                              bottom=0.06,
@@ -147,15 +148,16 @@ if flag.get('show cohere', False):
         ax.semilogx(bnow.freq, coh[iax],
                     'k', label='$u_{mot}$')
         ax.semilogx(bnow.freq, cohr[iax],
-                    'r', label='$u_{acc}$')
+                    'm', label='$u_{rot}$')
         ax.semilogx(bnow.freq, coha[iax],
-                    'b', label='$u_{rot}$')
+                    'b', label='$u_{acc}$')
         ax.text(0.02, 0.98, ['u', 'v', 'w'][iax] + '-component',
                 transform=ax.transAxes,
                 ha='left', va='top')
 
     axs[0].set_title('Coherence with $u_{bt}$ (%s coord sys)' %
                      dnow.props['coord_sys'], size='large')
+    axs[0].legend(loc='upper left', bbox_to_anchor=[1.02, 1])
     ax.set_ylim([0, 1])
     ax.set_xlim([1e-3, 1])
     ax.set_xlabel('freq [hz]')
@@ -163,9 +165,15 @@ if flag.get('show cohere', False):
 
 if flag.get('filt spec', False):
 
-    fig = plt.figure(400)
+    fig = plt.figure(400, figsize=[6, 9])
     fig.clf()
-    fig, axs = plt.subplots(3, 1, num=fig.number, sharex=True, sharey=True)
+    fig, axs = plt.subplots(3, 1, num=fig.number,
+                            gridspec_kw=dict(right=0.75,
+                                             left=0.13,
+                                             top=0.96,
+                                             bottom=0.06,
+                                             hspace=0.08),
+                            sharex=True, sharey=True)
     #vars = ['Spec', 'Spec_uraw', 'Spec_uacc', 'Spec_urot', 'Spec_ubt', 'Spec_umot']
 
     for iax, ax in enumerate(axs):
@@ -187,20 +195,40 @@ if flag.get('filt spec', False):
         ax.loglog(bnow.freq,
                   bnow.Spec_ubt[iax][inds].mean(0) * pii,
                   'r', label='$u_{bt}$')
+        ax.text(0.98, 0.98, ['u', 'v', 'w'][iax],
+                ha='right', va='top', transform=ax.transAxes)
 
+    ax.set_ylabel('$\mathrm{[m^2/s^2/hz]}$')
     ax.set_ylim([1e-5, 1e1])
     ax.set_xlabel('freq [hz]')
+    axs[0].legend(loc='upper left', bbox_to_anchor=[1.02, 1])
+    axs[0].set_title('Velocity Spectra (%s coord sys)' %
+                     dnow.props['coord_sys'], size='large')
+
+    fig.savefig('../fig/NoMC_Spectra01.pdf')
+
 
 if flag.get('plot time', False):
 
+    tkr = dt.MinuteLocator(range(0, 60, 10))
+    #tkr = dt.HourLocator(range(0, 24, 1))
+    tk_fmt = dt.DateFormatter('%H:%M')
     fig = plt.figure(100)
     fig.clf()
     fig, axs = plt.subplots(3, 1, num=fig.number, sharex=True, sharey=True)
     #vars = ['Spec', 'Spec_uraw', 'Spec_uacc', 'Spec_urot', 'Spec_ubt', 'Spec_umot']
 
-    time_inds = slice(10000, 20000)
+    time_inds = slice(10000, 40000)
 
     for iax, ax in enumerate(axs):
         ax.plot(dnow.mpltime[time_inds], dnow._u[iax][time_inds], 'k-')
         ax.plot(dnow.mpltime[time_inds], dnow.umot[iax][time_inds], 'b-')
+        ax.set_ylabel('${}'.format(['u', 'v', 'w'][iax] + '\ \mathrm{[m/s]}$'))
 
+    ax.xaxis.set_major_locator(tkr)
+    ax.xaxis.set_major_formatter(tk_fmt)
+
+    axs[0].set_title('Example velocity timeseries No MC (inst coord. sys.)')
+
+    fig.savefig('../fig/NoMC_TimeSeries01.pdf')
+    

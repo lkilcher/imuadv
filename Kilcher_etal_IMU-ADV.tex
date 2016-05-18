@@ -95,7 +95,7 @@ robust and versatile tools
 
 \section{Measurements}
 
-This work utilizes ADV measurements from two field deployments and from bench and laboratory tests. The ADVs utilized for these measurements were all equipped with Microstrain 3DM-GX3-25 IMU sensors that captured the angular rotation vector, the linear acceleration , and the orientation of the ADV pressure-case.  
+This work utilizes ADV measurements from two field deployments, and from bench and laboratory tests. The ADVs utilized for these measurements were all equipped with Microstrain 3DM-GX3-25 IMU sensors that captured the angular rotation vector, the linear acceleration, and the orientation of the ADV pressure-case.  
 
 \begin{figure}[t]
   \centering
@@ -111,7 +111,28 @@ This work utilizes ADV measurements from two field deployments and from bench an
   \label{fig:ttm_schematic}
 \end{figure}
 
+% Do we need a schematic of the StableMoor too?
+
 \section{Methodology}
+
+Estimate time-series of velocity on a compliant mooring by obtaining an independent estimate of ADV head motion, and removing that motion from the measured signal. Nortek offers an ADV that is equipped with an IMU that measures the linear acceleration and rotational-motion of the ADV pressure case. 
+So long as the ADV head is rigidly connected to the ADV pressure case, it is possible to utilize the IMU motion signals to calculate the motion of the ADV head. This motion can then be removed from the measured velocity signal.
+
+A primary limitation of this approach is based on the limitations of the IMU sensors themselves. In particular, the noise levels of the Accel and AngRt signals from the IMU. The primary source of uncertainty in this approach is related to the `low frequency drift' of IMU accelerometers. Without correcting for this, the noise in the Accel will typically overwhelm the measured velocity signal at low frequency, and lead to non-realistic estimates of mean motion (see Appendix \ref{apdx:imu-uncertainty}).
+
+Break motion velocity into two components:
+\begin{itemize}
+\item translational (Accel + something)
+\item rotational  (AngRt)
+\end{itemize}
+
+\begin{figure}
+  \centering
+  
+  \caption{Spectra of Accel and AngRt signals, and of the $u_{acc}$ + $u_{rot}$ signals?}
+\end{figure}
+
+There are errors in Accel velocity. Discuss these in context of non-moving Accel spectra. Introduce concept of adding low-f translational velocity signal.
 
 \subsection{Motion Correction}\label{sec:proc:motion}
 
@@ -129,9 +150,9 @@ This work utilizes ADV measurements from two field deployments and from bench an
 \item the linear acceleration vector, and
 \item the IMU orientation (matrix), in the earth's 'East-North-Up' (ENU) coordinate system.
 \end{itemize}
-The signals are sampled 
+
 The orientation matrix can be used to rotate all vector-quantities measured in the instrument frame (velocity, rotation rate, acceleration, etc.) into the earth's coordinate system. 
-These signals can be used to estimate the ADV head-motion, $\um$, which can then be removed from the measured velocity, $\uadv$, to estimate the `motion corrected' velocity in the earth frame,
+The angular rate and linear acceleration signals can be used to estimate the ADV head-motion, $\um$, which can then be removed from the measured velocity, $\uadv$, to estimate the `motion corrected' velocity in the earth frame,
 \begin{align}
   \label{eqn:u_mot_def}
   \ue(t) & = \uadv(t) + \um(t) &  .
@@ -164,12 +185,18 @@ Here $\AngRt^*$ is the IMU-measured rotation-rate, $\vec{\ell}^* = \bhv - \ihv$ 
 
 \section{Results}
 
+\subsection{Mean velocity}
+
 \begin{figure}[t]
   \centering
   \includegraphics[width=3in]{TimeFig01}
   \caption{Time series of tidal velocity at Admiralty Head.}
   \label{fig:vel_time}
 \end{figure}
+
+\subsection{Turbulence Spectra}
+
+Estimates of spectra 
 
 \begin{figure*}[t]
   \centering
@@ -178,6 +205,10 @@ in]{SpecFig02_annot}
   \caption{Spectra from IMU-ADV measurements.}
   \label{fig:spec01}
 \end{figure*}
+
+\subsubsection{Uncertainty in spectra}
+
+\subsection{Turbulence energy dissipation rate}
 
 %%%%%%%%%%%%%%%%%
 %ACKNOWLEDGMENTS
@@ -196,6 +227,8 @@ in]{SpecFig02_annot}
 \appendixtitle{Coordinate Systems}
 
 \def\Amat\ensuremath{\mathbf{A}}
+
+\subsection{IMU uncertainty}\label{apdx:imu-uncertainty}
 
 \subsection{Measurement frames}\label{apdx:coord-sys:meas}\label{apdx:coord-sys}
 

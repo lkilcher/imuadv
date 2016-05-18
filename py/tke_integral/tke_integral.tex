@@ -1,0 +1,28 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\def\tke{\ensuremath{\mathrm{tke}}}
+\def\sinc{\ensuremath{\mathrm{sinc}}}
+\begin{document}
+
+\begin{align}
+  S(k) = \frac{a}{1 + b k^{5/3}}
+\end{align}
+
+As $k \rightarrow \infty$, $S(k) \rightarrow \alpha
+\epsilon^{2/3}k^{-5/3}$. Therefore, $a/b = \alpha\epsilon^{2/3}$.
+
+We also know that the integral of $\int S(k) = \tke$. Performing this integral in sympy yields:
+
+\begin{align}
+  a &=  \frac{(\sinc(\beta) \tke)^{5/2}}{\alpha^{3/2} \epsilon}\\
+  b &= \frac{a}{\alpha\epsilon^{2/3}}
+\end{align}
+where $\beta = 3\pi/5$.
+
+
+
+% Piecewise((pi*a*b**(1 - 1/pow)/(b*sin(pi/pow)*Abs(pow)), Or(And(1 - re(pow)/(re(pow)**2 + im(pow)**2) < 1, 2 - re(pow)/(re(pow)**2 + im(pow)**2) > 1, Abs(periodic_argument(b, oo)) != pi, Abs(periodic_argument(b, oo)) < pi, b != 0), And(1 - re(pow)/(re(pow)**2 + im(pow)**2) < 1, 2 - re(pow)/(re(pow)**2 + im(pow)**2) > 1, Abs(periodic_argument(b, oo)) < pi))), (Integral(a/(b*k**pow + 1), (k, 0, oo)), True))
+
+\end{document}

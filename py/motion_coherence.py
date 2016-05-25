@@ -4,22 +4,22 @@ import matplotlib.pyplot as plt
 import ttm.sm2015 as data_api
 import numpy as np
 import dolfyn.adv.api as avm
-import dolfyn.tools.psd as psd
 import matplotlib.dates as dt
 plt.ion()
 
 flag = {}
+#flag['save fig'] = True
 #flag['bt_basic_time'] = True
 #flag['bt_filt_time'] = True
-flag['filt spec'] = True
-flag['show cohere'] = True
-flag['plot time'] = True
+#flag['nofilt spec'] = True
+#flag['show cohere'] = True
+flag['phase'] = True
 
 filt_freqs = {'unfilt': 0.0,
               '5s': 1. / 5,
               # '10s': 1. / 10,
-              '30s': 1. / 30,
-              '60s': 1. / 60,
+              #'30s': 1. / 30,
+              #'60s': 1. / 60,
               '5m': 1. / (5 * 60),
 }
 
@@ -173,9 +173,54 @@ if flag.get('show cohere', False):
     ax.set_ylim([0, 1])
     ax.set_xlim([1e-3, 1])
     ax.set_xlabel('freq [hz]')
-    fig.savefig('../fig/BT_IMU_Coherence01.pdf')
+    if flag.get('save fig', False):
+        fig.savefig('../fig/BT_IMU_Coherence01.pdf')
 
-if flag.get('filt spec', False):
+if flag.get('phase', False):
+
+    ph = binner.phase_angle(dnow.umot, ubt, n_fft=n_fft)[:, inds].mean(1)
+    phr = binner.phase_angle(dnow.urot, ubt, n_fft=n_fft)[:, inds].mean(1)
+    pha = binner.phase_angle(dnow.uacc, ubt, n_fft=n_fft)[:, inds].mean(1)
+
+    fig = plt.figure(301, figsize=[6, 9])
+    fig.clf()
+    fig, axs = plt.subplots(3, 1, num=fig.number,
+                            gridspec_kw=dict(right=0.75,
+                                             left=0.1,
+                                             top=0.96,
+                                             bottom=0.06,
+                                             hspace=0.08),
+                            sharex=True, sharey=True, )
+
+    for iax, ax in enumerate(axs):
+        ax.semilogx(cohfreq, np.angle(ph[iax]),
+                    'k', label='$u_{mot}$', lw=2, zorder=5)
+        ax.semilogx(cohfreq, np.angle(pha[iax]),
+                    'b', label='$u_{acc}$', lw=1, zorder=1)
+        ax.semilogx(cohfreq, np.angle(phr[iax]),
+                    'g', label='$u_{rot}$', lw=1, zorder=0)
+        # Need to confirm how to calculate angle uncertainty...
+        ax.fill_between(cohfreq,
+                        (np.angle(ph[iax])) - (1 - np.abs(ph[iax])) * np.pi,
+                        (np.angle(ph[iax])) + (1 - np.abs(ph[iax])) * np.pi,
+                        color='0.7', zorder=-5)
+        ax.text(0.02, 0.98, ['u', 'v', 'w'][iax] + '-component',
+                transform=ax.transAxes,
+                ha='left', va='top')
+        ax.yaxis.grid(True)
+
+    axs[0].set_title('Phase shift with $u_{bt}$ (%s coord sys)' %
+                     dnow.props['coord_sys'], size='large')
+    axs[0].legend(loc='upper left', bbox_to_anchor=[1.02, 1])
+    ax.set_yticks(np.arange(-np.pi, np.pi + 1, np.pi / 2))
+    ax.set_yticklabels(['$-\pi$', '$-\pi/2$', '$0$', '$\pi/2$', '$\pi$'])
+    ax.set_ylim([-np.pi, np.pi])
+    ax.set_xlim([1e-3, 1])
+    ax.set_xlabel('freq [hz]')
+    if flag.get('save fig', False):
+        fig.savefig('../fig/BT_IMU_Phase01.pdf')
+
+if flag.get('nofilt spec', False):
 
     bnow = bindat_filt['unfilt'].copy()
     bnow = bindat_filt['5m'].copy()
@@ -189,7 +234,6 @@ if flag.get('filt spec', False):
                                              bottom=0.06,
                                              hspace=0.08),
                             sharex=True, sharey=True)
-    #vars = ['Spec', 'Spec_uraw', 'Spec_uacc', 'Spec_urot', 'Spec_ubt', 'Spec_umot']
 
     for iax, ax in enumerate(axs):
         # ax.loglog(bnow.freq,
@@ -220,4 +264,5 @@ if flag.get('filt spec', False):
     axs[0].set_title('Velocity Spectra (%s coord sys)' %
                      dnow.props['coord_sys'], size='large')
 
-    fig.savefig('../fig/NoMC_Spectra01.pdf')
+    if flag.get('save fig', False):
+        fig.savefig('../fig/NoMC_Spectra01.pdf')

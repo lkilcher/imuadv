@@ -1,5 +1,5 @@
 motion_coherence.py:
-- Plot phases
-- Try lower-f filter? What drives the low-f cutoff?
+- Confirm how to calculate uncertainty of angles (for phase-shift
+  plot, if we're going to use it).
 
 Start on working with bench tests from Nortek.

@@ -18,7 +18,9 @@ flag['plot time'] = True
 filt_freqs = {'unfilt': 0.0,
               '5s': 1. / 5,
               # '10s': 1. / 10,
-              '30s': 1. / 30
+              '30s': 1. / 30,
+              '60s': 1. / 60,
+              '5m': 1. / (5 * 60),
 }
 
 pii = np.pi * 2
@@ -103,7 +105,7 @@ def within(dat, minval, maxval):
     return (minval < dat) & (dat < maxval)
 
 dnow_name = 'unfilt'
-dnow_name = '30s'
+dnow_name = '5m'
 dnow = dat_filt[dnow_name]
 dnow.umot = dnow.urot + dnow.uacc
 if dnow_name != 'unfilt':
@@ -156,11 +158,11 @@ if flag.get('show cohere', False):
 
     for iax, ax in enumerate(axs):
         ax.semilogx(cohfreq, coh[iax],
-                    'k', label='$u_{mot}$')
-        ax.semilogx(cohfreq, cohr[iax],
-                    'm', label='$u_{rot}$')
+                    'k', label='$u_{mot}$', lw=2, zorder=5)
         ax.semilogx(cohfreq, coha[iax],
                     'b', label='$u_{acc}$')
+        ax.semilogx(cohfreq, cohr[iax],
+                    'g', label='$u_{rot}$')
         ax.text(0.02, 0.98, ['u', 'v', 'w'][iax] + '-component',
                 transform=ax.transAxes,
                 ha='left', va='top')
@@ -176,7 +178,8 @@ if flag.get('show cohere', False):
 if flag.get('filt spec', False):
 
     bnow = bindat_filt['unfilt'].copy()
-    #bnow['Spec_ubt'] = bindat_filt['unfilt']['Spec_ubt']
+    bnow = bindat_filt['5m'].copy()
+    bnow['Spec_ubt'] = bindat_filt['unfilt']['Spec_ubt']
     fig = plt.figure(400, figsize=[6, 9])
     fig.clf()
     fig, axs = plt.subplots(3, 1, num=fig.number,
@@ -189,12 +192,12 @@ if flag.get('filt spec', False):
     #vars = ['Spec', 'Spec_uraw', 'Spec_uacc', 'Spec_urot', 'Spec_ubt', 'Spec_umot']
 
     for iax, ax in enumerate(axs):
-        ax.loglog(bnow.freq,
-                  (bnow.Spec[iax][inds].mean(0) - 2e-5) * pii,
-                  'g', label='$u$', linewidth=2, zorder=10)
+        # ax.loglog(bnow.freq,
+        #           (bnow.Spec[iax][inds].mean(0) - 2e-5) * pii,
+        #           'g', label='$u$', linewidth=2, zorder=10)
         ax.loglog(bnow.freq,
                   (bnow.Spec_uraw[iax][inds].mean(0) - 2e-5) * pii,
-                  'y', label='$u_{raw}$')
+                  'g', label='$u_{raw}$')
         ax.loglog(bnow.freq,
                   bnow.Spec_umot[iax][inds].mean(0) * pii,
                   'k', label='$u_{mot}$', zorder=8, linewidth=1.5)

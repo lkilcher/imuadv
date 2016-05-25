@@ -1,0 +1,5 @@
+motion_coherence.py:
+- Plot phases
+- Try lower-f filter? What drives the low-f cutoff?
+
+Start on working with bench tests from Nortek.

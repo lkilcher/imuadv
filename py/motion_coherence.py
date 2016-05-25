@@ -175,8 +175,8 @@ if flag.get('show cohere', False):
 
 if flag.get('filt spec', False):
 
-    bnow = bindat_filt['5s'].copy()
-    # bnow.
+    bnow = bindat_filt['unfilt'].copy()
+    #bnow['Spec_ubt'] = bindat_filt['unfilt']['Spec_ubt']
     fig = plt.figure(400, figsize=[6, 9])
     fig.clf()
     fig, axs = plt.subplots(3, 1, num=fig.number,

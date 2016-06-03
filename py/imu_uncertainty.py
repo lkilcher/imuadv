@@ -16,8 +16,8 @@ def spec_epsilon(epsilon, tke, k, alpha=0.5, ):
 
 flag = {}
 #flag['plot_spec'] = True
-flag['plot_spec2'] = True
-#flag['plot_spec3'] = True
+#flag['plot_spec2'] = True
+flag['plot_spec3'] = True
 
 binner = avm.TurbBinner(9600, 32, )
 
@@ -77,9 +77,9 @@ if flag.get('plot_spec', False):
                             gridspec_kw=dict(left=0.2, right=0.94, top=0.95))
 
     for idx in xrange(3):
-        axs[0].loglog(bd.freq, bd.Spec_Accel[idx][gd].mean(0),
+        axs[0].loglog(bd.freq, bd.Spec_Accel[idx][gd].mean(0) * 2 * np.pi,
                       color=colors[idx], linestyle='-')
-        axs[1].loglog(bd.freq, bd.Spec_AngRt[idx][gd].mean(0),
+        axs[1].loglog(bd.freq, bd.Spec_AngRt[idx][gd].mean(0) * 2 * np.pi,
                       color=colors[idx], linestyle='-')
 
     #axs[1].set_xlim([1e-3, 20])

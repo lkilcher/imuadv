@@ -29,8 +29,11 @@
 %\extraaffil{Affiliation, City, State/Province, Country}
 
 \graphicspath{{./fig/}}
+\newlength{\onewidth}
+\setlength{\onewidth}{3.2in}
 
 \newcommand{\note}[1]{\textcolor{blue}{#1}}
+\newcommand{\citeneeded}[1]{\textcolor{red}{(NEED CITATION for: #1)}}
 
 \newcommand{\unit}[1]{\ensuremath{\,\mathrm{#1}}}
 \def\rmat{\ensuremath{\mathbf{H}}}
@@ -44,6 +47,17 @@
 \def\omatinv{\ensuremath{\mathbf{R}^\mathrm{T}}}
 \def\ue{\ensuremath{\vec{u}\earth}}
 \def\uacc{\ensuremath{\ue_a}}
+\def\tke{\ensuremath{\mathrm{tke}}}
+
+\def\AngRt{\ensuremath{\vec{\omega}}}
+\def\Accel{\ensuremath{{\vec{a}}}}
+\def\Accelp{\ensuremath{{\vec{a}^{*'}}}}
+\def\ue{\ensuremath{\vec{u}\earth}}
+\def\um{\ensuremath{\ue_\mathrm{h}}}
+\def\uadv{\ensuremath{\ue_\mathrm{m}}}
+\def\urot{\ensuremath{\ue_\omega}}
+\def\uacc{\ensuremath{\ue_a}}
+\def\l{\ensuremath{\vec{\ell}}}
 
 \abstract{
 THE ABSTRACT.
@@ -115,35 +129,33 @@ This work utilizes ADV measurements from two field deployments, and from bench a
 
 \section{Methodology}
 
-Estimate time-series of velocity on a compliant mooring by obtaining an independent estimate of ADV head motion, and removing that motion from the measured signal. Nortek offers an ADV that is equipped with an IMU that measures the linear acceleration and rotational-motion of the ADV pressure case. 
-So long as the ADV head is rigidly connected to the ADV pressure case, it is possible to utilize the IMU motion signals to calculate the motion of the ADV head. This motion can then be removed from the measured velocity signal.
+Estimate time-series of velocity on a compliant mooring by obtaining an independent estimate of ADV head motion, and removing that motion from the measured signal. Nortek offers an ADV that is equipped with an IMU that measures the linear acceleration, rotational-motion, and orientation of the ADV pressure case (body). So long as the ADV head is rigidly connected to the ADV pressure case, it is possible to utilize the IMU motion signals to calculate the motion of the ADV head, and remove it from the measured velocity signal.  The ADV head motion, is calculated as the sum of rotational and translational motion, which are each estimated from the IMU's angular-rate, \AngRt, and acceleration, \Accel, signals as:
+\begin{align}
+  \um & = \urot + \uacc \\
+      & = \omatinv \cdot \AngRt^*(t)\times\l^* + \int \{\Accel(t)\}_{HP(f_{a})} \mathrm{d}t
+\end{align}
+Here `$*$' superscripts denote quantities in the ADV's locale coordinate system, $\omatinv$ is the IMU orientation matrix that rotates vectors from the IMU to the earth reference frame, and $\l^*$ is the vector from the IMU to the ADV head. The notation $\{\Accel\}_{HP(f_a)}$ indicates that the IMU's accelerometer signal is high-pass filtered (in the earth's stationary reference frame) at a chosen filter-frequency, $f_a$. This is necessary because accelerometers have known low-frequency noise, sometimes referred to as `bias-drift' \citeneeded{Accelerometer noise}. This noise is amplified by integration of the acceleration signal such that it contaminates the motion correction, especially at low-frequencies (Figure \ref{fig:stationary_noise}).
 
-A primary limitation of this approach is based on the limitations of the IMU sensors themselves. In particular, the noise levels of the Accel and AngRt signals from the IMU. The primary source of uncertainty in this approach is related to the `low frequency drift' of IMU accelerometers. Without correcting for this, the noise in the Accel will typically overwhelm the measured velocity signal at low frequency, and lead to non-realistic estimates of mean motion (see Appendix \ref{apdx:imu-uncertainty}).
+The choice of high-pass filter to be used to correct for low-frequency accelerometer noise issue depends on the application (e.g. deployment platform), and the turbulence level of the measurement environment. In particular, this involves a trade off between filtering-out this noise and not filtering measured motion. If an independent measure of low-frequency motion is available, it is possible to combine that signal with the IMU's high-frequency motion measurements to obtain a complete estimate of ADV motion. An example of this operation is presented in section \ref{sec:stablemoor_motion}. Lacking an independent measure of low-f motion, the user may instead choose to neglect the portion of the spectrum below the chosen filter frequency 
 
 Break motion velocity into two components:
 \begin{itemize}
-\item translational (Accel + something)
+\item translational (Accel + something?)
 \item rotational  (AngRt)
 \end{itemize}
 
+A primary limitation of this approach is based on the limitations of the IMU sensors themselves. In particular, the noise levels of the Accel and AngRt signals from the IMU. The primary source of uncertainty in this approach is related to the `low frequency drift' of IMU accelerometers. Without correcting for this, the noise in the Accel will typically overwhelm the measured velocity signal at low frequency, and lead to non-realistic estimates of mean motion (see Appendix \ref{apdx:imu-uncertainty}).
+
 \begin{figure}
   \centering
-  
-  \caption{Spectra of Accel and AngRt signals, and of the $u_{acc}$ + $u_{rot}$ signals?}
+  \label{fig:stationary_noise}
+  \includegraphics[width=\onewidth]{stationary_noise03}
+  \caption{Spectra of $\urot$ (yellow) and $\uacc$ signals from the Microstrain IMU sitting on a motionless table. The $\uacc$ signals are unfiltered (black), and high-pass filtered at 30s (magenta), 10s (blue), 5s (green). Vertical dotted lines indicate the filter frequency. The black horizontal dotted line indicates the noise-level of a Nortek Vector ADV configured to measure $\pm$4m/s. The shaded region indicates the range of spectra presented herein (0.002 $< \tke <$ 0.03 $\mathrm{m^2/s^2}$, 1e-5 $< \epsilon <$ 5e-4 $\mathrm{W/kg}$).}
 \end{figure}
 
 There are errors in Accel velocity. Discuss these in context of non-moving Accel spectra. Introduce concept of adding low-f translational velocity signal.
 
 \subsection{Motion Correction}\label{sec:proc:motion}
-
-\def\AngRt{\ensuremath{\vec{\omega}}}
-\def\Accel{\ensuremath{{\vec{a}^*}}}
-\def\Accelp{\ensuremath{{\vec{a}^{*'}}}}
-\def\ue{\ensuremath{\vec{u}\earth}}
-\def\um{\ensuremath{\ue_\mathrm{h}}}
-\def\uadv{\ensuremath{\ue_\mathrm{m}}}
-\def\urot{\ensuremath{\ue_\omega}}
-\def\uacc{\ensuremath{\ue_a}}
 
 \begin{itemize}
 \item the angular rotation rate vector,
@@ -158,7 +170,6 @@ The angular rate and linear acceleration signals can be used to estimate the ADV
   \ue(t) & = \uadv(t) + \um(t) &  .
 \end{align}
 Note that $\um$ is added to $\uadv$ because the measured velocity resulting from head motion is in the opposite direction of head motion itself (i.e., $\uadv = \ue - \um$).
-
 
 We now break $\um$ into two parts, $ \um  =  \uacc + \urot $.
 The first is an estimate of the linear motion of the ADV,

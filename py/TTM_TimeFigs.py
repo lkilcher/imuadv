@@ -1,6 +1,5 @@
-from dolfyn.adv import api as avm
+#from dolfyn.adv import api as avm
 from faretools.ptools import figobj
-import faretools.tools as tbx
 from dolfyn.tools.misc import delta
 import numpy as np
 import ttm.June2012 as j12
@@ -13,17 +12,17 @@ awac = j12.load('AWAC', coordsys='pax', bin=True)
 datdir = '/Users/lkilcher/data/ttm/June2012/'
 figdir = '../fig/'
 
-flg = tbx.flag()
-# flg.do_specfig=True
-# flg.do_specfig2=True
-# flg.do_specfig_all=True
-# flg.do_time_all=True
-# flg.do_time_u=True
-# flg.do_time_u2=True
-flg.do_coh = True
-# flg.do_specfig_comp=True
-flg.do_Lcoh = True
-# flg.do_Lcoh2=True
+flg = {}
+# flg['do_specfig'] = True
+# flg['do_specfig2'] = True
+# flg['do_specfig_all'] = True
+# flg['do_time_all'] = True
+# flg['do_time_u'] = True
+# flg['do_time_u2'] = True
+flg['do_coh'] = True
+# flg['do_specfig_comp'] = True
+flg['do_Lcoh'] = True
+# flg['do_Lcoh2'] = True
 
 # fctr_lcoh=2*np.pi
 fctr_lcoh = 1
@@ -70,7 +69,7 @@ shp = {'h': [1, 2], 'p': [2, 1]}
 ang = 4  # deg
 tmp = awac.rotate_var(ang * np.pi / 180)
 
-if flg.do_time_all:
+if flg.get('do_time_all', False):
     fg0 = figobj(32, (3, 1), axsize=[1.6, 4],
                  sharex=True, gap=.24, frame=[.6, .2, 1., .2])
     ax = fg0.ax[0]
@@ -107,7 +106,7 @@ if flg.do_time_all:
 pt = 35
 tr = dat_mc.mpltime[pt] + np.array([-0.5, 0.5]) * \
     (dat_mc.mpltime[pt + 1] - dat_mc.mpltime[pt])
-if flg.do_time_u:
+if flg.get('do_time_u', False):
     fg0 = figobj(33, (2, 1), axsize=[1.6, 4],
                  sharex=False, gap=.64, frame=[.6, .2, .8, .2])
     ax = fg0.ax[0]
@@ -179,7 +178,7 @@ if flg.do_time_u:
     fg0.savefig(figdir + 'timeFigU01.png', dpi=dpi)
 
 
-if flg.do_time_u2:
+if flg.get('do_time_u2', False):
     fg00 = figobj(34, (2, 1), axsize=[1.6, 4],
                   sharex=True, gap=.2, frame=[.6, .2, .8, .2])
     ax = fg00.ax[0]
@@ -208,14 +207,14 @@ if flg.do_time_u2:
     fg00.savefig(figdir + 'timeFigU02.pdf')
     fg00.savefig(figdir + 'timeFigU02.png', dpi=dpi)
 
-if flg.do_awacVadv_up:
+if flg.get('do_awacVadv_up', False):
     fg20 = figobj(388, (1, 1))
     fg20.plot(np.abs(dat_mc.upup_)**0.5,
               np.ma.masked_where(bd, np.abs(awac.upup_[10]))**0.5 + .12 - .1,
               'k.')
     fg20.plot([0, 0.2], [0, 0.2], 'k-')
 
-if flg.do_check_awac_amp:
+if flg.get('do_check_awac_amp', False):
     def msk(dat):
         return np.ma.masked_where(bd, dat)
 

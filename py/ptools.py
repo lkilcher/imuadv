@@ -13,8 +13,13 @@ datetime = dt.datetime.datetime
 rcParams = mpl.rcParams
 
 plt.style.use('./amspub.mplstyle')
-onecol = lambda:plt.style.context('./amspub.mplstyle')  # nopep8
-twocol = lambda:plt.style.context(['./amspub.mplstyle', './amspub_twocol.mplstyle'])  # nopep8
+style = dict(
+    onecol=lambda:plt.style.context('./amspub.mplstyle'),
+    twocol=lambda:plt.style.context(['./amspub.mplstyle', './amspub_twocol.mplstyle']),
+    stylegg=lambda:plt.style.context('ggplot'),
+    classic=lambda:plt.style.context('classic'),
+)
+
 figdir = os.path.abspath('../fig/') + '/'
 
 

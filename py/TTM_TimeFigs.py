@@ -1,31 +1,27 @@
-#from dolfyn.adv import api as avm
-from faretools.ptools import figobj
+import ptools as pt
 from dolfyn.tools.misc import delta
 import numpy as np
+import dolfyn.data.binned as binmod
 import ttm.June2012 as j12
+plt = pt.plt
+import scipy.signal as sig
 
-awacr = j12.load('AWAC', coordsys='pax')
+awacr = j12.load('AWAC', coordsys='pax', data_groups='ALL')
 awac = j12.load('AWAC', coordsys='pax', bin=True)
 
 # This file was copied from ~/work/mhk/ttm/June2012/mets_figs.py
 
 datdir = '/Users/lkilcher/data/ttm/June2012/'
-figdir = '../fig/'
 
 flg = {}
-# flg['do_specfig'] = True
-# flg['do_specfig2'] = True
-# flg['do_specfig_all'] = True
 # flg['do_time_all'] = True
 # flg['do_time_u'] = True
 # flg['do_time_u2'] = True
-flg['do_coh'] = True
-# flg['do_specfig_comp'] = True
-flg['do_Lcoh'] = True
-# flg['do_Lcoh2'] = True
-
-# fctr_lcoh=2*np.pi
-fctr_lcoh = 1
+#flg['do_check_awac_amp'] = True
+#flg['do_awacVadv_up'] = True
+flg['show awac avg fix'] = True
+flg['show awac avg2'] = True
+flg['save figs'] = True
 
 if 'dat_mc' not in vars():
     dat_mc = j12.load('NREL', coordsys='pax', bin=True)
@@ -51,7 +47,7 @@ indu_mc = delta(dat_mc.u, dl)
 f_fit = np.logspace(-2, 1, 50)
 rad_hz = 2 * np.pi
 
-bd = np.abs(awac.w[10] - dat_mc.w) > 0.04
+#bd = np.abs(awac.w[10] - dat_mc.w) > 0.04
 #bd = np.abs(awac.w[10] - dat_mc.w) > 0.04
 
 # ucomp=1
@@ -70,46 +66,44 @@ ang = 4  # deg
 tmp = awac.rotate_var(ang * np.pi / 180)
 
 if flg.get('do_time_all', False):
-    fg0 = figobj(32, (3, 1), axsize=[1.6, 4],
-                 sharex=True, gap=.24, frame=[.6, .2, 1., .2])
-    ax = fg0.ax[0]
-    ax.plot(dat_mc.time, dat_mc.u, 'b-', label='ADV')
-    ax.plot(awac.time, np.ma.masked_where(
-        bd, tmp.real[10]), 'r-', label='AWAC')
+    fg, axs = pt.newfig(32, 3, 1,
+                        sharex=True, )
+    ax = axs[0]
+    ax.plot(dat_mc.mpltime, dat_mc.u, 'b-', label='ADV')
+    #ax.plot(awac.time, np.ma.masked_where(bd, tmp.real[10]), 'r-', label='AWAC')
     ax.set_ylim([-2.5, 2.5])
     c = '\n'
     ax.set_ylabel(r'$\bar{u}\,\mathrm{[ms^{-1}]}$', size='large')
     # ax.set_ylabel(r'$\frac{\bar{u}}{\mathrm{[ms^{-1}]}}$',size='x-large',rotation=0,multialignment='center')
-    ax = fg0.ax[1]
-    ax.plot(dat_mc.time, dat_mc.v, 'b-')
-    ax.plot(awac.time, np.ma.masked_where(bd, tmp.imag[10]), 'r-')
+    ax = axs[1]
+    ax.plot(dat_mc.mpltime, dat_mc.v, 'b-')
+    #ax.plot(awac.time, np.ma.masked_where(bd, tmp.imag[10]), 'r-')
     ax.set_ylim([-1, 1])
     ax.set_ylabel(r'$\bar{v}\,\mathrm{[ms^{-1}]}$', size='large')
-    ax = fg0.ax[2]
-    ax.plot(dat_mc.time, dat_mc.w, 'b-')
-    ax.plot(awac.time, np.ma.masked_where(bd, awac.w[10] + 0.02), 'r-')
-    ax.set_ylim([-0.1, 0.1])
+    ax = axs[2]
+    ax.plot(dat_mc.mpltime, dat_mc.w, 'b-')
+    #ax.plot(awac.time, np.ma.masked_where(bd, awac.w[10] + 0.02), 'r-')
+    #ax.set_ylim([-0.1, 0.1])
     ax.set_ylabel(r'$\bar{w}\,\mathrm{[ms^{-1}]}$', size='large')
-    ax.set_xlim([12.7, 14.7])
-    fg0.ax[0].legend(loc='upper left', prop={
-                     'size': 'small'}, bbox_to_anchor=[0.03, 0.17])
-    # ax=fg0.ax[3]
+    #ax.set_xlim([12.7, 14.7])
+    axs[0].legend(loc='upper left', prop={'size': 'small'},
+                  bbox_to_anchor=[0.03, 0.17])
+    # ax=axs[3]
     # ax.plot(dat_mc.time,dat_mc.U_mag,'b-',label='ADV')
     # ax.plot(awac.time,np.ma.masked_where(bd,np.abs(tmp)[10]),'r-',label='AWAC')
     # ax.set_ylabel(r'$\bar{U}\,\mathrm{[ms^{-1}]}$',size='large')
     # ax.set_ylim([-2.5,2.5])
     ax.set_xlabel('Day of June, 2012')
-    fg0.hide('xticklabels', ax)
-    fg0.sax.alphNumAxes('ABCD', prefix='(', suffix=')', pos='ul')
-    # fg0.savefig(figdir+'timeFig01.pdf')
+    #fg.hide('xticklabels', ax)
+    #fg.sax.alphNumAxes('ABCD', prefix='(', suffix=')', pos='ul')
+    # fg0.savefig(pt.figdir+'timeFig01.pdf')
 
-pt = 35
-tr = dat_mc.mpltime[pt] + np.array([-0.5, 0.5]) * \
-    (dat_mc.mpltime[pt + 1] - dat_mc.mpltime[pt])
+point = 35
+tr = dat_mc.mpltime[point] + np.array([-0.5, 0.5]) * \
+    (dat_mc.mpltime[point + 1] - dat_mc.mpltime[point])
 if flg.get('do_time_u', False):
-    fg0 = figobj(33, (2, 1), axsize=[1.6, 4],
-                 sharex=False, gap=.64, frame=[.6, .2, .8, .2])
-    ax = fg0.ax[0]
+    fg, axs = pt.newfig(33, 2, 1, sharex=False, )
+    ax = axs[0]
     ax.plot(dat_mc.time, dat_mc.u, 'b-', label='ADV')
     ax.plot(awac.time, np.ma.masked_where(bd, awac.u[10]), 'r-', label='AWAC')
     ax.set_ylim([-2.5, 2.5])
@@ -151,7 +145,7 @@ if flg.get('do_time_u', False):
                 zorder=-1)
     # ax.set_ylabel(r'$\frac{\bar{u}}{\mathrm{[ms^{-1}]}}$',size='x-large',rotation=0,multialignment='center')
     ax.set_xlim([12.7, 14.7])
-    ax = fg0.ax[1]
+    ax = axs[1]
     iturb = (tr[0] < datr.mpltime) & (datr.mpltime < tr[1])
     ax.plot((datr.time[iturb] - datr.time[iturb][0]) * 24 *
             3600, datr.u[iturb] - datr.u[iturb].mean(), 'b-')
@@ -171,19 +165,18 @@ if flg.get('do_time_u', False):
     ax.set_ylabel("$u'\,\mathrm{[ms^{-1}]}$")
     ax.set_xlabel('Time [seconds]')
     ax.set_xlim([0, 300])
-    fg0.ax[0].legend(loc='upper left', prop={'size': 'small'}, bbox_to_anchor=[
-                     0.29, .99], handlelength=1.5, handletextpad=.2)
-    fg0.sax.alphNumAxes('ABC', prefix='(', suffix=')', pos='ul', offset=(5, 5))
-    fg0.savefig(figdir + 'timeFigU01.pdf')
-    fg0.savefig(figdir + 'timeFigU01.png', dpi=dpi)
+    axs[0].legend(loc='upper left', prop={'size': 'small'},
+                  bbox_to_anchor=[0.29, .99], handlelength=1.5, handletextpad=.2)
+    fg.sax.alphNumAxes('ABC', prefix='(', suffix=')', pos='ul', offset=(5, 5))
+    fg.savefig(pt.figdir + 'timeFigU01.pdf')
+    fg.savefig(pt.figdir + 'timeFigU01.png', dpi=dpi)
 
 
 if flg.get('do_time_u2', False):
-    fg00 = figobj(34, (2, 1), axsize=[1.6, 4],
-                  sharex=True, gap=.2, frame=[.6, .2, .8, .2])
+    fg00 = pt.newfig(34, (2, 1), sharex=True, )
     ax = fg00.ax[0]
     ax.plot(dat_mc.time, dat_mc.u, 'b-', label='ADV')
-    ax.plot(awac.time, np.ma.masked_where(bd, awac.u[10]), 'r-', label='AWAC')
+    #ax.plot(awac.time, np.ma.masked_where(bd, awac.u[10]), 'r-', label='AWAC')
     ax.set_ylim([-2.5, 2.5])
     ax.hln(0, color='k', linestyle='-', zorder=10)
     c = '\n'
@@ -191,8 +184,7 @@ if flg.get('do_time_u2', False):
     # ax.plot(dat_mc.time[pt],dat_mc.u[pt],'ko',mfc='none',mew=2,ms=10)
     ax = fg00.ax[1]
     ax.plot(dat_mc.time, np.abs(dat_mc.upup_)**0.5 - 0.02, 'b-')
-    ax.plot(awac.time, np.ma.masked_where(
-        bd, np.abs(awac.upup_[10])**0.5), 'r-')
+    #ax.plot(awac.time, np.ma.masked_where(bd, np.abs(awac.upup_[10])**0.5), 'r-')
     ax.set_yticks(np.arange(0, 1, .1))
     ax.set_ylim([0, .2])
     ax.set_ylabel("$\mathrm{std}(u')\,\mathrm{[ms^{-1}]}$")
@@ -204,30 +196,209 @@ if flg.get('do_time_u2', False):
                       0.29, .99], handlelength=1.5, handletextpad=.2)
     fg00.sax.alphNumAxes('ABC', prefix='(', suffix=')',
                          pos='ul', offset=(5, 5))
-    fg00.savefig(figdir + 'timeFigU02.pdf')
-    fg00.savefig(figdir + 'timeFigU02.png', dpi=dpi)
+    fg00.savefig(pt.figdir + 'timeFigU02.pdf')
+    fg00.savefig(pt.figdir + 'timeFigU02.png', dpi=dpi)
 
 if flg.get('do_awacVadv_up', False):
-    fg20 = figobj(388, (1, 1))
-    fg20.plot(np.abs(dat_mc.upup_)**0.5,
-              np.ma.masked_where(bd, np.abs(awac.upup_[10]))**0.5 + .12 - .1,
-              'k.')
-    fg20.plot([0, 0.2], [0, 0.2], 'k-')
+
+    with pt.style['classic']():
+        fg20 = pt.newfig(388, 1, 1, figsize=(8, 8))
+        # fg20.plot(np.abs(dat_mc.upup_)**0.5,
+        #           np.ma.masked_where(bd, np.abs(awac.upup_[10]))**0.5 + .12 - .1,
+        #           'k.')
+        fg20.plot([0, 0.2], [0, 0.2], 'k-')
 
 if flg.get('do_check_awac_amp', False):
+
     def msk(dat):
         return np.ma.masked_where(bd, dat)
 
-    fga = figobj(40, [4, 1])
-    thresh = 100
-    d = awacr._amp[:, 10].mean(0)
-    bd = d > thresh
-    ax = fga.ax[0]
-    ax.plot(msk(awacr.u[10]))
-    ax = fga.ax[1]
-    ax.plot(msk(awacr.v[10]))
-    ax = fga.ax[2]
-    ax.plot(msk(awacr.w[10]))
-    ax = fga.ax[3]
-    ax.plot(d)
-    ax.hln(thresh, color='r')
+    awi = slice(25000, 32000)
+    depi = 8
+    with pt.style['classic']():
+        fg, axs = pt.newfig(40, 4, 1, figsize=[8, 8], sharex=True)
+        thresh = 100
+        d = awacr._amp[:, depi, awi].mean(0)
+        bd = d > thresh
+        ax = axs[0]
+        ax.plot(msk(awacr.u[depi, awi]))
+        ax = axs[1]
+        ax.plot(msk(awacr.v[depi, awi]))
+        ax = axs[2]
+        ax.plot(msk(awacr.w[depi, awi]))
+        ax = axs[3]
+        ax.plot(d, 'k')
+        ax.plot(awacr._amp[0, depi, awi], 'r')
+        ax.plot(awacr._amp[1, depi, awi], 'b')
+        ax.plot(awacr._amp[2, depi, awi], 'g')
+        ax.axhline(thresh, color='r')
+
+
+def screen(amp, npt=10, thresh=5):
+    damp = np.diff(np.pad(amp.astype(np.int16),
+                          (((0, 1),) + (((0, 0), ) * (amp.ndim - 1))),
+                          'wrap'),
+                   1, 0)
+    shape = [1, ] * amp.ndim
+    shape[1] = npt
+    tmp = sig.convolve(damp, np.ones(shape) / npt, 'same')
+    return tmp.max(0) > thresh
+
+if flg.get('do_check_awac_amp2', False):
+
+    def msk(dat, msk):
+        return np.ma.masked_where(bd, dat)
+
+    awi = slice(25000, 32000)
+    t = pt.dt.num2date(awacr.mpltime[awi])
+    avi = slice(np.argmin(np.abs(awacr.mpltime[awi.start] - datr.mpltime)),
+                np.argmin(np.abs(awacr.mpltime[awi.stop] - datr.mpltime)), )
+    ta = pt.dt.num2date(datr.mpltime[avi])
+    depi = 9
+    with pt.style['classic']():
+        fg, axs = pt.newfig(41, 5, 1, figsize=[8, 8], sharex=True)
+        thresh = 100
+        d = awacr._amp[:, depi, awi].mean(0)
+        #damp = np.diff(awacr._amp[:, depi, awi].astype(np.int16), 1, 0)
+        #bd = d > thresh
+        damp = np.diff(np.pad(awacr._amp[:, depi, awi].astype(np.int16),
+                              ((0, 1), (0, 0)), 'wrap'),
+                       1, 0)
+        tmp = sig.convolve(damp, np.ones((1, 10)) / 10, 'same')
+        bd = screen(awacr._amp[:, depi, awi])
+        ax = axs[0]
+        ax.plot(t, awacr.u[depi, awi], '0.6')
+        ax.plot(ta, datr.u[avi], 'r')
+        ax.plot(t, msk(awacr.u[depi, awi]), 'b')
+        ax = axs[1]
+        ax.plot(t, awacr.v[depi, awi], '0.6')
+        ax.plot(ta, datr.v[avi], 'r')
+        ax.plot(t, msk(awacr.v[depi, awi]), 'b')
+        ax = axs[2]
+        ax.plot(t, awacr.w[depi, awi], '0.6')
+        ax.plot(ta, datr.w[avi], 'r')
+        ax.plot(t, msk(awacr.w[depi, awi]), 'b')
+        ax = axs[3]
+        ax.plot(t, d, 'k')
+        ax.plot(t, awacr._amp[0, depi, awi], 'r')
+        ax.plot(t, awacr._amp[1, depi, awi], 'b')
+        ax.plot(t, awacr._amp[2, depi, awi], 'g')
+        ax.axhline(thresh, color='r')
+        ax = axs[4]
+        #ax.plot(t, d, 'k')
+        ax.plot(t, damp[0], 'r')
+        ax.plot(t, damp[1], 'b')
+        ax.plot(t, damp[2], 'g')
+        #ax.plot(t, np.abs(damp).max(0), 'k')
+        ax.plot(t, tmp.max(0), 'k')
+        
+        #ax.axhline(thresh, color='r')
+
+if flg.get('show awac avg fix', False):
+ 
+    bnr = binmod.TimeBinner(300, 1)
+    t0 = awacr.mpltime[0]
+    t = (bnr.mean(awacr.mpltime) - t0) * 24
+    dat_mc.time = (dat_mc.mpltime - t0) * 24
+    depi = 9
+    bd = screen(awacr._amp[:, depi])
+    u = bnr.mean(np.ma.masked_where(np.tile(bd[None, :], (3, 1)), awacr._u[:, depi]),
+                 mask_thresh=0.6)
+    scale = np.array([[-2, 2.5],
+                      [-1, 1],
+                      [-0.2, 0.1],])
+    height_ratios = np.diff(scale, 1, -1)
+    height_ratios[2] *= 2
+    height_ratios = np.ones(3)
+    # ufix = (u[0] + 1j * u[1]) * np.exp(1j * np.pi / 180 * -5)
+    # u[0], u[1] = ufix.real, ufix.imag
+    ufix = dat_mc.u + 1j * dat_mc.v
+    #ufix *= np.exp(1j * np.pi / 180 * 5)
+    with pt.style['onecol']():
+        fg, axs = pt.newfig(42, 3, 1, figsize=4, sharex=True, hspace=0.18,
+                            bottom=0.1,
+                            gridspec_kw=dict(height_ratios=height_ratios))
+        thresh = 100
+        ax = axs[0]
+        ax.text(0.03, 0.92, '(A)', transform=ax.transAxes,
+                ha='left', va='top')
+        ax.axhline(0, color='k', linestyle='--', lw=0.5)
+        ax.plot(dat_mc.time, ufix.real, 'k', lw=2)
+        ax.plot(t, u[0], 'r', lw=1.0)
+        ax.set_ylabel('$u\ \mathrm{[m/s]}$')
+        ax.yaxis.set_ticks(np.arange(-3.5, 3.5, 0.5))
+        ax.yaxis.set_ticks(np.arange(-3.5, 3.5, 0.1), minor=True)
+        ax.set_ylim(scale[0])
+        ax = axs[1]
+        ax.text(0.03, 0.92, '(B)', transform=ax.transAxes,
+                ha='left', va='top')
+        ax.axhline(0, color='k', linestyle='--', lw=0.5)
+        ax.plot(dat_mc.time, ufix.imag, 'k', lw=2)
+        ax.plot(t, u[1], 'r')
+        ax.yaxis.set_ticks(np.arange(-1.5, 1.5, 0.5))
+        ax.yaxis.set_ticks(np.arange(-1.5, 1.5, 0.1), minor=True)
+        ax.set_ylim(scale[1])
+        ax.set_ylabel('$v\ \mathrm{[m/s]}$')
+        ax = axs[2]
+        ax.text(0.03, 0.92, '(C)', transform=ax.transAxes,
+                ha='left', va='top')
+        ax.axhline(0, color='k', linestyle='--', lw=0.5)
+        ax.plot(dat_mc.time, dat_mc.w - 0.02, 'k', lw=2)
+        ax.plot(t, u[2], 'r')
+        ax.set_ylabel('$w\ \mathrm{[m/s]}$')
+        ax.yaxis.set_ticks(np.arange(-0.5, 0.5, 0.1))
+        #ax.yaxis.set_ticks(np.arange(-0.5, 0.5, 0.05), minor=True)
+        ax.set_ylim(scale[2])
+
+        # ax.xaxis.set_major_locator(pt.dt.HourLocator(range(0, 24, 6)))
+        # ax.xaxis.set_major_formatter(pt.dt.DateFormatter('%H'))
+        ax.set_xlim([t[0], t[-1]])
+        ax.set_xlabel('Time [Hours]')
+
+        fg.savefig(pt.figdir + 'TimeFig02.pdf')
+    
+
+if flg.get('show awac avg2', False):
+
+    def velmag(u):
+        return np.sqrt((u ** 2).sum(0))
+
+    def velang(u):
+        out = np.angle(u[0] + 1j * u[1]) * 180 / np.pi
+        if isinstance(u, np.ma.MaskedArray):
+            out = np.ma.masked_where(u.mask[0], out)
+        return out
+
+    def dang(u1, u2):
+        u1c = u1[0] + 1j * u1[1]
+        u2c = u2[0] + 1j * u2[1]
+        out = np.angle(u2c / u1c) * 180 / np.pi
+        if isinstance(u1, np.ma.MaskedArray):
+            out = np.ma.masked_where(u1c.mask, out)
+        if isinstance(u2, np.ma.MaskedArray):
+            out = np.ma.masked_where(u2c.mask, out)
+        return out
+
+    ui = np.array((np.interp(t, dat_mc.mpltime, dat_mc.u),
+                   np.interp(t, dat_mc.mpltime, dat_mc.v)))
+    bnr = binmod.TimeBinner(300, 1)
+    t = bnr.mean(awacr.mpltime)
+    depi = 9
+    bd = screen(awacr._amp[:, depi])
+    u = bnr.mean(np.ma.masked_where(np.tile(bd[None, :], (3, 1)), awacr._u[:, depi]),
+                 mask_thresh=0.6)
+    umag = velmag(u)
+    delta_ang = dang(u, ui)
+    delta_ang.mask |= umag < 0.5
+    with pt.style['onecol']():
+        fg, axs = pt.newfig(43, 3, 1, figsize=5, sharex=True)
+        thresh = 100
+        ax = axs[0]
+        ax.plot(dat_mc.mpltime, velmag(dat_mc._u), 'b', lw=2)
+        ax.plot(t, velmag(u), 'r')
+        ax = axs[1]
+        ax.plot(dat_mc.mpltime, velang(dat_mc._u), 'b', lw=2)
+        ax.plot(t, velang(u), 'r')
+        ax = axs[2]
+        ax.plot(t, delta_ang, 'r')
+        

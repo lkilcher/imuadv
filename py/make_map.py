@@ -1,16 +1,10 @@
 from mpl_toolkits.basemap import Basemap as bm
 from scipy.signal import convolve2d as conv2
 from matplotlib import cm
-import local_tools as ltbx
 import numpy as np
-import darrow
-from matplotlib import pyplot as pt
+import ptools as pt
+from matplotlib import pyplot as plt
 
-
-if 'veldat' not in vars():
-    veldat = {}
-    for nm in ['T2b-top', 'T1b-top', 'T1-top']:
-        veldat[nm] = ltbx.load(nm, 'mcpax_bin')
 
 #
 # From the ./metadata.htm file
@@ -31,7 +25,7 @@ map_data = bm(projection=proj,
               urcrnrlon=grid_urcrnr[0], urcrnrlat=grid_urcrnr[1],
               lat_1=lat_1, lat_2=lat_2)
 
-dat = np.load('/home/lkilcher/data/bathy/puget_sound/g1230485/g1230485.npz')
+dat = np.load('/Users/lkilcher/data/bathy/puget_sound/g1230485/g1230485.npz')
 dparams = {}
 for nm in dat.files:
     if not nm == 'elev':
@@ -98,29 +92,30 @@ x0, y0 = map_data(center[0], center[1])
 
 # veldat=
 
-cmap = ltbx.truncate_colormap(pt.get_cmap('YlGnBu'), 0.3, 1.0)
-fig = pt.figure(308, figsize=[8, 5])
-pt.clf()
+cmap = pt.truncate_colormap(plt.get_cmap('YlGnBu'), 0.3, 1.0)
+fig, ax = pt.newfig(308, 1, 1, figsize=2)
+fig.clf()
 axrect = [.1, .1, .72, .87]
-ax = pt.axes(axrect)
+ax = plt.axes(axrect)
 ax.axis('equal')
 # map.drawmapboundary(fill_color=[.7,1.,1.],zorder=-200)
-plt = ax.pcolor(xdat[ix] - x0, ydat[iy] - y0, -dnow, cmap=cmap,
-                rasterized=True)
-cbar_ax = pt.axes([axrect[0] + axrect[2] + .03, axrect[1], .04, .5])
-cbar = pt.colorbar(plt, cax=cbar_ax,
-                   ticks=np.arange(0, 100, 10))
+pcol = ax.pcolor(xdat[ix] - x0, ydat[iy] - y0, -dnow, cmap=cmap,
+                 rasterized=True)
+cbar_ax = plt.axes([axrect[0] + axrect[2] + .03, axrect[1], .04, .5])
+cbar = plt.colorbar(pcol, cax=cbar_ax,
+                    ticks=np.arange(0, 100, 10))
+cbar.mappable.set_rasterized(True)
 cbar_ax.set_ylabel('Depth [m]')
-plt.set_clim([0, 70])
+pcol.set_clim([0, 70])
 #cbar.patch.set_rasterized(True)
-plt = ax.contourf(xdat[ix] - x0, ydat[iy] - y0,
-                  dnow, np.arange(0, 60, 1), cmap=cm.copper_r,
-                  rasterized=True)
-plt.set_clim([0, 90])
+pcon = ax.contourf(xdat[ix] - x0, ydat[iy] - y0,
+                   dnow, np.arange(0, 60, 1), cmap=cm.copper_r,
+                   rasterized=True)
+pcon.set_clim([0, 90])
 
 
 # clf()
-dpths = np.arange(0, -100, -10)
+dpths = np.arange(-100, 1, 10)
 lw = [.6] * len(dpths)
 lw[0] = 2
 ax.contour(xdat[ix] - x0, ydat[iy] - y0, dnow, dpths, colors=['k']
@@ -132,31 +127,30 @@ ax.text(200, 80, '(Fort Casey\nState Park)',
 
 # bbox_props=dict(boxstyle='rarrow,pad=0.3',fc='cyan',ec='none',lw=2)
 # t=text(-800,-400,'Tidal
-# Flow',bbox=bbox_props,zorder=10,ha='center',va='center',rotation=ltbx.principal_angle,size='large')
-
+# Flow',bbox=bbox_props,zorder=10,ha='center',va='center',rotation=pt.principal_angle,size='large')
 
 bbox_props = dict(boxstyle='darrow,pad=0.3', fc='cyan', ec='none', lw=2)
 t = ax.text(-800, -500, 'Tidal Flow',
             bbox=bbox_props, zorder=10,
             ha='center', va='center',
-            rotation=ltbx.principal_angle,
+            rotation=pt.principal_angle,
             size='large')
 
 ax.set_ylim([-660, 300])
 ax.set_xlim([-1000, 400])
 
-kws = {'T1b-top': dict(xytext=(-5, -5),
-                       ha='right',
-                       va='top'
-                       ),
-       'T2b-top': dict(xytext=(5, 5),
-                       ha='left',
-                       va='bottom',
-                       )
+kws = {'T1b': dict(xytext=(-5, -5),
+                   ha='right',
+                   va='top'
+       ),
+       'T2b': dict(xytext=(5, 5),
+                   ha='left',
+                   va='bottom',
+       )
        }
 
-for nm in ['T1b-top', 'T2b-top']:
-    ll = veldat[nm].props['latlon'][::-1]
+for nm in ['T1b', 'T2b']:
+    ll = pt.latlons[nm][::-1]
     xd, yd = map_data(*ll)
     ax.annotate('TTM ' + nm[1], (xd - x0, yd - y0),
                 textcoords='offset points', color='k',
@@ -169,5 +163,5 @@ for nm in ['T1b-top', 'T2b-top']:
                 )
     ax.plot(xd - x0, yd - y0, 'y.', ms=20, zorder=50)
 
-#fig.savefig(ltbx.figdir + 'map02.png', dpi=300)
-#fig.savefig(ltbx.figdir + 'map02.pdf')
+fig.savefig(pt.figdir + 'map03.png', dpi=300)
+fig.savefig(pt.figdir + 'map03.pdf')

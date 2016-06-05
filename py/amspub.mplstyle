@@ -1,0 +1,13 @@
+font.size : 9.85
+axes.titlesize : medium
+lines.linewidth : 1
+lines.markersize : 8
+figure.subplot.left : 0.2
+figure.subplot.right : 0.95
+figure.subplot.top : 0.95
+figure.subplot.bottom : 0.14
+figure.subplot.hspace : 0.08
+figure.subplot.wspace : 0.08
+figure.figsize : 3.166, 4.
+text.usetex : True
+

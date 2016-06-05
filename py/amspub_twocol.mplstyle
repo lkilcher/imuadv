@@ -1,0 +1,6 @@
+figure.subplot.left : 0.1
+figure.subplot.right : 0.98
+figure.subplot.top : 0.95
+figure.subplot.bottom : 0.14
+figure.subplot.wspace : 0.14
+figure.figsize : 6.5, 4.

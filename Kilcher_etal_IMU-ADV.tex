@@ -34,30 +34,7 @@
 
 \newcommand{\note}[1]{\textcolor{blue}{#1}}
 \newcommand{\citeneeded}[1]{\textcolor{red}{(NEED CITATION for: #1)}}
-
-\newcommand{\unit}[1]{\ensuremath{\,\mathrm{#1}}}
-\def\rmat{\ensuremath{\mathbf{H}}}
-%\def\earth{\ensuremath{^\mathrm{e}}}
-\def\earth{}
-\def\bhv{\ensuremath{\vec{l}_\mathrm{head}^*}}
-\def\ihv{\ensuremath{\vec{l}^*_\mathrm{imu}}}
-%\def\dolfyn{\url{http://lkilcher.github.io/dolfyn/}{DOLfYN}}
-\def\dolfyn{DOLfYN}
-\def\omat{\ensuremath{\mathbf{R}}}
-\def\omatinv{\ensuremath{\mathbf{R}^\mathrm{T}}}
-\def\ue{\ensuremath{\vec{u}\earth}}
-\def\uacc{\ensuremath{\ue_a}}
-\def\tke{\ensuremath{\mathrm{tke}}}
-
-\def\AngRt{\ensuremath{\vec{\omega}}}
-\def\Accel{\ensuremath{{\vec{a}}}}
-\def\Accelp{\ensuremath{{\vec{a}^{*'}}}}
-\def\ue{\ensuremath{\vec{u}\earth}}
-\def\um{\ensuremath{\ue_\mathrm{h}}}
-\def\uadv{\ensuremath{\ue_\mathrm{m}}}
-\def\urot{\ensuremath{\ue_\omega}}
-\def\uacc{\ensuremath{\ue_a}}
-\def\l{\ensuremath{\vec{\ell}}}
+\usepackage{defs}
 
 \abstract{
 THE ABSTRACT.
@@ -109,42 +86,65 @@ robust and versatile tools
 
 \section{Measurements}
 
-This work utilizes ADV measurements from two field deployments, and from bench and laboratory tests. The ADVs utilized for these measurements were all equipped with Microstrain 3DM-GX3-25 IMU sensors that captured the angular rotation vector, the linear acceleration, and the orientation of the ADV pressure-case.  
+This work is focused on measuring turbulence spectra from moored ADVs that are equipped with inertial motion sensors (IMU). The ADVs utilized for these measurements were all equipped with Microstrain 3DM-GX3-25 IMU sensors that captured all 6 components of the ADV motion (3 components of angular rotation and 3 components of linear acceleration), as well the orientation of the ADV pressure-case. The sampling of the motion sensor is tightly synchronized with the ADV measurements. The IMU measures its motion at 1kHz and uses internal signal integration (Kalman filtering) to output the motion signals at the same sample rate as the ADV's velocity measurements. This reduces aliasing of the IMU's motion measurements above the ADV's sample-rate \cite{3DM-GX3_coning_sculling}.
+
+This work utilizes data from two distinct mooring systems to demonstrate the advantages and limitations of each platform. Both mooring systems were deployed in Admiralty Inlet, Washington, approximately 500 meters (m) WSW of Admiralty Head--Fort Casey State Park--in 60 m of water at latitude 48.153 north and longitude 122.687 west (Figure \ref{fig:map}). Admiralty inlet possesses a large semi-diurnal tidal energy flux as it is the largest waterway connecting Puget Sound to the Strait of Juan de Fuca. The site is approximately 6 kilometers (km) east of Port Townsend, and 1 km north of the Port Townsend -- Coupeville ferry route.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=3in]{map02}
-  \caption{Map of admiralty inlet.}
+  \caption{Bathymetry of Admiralty Inlet at Admiralty Head.}
   \label{fig:map}
+\end{figure}
+
+The first mooring system was a simple fin suspended between a clump-weight anchor (2700lbs dry weight) and a spherical steel buoy (700lbs buoyancy). The ADVs pressure case (body) was hose-clamped to one side of the fin and the ADV sensor head was positioned in 10cm in front of the fin's leading edge (Figure \ref{fig:ttm:diagram}). The leading edge of the fin is fastened inline with the mooring line. This configuration  was designed to work similar to a weather-vane, such that the drag on the fin held the ADV head upstream of the mooring components. The ADVs were inclined at an angle of 18$^\circ$ to the leading edge of the fin to account for mooring blow-down during strong currents (Figure \ref{fig:ttm:photo}.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=2.4in]{ttm04b}
+  \caption{Schematic diagram of the TTM, not to scale.}
+  \label{fig:ttm:diagram}
 \end{figure}
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.8in]{ttm06}
-  \caption{TTM schematic.}
-  \label{fig:ttm_schematic}
+  \includegraphics[width=2.6in]{TTM_image01}  
+  \caption{TTM components on the deck of the R/V Jack Robertson. The TTM includes two ADVs, with pressure-cases mounted on opposite sides of the fin. The anchor stack includes a pop-up buoy for retrieval. }
+  \label{fig:ttm:photo}
 \end{figure}
 
-% Do we need a schematic of the StableMoor too?
+The second mooring system was a cylindrical syntactic foam buoy that was anchored to a clump weight that weighed 2700 lbs (Figure \ref{fig:SM}). The buoy is 3.5 m long and 0.45 m in diameter with a tail ring that is 0.76 m in diameter. It weighs 295 kg in air, and has a buoyancy of 185 kg in water. An ADV head was positioned 0.1 m in front of the buoy nose.  The buoy was equipped with a 300 kHz RDI workhorse acoustic Doppler profiler that was pointed downward and configured to measure water velocity below the platform in \note{how many bins?} and measure buoy motion (`bottom tracking') at 1 Hz. The buoy platform was ballasted to pitch upward a few degrees in zero-flow to avoid `flying downward'. In the presence of an oncoming current the tail fins help to orient it into the flow. The anchor for this buoy is similar to that of the TTM, including an acoustic release so the mooring and anchor can be recovered separately.
+
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=2.6in]{SM_ondeck01}
+  \includegraphics[width=2.6in]{SM_NoseMode01}
+  \caption{Alex DeKlerk checks to ensure that the StableMoor buoy is properly fastened to its anchor; the RDI workhorse ADCP can be seen in the rear instrument bay (top). A bridle is draped across the top of the buoy for deployment and recovery, and a small marker buoy fastened to the tail aids in recovery.  A close-up of the StableMoor nose shows the ADV head and the top of its pressure case (bottom). }
+  \label{fig:SM}
+\end{figure}
 
 \section{Methodology}
 
+% The orientation matrix can be used to rotate all vector-quantities measured in the instrument frame (velocity, rotation rate, acceleration, etc.) into the earth's coordinate system. 
+% The angular rate and linear acceleration signals can be used to estimate the ADV head-motion, $\um$, which can then be removed from the measured velocity, $\uadv$, to estimate the `motion corrected' velocity in the earth frame,
+% Note that $\um$ is added to $\uadv$ because the measured velocity resulting from head motion is in the opposite direction of head motion itself (i.e., $\uadv = \ue - \um$).
+
 Estimate time-series of velocity on a compliant mooring by obtaining an independent estimate of ADV head motion, and removing that motion from the measured signal. Nortek offers an ADV that is equipped with an IMU that measures the linear acceleration, rotational-motion, and orientation of the ADV pressure case (body). So long as the ADV head is rigidly connected to the ADV pressure case, it is possible to utilize the IMU motion signals to calculate the motion of the ADV head, and remove it from the measured velocity signal.  The ADV head motion, is calculated as the sum of rotational and translational motion, which are each estimated from the IMU's angular-rate, \AngRt, and acceleration, \Accel, signals as:
 \begin{align}
-  \um & = \urot + \uacc \\
-      & = \omatinv \cdot \AngRt^*(t)\times\l^* + \int \{\Accel(t)\}_{HP(f_{a})} \mathrm{d}t
+  \um & = \urot + \uacc + \ulow \\
+      & = \omatinv \cdot \AngRt^*(t)\times\l^* + \int \{\Accel(t)\}_{HP(f_{a})} \mathrm{d}t + \ulow
 \end{align}
 Here `$*$' superscripts denote quantities in the ADV's locale coordinate system, $\omatinv$ is the IMU orientation matrix that rotates vectors from the IMU to the earth reference frame, and $\l^*$ is the vector from the IMU to the ADV head. The notation $\{\Accel\}_{HP(f_a)}$ indicates that the IMU's accelerometer signal is high-pass filtered (in the earth's stationary reference frame) at a chosen filter-frequency, $f_a$. This is necessary because accelerometers have known low-frequency noise, sometimes referred to as `bias-drift' \citeneeded{Accelerometer noise}. This noise is amplified by integration of the acceleration signal such that it contaminates the motion correction, especially at low-frequencies (Figure \ref{fig:stationary_noise}).
+% Do I need to say something about filtering out gravity here too?
 
-The choice of high-pass filter to be used to correct for low-frequency accelerometer noise issue depends on the application (e.g. deployment platform), and the turbulence level of the measurement environment. In particular, this involves a trade off between filtering-out this noise and not filtering measured motion. If an independent measure of low-frequency motion is available, it is possible to combine that signal with the IMU's high-frequency motion measurements to obtain a complete estimate of ADV motion. An example of this operation is presented in section \ref{sec:stablemoor_motion}. Lacking an independent measure of low-f motion, the user may instead choose to neglect the portion of the spectrum below the chosen filter frequency 
+% Bench-tests of the Microstrain IMU indicate that its accelerometers drift for frequencies $<10^{-2}$Hz (a minute or more, \cite{EgelandPhD2014}).  Therefore, in order to remove bias-drifts in $\vec{a}$ that--when integrated according to \eqref{eqn:uacc-def}--lead to large errors in $\uacc$ this document recommends using $f_a = 0.033$Hz (30seconds). 
+% On the other hand, real motions at and below $f_a$ will not be accurately accounted for in $\uacc$, and will therefore persist as low-frequency motion contamination not corrected-for in the estimate of $\vec{u}$. 
 
-Break motion velocity into two components:
-\begin{itemize}
-\item translational (Accel + something?)
-\item rotational  (AngRt)
-\end{itemize}
+% For moorings whose low-frequency motion is limited by the mooring line itself this is a reasonable approach.  
+% Assuming that the displacement of the ADV head (from the mooring's neutral position) is likely to be  $< 20 \% $ of its distance from the bottom, then for ADVs deployed at 10m depth the speed of their low-frequency motion (i.e. below $ f_a = 0.03 $ Hz) will be $<0.07 \mathrm{m/s} $.  In other words, for a 10m mooring the choice of $f_a = 0.03$Hz allows for low-frequency motion contamination on the order of 7cm/s to persist.  This is a notable but relatively minor level of uncertainty in the context of the highly energetic flows that exist at tidal energy sites.
 
-A primary limitation of this approach is based on the limitations of the IMU sensors themselves. In particular, the noise levels of the Accel and AngRt signals from the IMU. The primary source of uncertainty in this approach is related to the `low frequency drift' of IMU accelerometers. Without correcting for this, the noise in the Accel will typically overwhelm the measured velocity signal at low frequency, and lead to non-realistic estimates of mean motion (see Appendix \ref{apdx:imu-uncertainty}).
+The choice of high-pass filter to be used to correct for low-frequency accelerometer noise issue depends on the application (e.g. deployment platform), and the turbulence level of the measurement environment. In particular, this involves a trade off between filtering-out this noise and not filtering measured motion (Figure \ref{fig:stationary_noise}). If an independent measure of low-frequency motion is available, it is possible to combine that signal with the IMU's high-frequency motion measurements to obtain a complete estimate of ADV motion. An example of this operation is presented in section \ref{sec:stablemoor_motion}. Lacking an independent measure of low-f motion, the user may instead choose to neglect the portion of the spectrum below the filter frequency, or demonstrate that platform motion at those frequencies is small compared to the measured signal based on other considerations. 
 
 \begin{figure}
   \centering
@@ -153,55 +153,23 @@ A primary limitation of this approach is based on the limitations of the IMU sen
   \caption{Spectra of $\urot$ (yellow) and $\uacc$ signals from the Microstrain IMU sitting on a motionless table. The $\uacc$ signals are unfiltered (black), and high-pass filtered at 30s (magenta), 10s (blue), 5s (green). Vertical dotted lines indicate the filter frequency. The black horizontal dotted line indicates the noise-level of a Nortek Vector ADV configured to measure $\pm$4m/s. The shaded region indicates the range of spectra presented herein (0.002 $< \tke <$ 0.03 $\mathrm{m^2/s^2}$, 1e-5 $< \epsilon <$ 5e-4 $\mathrm{W/kg}$).}
 \end{figure}
 
-There are errors in Accel velocity. Discuss these in context of non-moving Accel spectra. Introduce concept of adding low-f translational velocity signal.
-
-\subsection{Motion Correction}\label{sec:proc:motion}
-
-\begin{itemize}
-\item the angular rotation rate vector,
-\item the linear acceleration vector, and
-\item the IMU orientation (matrix), in the earth's 'East-North-Up' (ENU) coordinate system.
-\end{itemize}
-
-The orientation matrix can be used to rotate all vector-quantities measured in the instrument frame (velocity, rotation rate, acceleration, etc.) into the earth's coordinate system. 
-The angular rate and linear acceleration signals can be used to estimate the ADV head-motion, $\um$, which can then be removed from the measured velocity, $\uadv$, to estimate the `motion corrected' velocity in the earth frame,
+With this estimate of ADV head motion it is straightforward to correct the measured velocity, $\uadv$, to estimate the velocity in the earth's inertial reference frame:
 \begin{align}
   \label{eqn:u_mot_def}
   \ue(t) & = \uadv(t) + \um(t) &  .
 \end{align}
-Note that $\um$ is added to $\uadv$ because the measured velocity resulting from head motion is in the opposite direction of head motion itself (i.e., $\uadv = \ue - \um$).
-
-We now break $\um$ into two parts, $ \um  =  \uacc + \urot $.
-The first is an estimate of the linear motion of the ADV,
-\begin{align}
-\label{eqn:uacc-def}
-  \uacc(t) & = \int \{\vec{a}\earth(t)\}_{HP(f_{a})} \mathrm{d}t & .
-\end{align}
-Here, $\vec{a}\earth(t)$ is the IMU-measured acceleration signal rotated into the earth frame\footnote{i.e. $\vec{a}\earth (t) = \omatinv(t) \cdot \vec{a}^*(t)$, see appendix \ref{apdx:coord-sys} for details.}, and $\{\}_{HP(f_{a})}$ denotes an appropriate high pass filter of frequency $f_a$. The acceleration must be high-pass filtered in this way to remove the influence of gravity and that of low-frequency bias drift that is inherent to IMU accelerometer measurements.  
-
-Bench-tests of the Microstrain IMU indicate that its accelerometers drift for frequencies $<10^{-2}$Hz (a minute or more, \cite{EgelandPhD2014}).  Therefore, in order to remove bias-drifts in $\vec{a}$ that--when integrated according to \eqref{eqn:uacc-def}--lead to large errors in $\uacc$ this document recommends using $f_a = 0.033$Hz (30seconds). 
-On the other hand, real motions at and below $f_a$ will not be accurately accounted for in $\uacc$, and will therefore persist as low-frequency motion contamination not corrected-for in the estimate of $\vec{u}$. 
-
-For moorings whose low-frequency motion is limited by the mooring line itself this is a reasonable approach.  
-Assuming that the displacement of the ADV head (from the mooring's neutral position) is likely to be  $< 20 \% $ of its distance from the bottom, then for ADVs deployed at 10m depth the speed of their low-frequency motion (i.e. below $ f_a = 0.03 $ Hz) will be $<0.07 \mathrm{m/s} $.  In other words, for a 10m mooring the choice of $f_a = 0.03$Hz allows for low-frequency motion contamination on the order of 7cm/s to persist.  This is a notable but relatively minor level of uncertainty in the context of the highly energetic flows that exist at tidal energy sites.
-
- 
-The second component if $\um$ is due to rotational motion of the ADV-head about the IMU,
-\begin{align}
-  \label{eqn:urot-def}
-  \urot(t) &  = \omatinv(t) \cdot \left ( \AngRt^*(t)\times\vec{\ell}^*  \right ) & .
-\end{align}
-Here $\AngRt^*$ is the IMU-measured rotation-rate, $\vec{\ell}^* = \bhv - \ihv$ is the vector from the IMU to the ADV head, $\times$ indicates a cross-product and superscript $*$s denotes a quantity in the `ADV body' coordinate system. This coordinate system is used explicitly here to emphasize that $\vec{\ell}^*$ is constant in time.  Matrix multiplication (denoted by `$\cdot$') with the inverse ADV body orientation matrix, $\omatinv(t)$, is used to rotate the `body-frame rotation induced velocity' into the earth frame.  For details on these coordinate systems and the definition of the orientation matrix see appendix \ref{apdx:coord-sys}.  
-
+Note here that the `+'-sign is correct because head motion, $\um$, induces a measured velocity in the opposite direction of the head motion itself ($\uadv = \ue - \um$).
 
 \section{Results}
+
+This section presents IMU corrected ADV measurements from the Tidal Turbulence Mooring (TTM) and Stablemoor (SM) platforms. These platforms have different motion characteristics that result in  \cite{Harding_MotionPaper}
 
 \subsection{Mean velocity}
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=3in]{TimeFig01}
-  \caption{Time series of tidal velocity at Admiralty Head.}
+  \includegraphics{TimeFig02}
+  \caption{Time series of tidal velocity at Admiralty Head from TTM measurements (black), and an acoustic Doppler profiler (red). The profiler measurements were contaminated by acoustic reflection from the mooring when it was inline with one of the profiler's beams. Note that the vertical scale on the three axes vary by more than an order of magnitude (the small ticks in A and B are equivalent to the ticks in C).}
   \label{fig:vel_time}
 \end{figure}
 
@@ -211,15 +179,21 @@ Estimates of spectra
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=6
-in]{SpecFig02_annot}
-  \caption{Spectra from IMU-ADV measurements.}
+  \includegraphics[width=6in]{SpecFig02_annot}
+  \caption{Spectra from Tidal Turbulence Mooring IMU-ADV measurements. }
   \label{fig:spec01}
 \end{figure*}
 
-\subsubsection{Uncertainty in spectra}
+\subsection{Massive Body}
 
-\subsection{Turbulence energy dissipation rate}
+\begin{figure*}[t]
+  \centering
+  \includegraphics{SM_spec_filt5s}
+\end{figure*}
+
+%\subsubsection{Uncertainty in spectra}
+
+%\subsection{Turbulence energy dissipation rate}
 
 %%%%%%%%%%%%%%%%%
 %ACKNOWLEDGMENTS

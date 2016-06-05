@@ -1,5 +1,31 @@
-motion_coherence.py:
+py/make_map.py
+- Make map of larger area?
+- Change font sizes?
+
+fig/TTM_Image01
+- Add l* vec?
+
+fig/SM_NoseMode01
+- Add l* vec
+
+fig/ttm04b
+- Increase font sizes?
+
+py/motion_coherence.py:
 - Confirm how to calculate uncertainty of angles (for phase-shift
   plot, if we're going to use it).
 
-Start on working with bench tests from Nortek.
+fig/TimeFig01
+- Make consistent mplstyle
+- Change y-axis sizes so that 1m/s is the same vertical size on all plots
+- Plot mag/direction instead? Difference?
+- Correct individual sampled AWAC data?
+- Is there an offset on w due to head-body rotation matrix?
+- Thicker linewidth for ADV
+
+fig/SpecFig_annot
+- Consistent mplstyle
+- Multiple velocity ranges?
+- Consistent legends
+
+- Do we need the bench tests from Nortek?

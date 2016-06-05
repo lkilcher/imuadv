@@ -1,10 +1,8 @@
 from __future__ import division
 from dolfyn.adv import api as avm
 import bench_tests as btests
-import matplotlib.pyplot as plt
-import matplotlib.dates as dt
+import ptools as pt
 import numpy as np
-plt.ion()
 
 
 def spec_epsilon(epsilon, tke, k, alpha=0.5, ):
@@ -61,20 +59,18 @@ bd.add_data('Var_Accel', binner.std(rd.Accel) ** 2)
 bd.add_data('Var_AngRt', binner.std(rd.AngRt) ** 2)
 
 gd = bd.Var_Accel.sum(0) < var_accel_screen_level
-gd &= bd.mpltime < dt.date2num(dt.datetime.datetime(2015, 1, 29, 6, 0, 0))
+gd &= bd.mpltime < pt.dt.date2num(pt.datetime(2015, 1, 29, 6, 0, 0))
 
-# tkr = dt.HourLocator(byhour=range(0, 24, 3))
-# tkr2 = dt.HourLocator()
-# fmt = dt.DateFormatter('%H')
+# tkr = pt.dt.HourLocator(byhour=range(0, 24, 3))
+# tkr2 = pt.dt.HourLocator()
+# fmt = pt.dt.DateFormatter('%H')
 
 colors = ['r', 'g', 'b']
 
 if flag.get('plot_spec', False):
 
-    fig = plt.figure(101, figsize=(4, 8))
-    fig.clf()
-    fig, axs = plt.subplots(2, 1, num=fig.number, sharex=True,
-                            gridspec_kw=dict(left=0.2, right=0.94, top=0.95))
+    fig, axs = pt.newfig(2, 1, sharex=True,
+                         gridspec_kw=dict(left=0.2, right=0.94, top=0.95))
 
     for idx in xrange(3):
         axs[0].loglog(bd.freq, bd.Spec_Accel[idx][gd].mean(0) * 2 * np.pi,
@@ -93,10 +89,8 @@ if flag.get('plot_spec', False):
 
 if flag.get('plot_spec2', False):
 
-    fig = plt.figure(102, figsize=(4, 4))
-    fig.clf()
-    fig, ax = plt.subplots(1, 1, num=fig.number, sharex=True,
-                           gridspec_kw=dict(left=0.2, right=0.94, top=0.95))
+    fig, ax = pt.newfig(1, 1, sharex=True,
+                        gridspec_kw=dict(left=0.2, right=0.94, top=0.95))
 
     bdmc = bindatmc['unfiltered']
     for idx in xrange(3):
@@ -113,14 +107,12 @@ if flag.get('plot_spec2', False):
     # axs[1].set_xlabel('$f\, \mathrm{[hz]}$', size='large')
 
     #fig.saxes.hide('xticklabels', fig.saxes.ax[-1, :])
-    fig.savefig('../fig/stationary_noise02.pdf')
+    fig.savefig(pt.figdir + 'stationary_noise02.pdf')
 
 if flag.get('plot_spec3', False):
 
-    fig = plt.figure(103, figsize=(4, 4))
-    fig.clf()
-    fig, ax = plt.subplots(1, 1, num=fig.number, sharex=True,
-                           gridspec_kw=dict(left=0.2, right=0.94, top=0.95, bottom=0.15))
+    fig, ax = pt.newfig(1, 1, sharex=True, figsize=3,
+                        gridspec_kw=dict(left=0.2, right=0.94, top=0.95, bottom=0.15))
 
     line_f = np.logspace(-3, 2, 50)
     epsilon, tke, U = (5e-4, 0.03, 1.0, )
@@ -172,7 +164,7 @@ if flag.get('plot_spec3', False):
     ax.set_ylim([1e-7, 1e1])
     ax.set_xlim([1e-3, 1e1])
     ax.legend(prop=dict(size='small'))
-    ax.set_xlabel('frequency [hz]')
+    ax.set_xlabel('$f\ [\mathrm{hz}]$')
     ax.set_ylabel('$\mathrm{[m^2s^{-2}/hz]}$')
     ax.axhline(2e-4, color='k', linestyle=':')
     #axs[0].set_title('Spectra: Bench Test %s' % tag)
@@ -181,4 +173,4 @@ if flag.get('plot_spec3', False):
     # axs[1].set_xlabel('$f\, \mathrm{[hz]}$', size='large')
 
     #fig.saxes.hide('xticklabels', fig.saxes.ax[-1, :])
-    fig.savefig('../fig/stationary_noise03.pdf')
+    fig.savefig(pt.figdir + 'stationary_noise03.pdf')

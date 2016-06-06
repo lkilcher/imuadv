@@ -92,7 +92,7 @@ This work utilizes data from two distinct mooring systems to demonstrate the adv
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=3in]{map02}
+  \includegraphics[width=3.4in]{map02}
   \caption{Bathymetry of Admiralty Inlet at Admiralty Head.}
   \label{fig:map}
 \end{figure}
@@ -123,6 +123,14 @@ The second mooring system was a cylindrical syntactic foam buoy that was anchore
   \caption{Alex DeKlerk checks to ensure that the StableMoor buoy is properly fastened to its anchor; the RDI workhorse ADCP can be seen in the rear instrument bay (top). A bridle is draped across the top of the buoy for deployment and recovery, and a small marker buoy fastened to the tail aids in recovery.  A close-up of the StableMoor nose shows the ADV head and the top of its pressure case (bottom). }
   \label{fig:SM}
 \end{figure}
+
+\note{Need to describe the measurements for each data source.}
+
+Periods of time during which the mooring interfered with a beam of the Doppler profiler were identified by inspection of the profiler's acoustic amplitude signal. Periods during which one beam of the profiler had $>5\%$ higher acoustic amplitude than the other beams were flagged as `contaminated' and excluded from averaging.  5-minute averages in which more than 50\% of the data was contaminated in this way are not shown.
+
+\note{END: Add data sources}
+
+Unless stated otherwise, vector quantities in this work are in a fixed `principal-axes' coordinate system that is aligned with the bi-directional tidal flow: positive $u$ is in the direction of ebb (310$\circ$ True), positive $w$ is vertically upward, and $v$ is the cross-stream component in a right-handed coordinate system. The full velocity vector, $\vec{\tilde{u}} = (\tilde{u}, \tilde{v}, \tilde{w})$, is separated into a mean and turbulent component as $\vec{\tilde{u}} = \vec{\bar{u}} + \vec{u}$, where--here and throughout this work--the over-bar denotes a 5 minute average.  All time series are linearly detrended and Hanning windowed prior to computing spectra to reduce spectral reddening. All spectra are computed as the squared magnitude of the Fourier transform and are normalized to preserve variance (e.g. $\int S(u)\mathrm{d}f = \overline{u^2}$).
 
 \section{Methodology}
 
@@ -162,14 +170,29 @@ Note here that the `+'-sign is correct because head motion, $\um$, induces a mea
 
 \section{Results}
 
-This section presents IMU corrected ADV measurements from the Tidal Turbulence Mooring (TTM) and Stablemoor (SM) platforms. These platforms have different motion characteristics that result in  \cite{Harding_MotionPaper}
+A comparison of mean velocity measured by an IMU-ADV mounted on a TTM, to that of an upward-looking acoustic Doppler profiler mounted on the TTM anchor is presented in Figure \ref{fig:vel_time}. This shows excellent agreement between the ADV and Doppler profiler measurements of velocity. The $u$ and $w$ components are always within 0.1 m/s, and the $v$ component only has limited periods where the difference is as large as 0.4 m/s. This agreement between the magnitude and direction of these independent measurements indicates that the IMU-measured orientation matrix accurately resolves the ADV orientation in the Earth's reference frame. This is a highly encouraging result considering most ADV manufacturers previously assumed these instruments would be stationary and therefore relied on slow-response orientation sensors.
 
-\subsection{Mean velocity}
+While it is encouraging that the moored IMU-ADV is capable of measuring mean velocity, it is not particularly useful considering that Doppler profilers accomplish this task more easily (upward looking from a bottom-lander or downward looking from a ship). As such, it 
+
+slow sample-rate   were only capable of resolving  amplitude of the ADV's motion on the mooring, and the  \cite{Harding_MotionPaper}
+
+Though there are some periods where the $v$ component of velocity differs by as much as 0.4m/s, the $u$ component is always within 0.1m/s. and 
+
+
+ data were  than return amplitude was significantly larger than the other beams, and  by inspection of t  There were significant periods of time when the TTM mooring pass in front of a beam of the profiler. interfeered with The periods In this figure, the 
+The mean velocity vector from the TTM-based ADV measurements agrees remarkably well with the velocity measured by the upward looking, bottom-mounted Doppler profiler at the same depth (Figure \ref{fig:vel_time}). 
+Comparison of the mean velocity The moored velocity measurements provide a reliable estimate of the mean velocity components. 
+
+The reliability of the IMU's orientation matrix is demonstrated shown by 
+The moored IMU-equipped ADV provides a reliable estimate of mean velocity (Figure \ref{fig:vel_time}).  The I
+The mean velocity is well resolved by the moored orientation matrix of the IMU provides a reliable estimate of the earth-frame
+
+This section presents IMU corrected ADV measurements from the Tidal Turbulence Mooring (TTM) and Stablemoor (SM) platforms. These platforms have different motion characteristics that result in  \cite{Harding_MotionPaper}
 
 \begin{figure}[t]
   \centering
   \includegraphics{TimeFig02}
-  \caption{Time series of tidal velocity at Admiralty Head from TTM measurements (black), and an acoustic Doppler profiler (red). The profiler measurements were contaminated by acoustic reflection from the mooring when it was inline with one of the profiler's beams. Note that the vertical scale on the three axes vary by more than an order of magnitude (the small ticks in A and B are equivalent to the ticks in C).}
+  \caption{Time series of tidal velocity at Admiralty Head from TTM measurements (black), and an acoustic Doppler profiler (red). The profiler measurements--taken at the same depth as the ADV on the TTM---were contaminated by acoustic reflection from the strongback fin when it was inline with one of the profiler's beams. Note that the vertical scale on the three axes vary by more than an order of magnitude (the small ticks in A and B are equivalent to the ticks in C).}
   \label{fig:vel_time}
 \end{figure}
 

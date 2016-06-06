@@ -10,4 +10,6 @@ figure.subplot.hspace : 0.08
 figure.subplot.wspace : 0.08
 figure.figsize : 3.166, 4.
 text.usetex : True
+font.family : serif
+font.serif : times
 

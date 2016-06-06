@@ -5,6 +5,7 @@ import dolfyn.data.binned as binmod
 import ttm.June2012 as j12
 plt = pt.plt
 import scipy.signal as sig
+import matplotlib.ticker as tkr
 
 awacr = j12.load('AWAC', coordsys='pax', data_groups='ALL')
 awac = j12.load('AWAC', coordsys='pax', bin=True)
@@ -20,7 +21,7 @@ flg = {}
 #flg['do_check_awac_amp'] = True
 #flg['do_awacVadv_up'] = True
 flg['show awac avg fix'] = True
-flg['show awac avg2'] = True
+#flg['show awac avg2'] = True
 flg['save figs'] = True
 
 if 'dat_mc' not in vars():
@@ -234,19 +235,20 @@ if flg.get('do_check_awac_amp', False):
         ax.axhline(thresh, color='r')
 
 
-def screen(amp, npt=10, thresh=5):
-    damp = np.diff(np.pad(amp.astype(np.int16),
+def screen(amp, npt=10, thresh=0.05):
+    damp = np.diff(np.pad(amp.astype(np.float32),
                           (((0, 1),) + (((0, 0), ) * (amp.ndim - 1))),
                           'wrap'),
                    1, 0)
+    damp /= amp
     shape = [1, ] * amp.ndim
     shape[1] = npt
-    tmp = sig.convolve(damp, np.ones(shape) / npt, 'same')
+    tmp = np.abs(sig.convolve(damp, np.ones(shape) / npt, 'same'))
     return tmp.max(0) > thresh
 
 if flg.get('do_check_awac_amp2', False):
 
-    def msk(dat, msk):
+    def msk(dat):
         return np.ma.masked_where(bd, dat)
 
     awi = slice(25000, 32000)
@@ -295,68 +297,56 @@ if flg.get('do_check_awac_amp2', False):
         #ax.axhline(thresh, color='r')
 
 if flg.get('show awac avg fix', False):
- 
+
     bnr = binmod.TimeBinner(300, 1)
     t0 = awacr.mpltime[0]
     t = (bnr.mean(awacr.mpltime) - t0) * 24
     dat_mc.time = (dat_mc.mpltime - t0) * 24
     depi = 9
-    bd = screen(awacr._amp[:, depi])
-    u = bnr.mean(np.ma.masked_where(np.tile(bd[None, :], (3, 1)), awacr._u[:, depi]),
-                 mask_thresh=0.6)
-    scale = np.array([[-2, 2.5],
+    bd = screen(awacr._amp[:, depi], thresh=0.05)
+    u = bnr.mean(np.ma.masked_where(np.tile(bd[None, :], (3, 1)),
+                                    awacr._u[:, depi]),
+                 mask_thresh=0.5)
+    scale = np.array([[-2.1, 2.1],
                       [-1, 1],
-                      [-0.2, 0.1],])
+                      [-0.2, 0.2], ])
     height_ratios = np.diff(scale, 1, -1)
     height_ratios[2] *= 2
     height_ratios = np.ones(3)
-    # ufix = (u[0] + 1j * u[1]) * np.exp(1j * np.pi / 180 * -5)
-    # u[0], u[1] = ufix.real, ufix.imag
-    ufix = dat_mc.u + 1j * dat_mc.v
-    #ufix *= np.exp(1j * np.pi / 180 * 5)
+    offset = [0, 0, 0.02]
     with pt.style['onecol']():
         fg, axs = pt.newfig(42, 3, 1, figsize=4, sharex=True, hspace=0.18,
                             bottom=0.1,
                             gridspec_kw=dict(height_ratios=height_ratios))
-        thresh = 100
+        for iax, ax in enumerate(axs):
+            ax.text(0.03, 0.92, '({})'.format('ABC'[iax]),
+                    transform=ax.transAxes, fontsize='small',
+                    ha='left', va='top')
+            ax.axhline(0, color='k', linestyle='--', lw=0.5)
+            ax.set_ylabel(r'$\bar{%s}\ \mathrm{[m/s]}$' % format('uvw'[iax]))
+            ax.plot(dat_mc.time, dat_mc._u[iax], 'k', lw=2)
+            ax.plot(t, u[iax] + offset[iax], 'r', lw=1.0)
         ax = axs[0]
-        ax.text(0.03, 0.92, '(A)', transform=ax.transAxes,
-                ha='left', va='top')
-        ax.axhline(0, color='k', linestyle='--', lw=0.5)
-        ax.plot(dat_mc.time, ufix.real, 'k', lw=2)
-        ax.plot(t, u[0], 'r', lw=1.0)
-        ax.set_ylabel('$u\ \mathrm{[m/s]}$')
-        ax.yaxis.set_ticks(np.arange(-3.5, 3.5, 0.5))
+        ax.yaxis.set_ticks(np.arange(-3.0, 3.5, 1.0))
         ax.yaxis.set_ticks(np.arange(-3.5, 3.5, 0.1), minor=True)
+        ax.yaxis.set_major_formatter(tkr.FormatStrFormatter('$%0.1f$'))
         ax.set_ylim(scale[0])
         ax = axs[1]
-        ax.text(0.03, 0.92, '(B)', transform=ax.transAxes,
-                ha='left', va='top')
-        ax.axhline(0, color='k', linestyle='--', lw=0.5)
-        ax.plot(dat_mc.time, ufix.imag, 'k', lw=2)
-        ax.plot(t, u[1], 'r')
         ax.yaxis.set_ticks(np.arange(-1.5, 1.5, 0.5))
         ax.yaxis.set_ticks(np.arange(-1.5, 1.5, 0.1), minor=True)
         ax.set_ylim(scale[1])
-        ax.set_ylabel('$v\ \mathrm{[m/s]}$')
         ax = axs[2]
-        ax.text(0.03, 0.92, '(C)', transform=ax.transAxes,
-                ha='left', va='top')
-        ax.axhline(0, color='k', linestyle='--', lw=0.5)
-        ax.plot(dat_mc.time, dat_mc.w - 0.02, 'k', lw=2)
-        ax.plot(t, u[2], 'r')
-        ax.set_ylabel('$w\ \mathrm{[m/s]}$')
         ax.yaxis.set_ticks(np.arange(-0.5, 0.5, 0.1))
         #ax.yaxis.set_ticks(np.arange(-0.5, 0.5, 0.05), minor=True)
         ax.set_ylim(scale[2])
-
+        ax.xaxis.set_ticks(np.arange(0, 50, 6))
         # ax.xaxis.set_major_locator(pt.dt.HourLocator(range(0, 24, 6)))
         # ax.xaxis.set_major_formatter(pt.dt.DateFormatter('%H'))
         ax.set_xlim([t[0], t[-1]])
         ax.set_xlabel('Time [Hours]')
 
-        fg.savefig(pt.figdir + 'TimeFig02.pdf')
-    
+        if flg.get('save figs', False):
+            fg.savefig(pt.figdir + 'TimeFig02.pdf')
 
 if flg.get('show awac avg2', False):
 

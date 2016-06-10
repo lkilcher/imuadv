@@ -15,28 +15,57 @@ rcParams = mpl.rcParams
 plt.style.use('./amspub.mplstyle')
 style = dict(
     onecol=lambda:plt.style.context('./amspub.mplstyle'),
-    twocol=lambda:plt.style.context(['./amspub.mplstyle', './amspub_twocol.mplstyle']),
+    twocol=lambda:plt.style.context(['./amspub.mplstyle',
+                                     './amspub_twocol.mplstyle']),
     stylegg=lambda:plt.style.context('ggplot'),
     classic=lambda:plt.style.context('classic'),
 )
 
 figdir = os.path.abspath('../fig/') + '/'
 
+vel_comps = ['u', 'v', 'w']
 
-latex = dict(um=r'$\vec{u}_\mathrm{m}$',
-             ue=r'$\vec{u}$',
-             uadv=r'$\vec{u}_\mathrm{h}$')
+
+def powline(xin=None, factor=1e-3, pow=-5. / 3):
+    if xin is None:
+        xin = np.logspace(-6, 2, 50)
+    return xin, factor * xin ** pow
+
+
+class label(object):
+
+    def __init__(self, prfx='', sufx='', comp=vel_comps):
+        self.prfx = prfx
+        self.sufx = sufx
+        self.comp = comp
+
+    def __str__(self, ):
+        return '$' + self.prfx + r'\vec{' + self.comp[0] + '}' + self.sufx + '$'
+
+    def __getitem__(self, ind):
+        return '$' + self.prfx + self.comp[ind] + self.sufx + '$'
+
+    @property
+    def spec(self, ):
+        return label2(prfx=r'S\{', sufx=self.sufx + r'\}', comp=self.comp)
+
+
+latex = dict(umeas=label(sufx=r'_\mathrm{m}'),
+             ue=label(),
+             uhead=label(sufx=r'_\mathrm{h}'))
 
 
 def calcFigSize(n, ax=[1, 0], frm=[.5, .5], norm=False):
     """
-    sz,vec = calcFigSize(n,ax,frame) calculates the width (or height) of a figure with
-    *n* subplots.  Specify the width (height) of each subplot with *ax[0]*, the space
-    between subplots with *ax[1]*, and the left/right (bottom/top) spacing with
-    *frame[0]*/*frame[1]*.
+    sz, vec = calcFigSize(n, ax, frame) calculates the width (or
+    height) of a figure with *n* subplots.  Specify the width (height)
+    of each subplot with *ax[0]*, the space between subplots with
+    *ax[1]*, and the left / right (bottom / top) spacing with
+    *frame[0]* / *frame[1]*.
 
-    calcFigSize returns *sz*, a scalar, which is the width (or height) the figure should,
-    and *vec*, which is the three element vector for input to saxes.
+    calcFigSize returns *sz*, a scalar, which is the width (or height)
+    the figure should, and *vec*, which is the three element vector
+    for input to saxes.
 
     See also: saxes, axes, calcAxesSize
     """

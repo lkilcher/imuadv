@@ -10,18 +10,17 @@ fig/SM_NoseMode01
 
 fig/ttm04b
 - Increase font sizes?
+- Add pop-up buoy?
 
 py/motion_coherence.py:
 - Confirm how to calculate uncertainty of angles (for phase-shift
   plot, if we're going to use it).
 
 fig/TimeFig01
-- Make consistent mplstyle
-- Change y-axis sizes so that 1m/s is the same vertical size on all plots
-- Plot mag/direction instead? Difference?
-- Correct individual sampled AWAC data?
-- Is there an offset on w due to head-body rotation matrix?
-- Thicker linewidth for ADV
+? Compare to 'old-style' ADV measurements?
+? Change y-axis sizes so that 1m/s is the same vertical size on all plots
+? Plot mag/direction instead? Difference?
+
 
 fig/SpecFig_annot
 - Consistent mplstyle

@@ -1,6 +1,6 @@
 from __future__ import division
 from dolfyn.adv import api as avm
-import bench_tests as btests
+import nortek_vector.bench_tests as btests
 import ptools as pt
 import numpy as np
 

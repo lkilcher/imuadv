@@ -10,6 +10,10 @@ import matplotlib.ticker as tkr
 awacr = j12.load('AWAC', coordsys='pax', data_groups='ALL')
 awac = j12.load('AWAC', coordsys='pax', bin=True)
 
+
+def rms(arr, ax=-1):
+    return np.sqrt(np.mean(arr ** 2))
+
 # This file was copied from ~/work/mhk/ttm/June2012/mets_figs.py
 
 datdir = '/Users/lkilcher/data/ttm/June2012/'
@@ -369,8 +373,9 @@ if flg.get('show awac avg2', False):
             out = np.ma.masked_where(u2c.mask, out)
         return out
 
-    ui = np.array((np.interp(t, dat_mc.mpltime, dat_mc.u),
-                   np.interp(t, dat_mc.mpltime, dat_mc.v)))
+    ui = np.array((np.interp(t, dat_mc.time, dat_mc.u),
+                   np.interp(t, dat_mc.time, dat_mc.v),
+                   np.interp(t, dat_mc.time, dat_mc.w)))
     bnr = binmod.TimeBinner(300, 1)
     t = bnr.mean(awacr.mpltime)
     depi = 9

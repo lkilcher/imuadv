@@ -195,11 +195,27 @@ The agreement between the magnitude and direction of these independent measureme
   \label{fig:spec01}
 \end{figure*}
 
-As discussed in detail in the companion paper, the mooring motion of the TTM has a peak at 0.1 to 0.2 Hz from swaying of the mooring that is most likely driven by eddy-shedding from the spherical buoy (Figure \ref{fig:spec01}, red lines). There is also broad-band motion that is especially energetic in the $v$-component spectra that is likely associated with fluttering of the strongback fin. As would be expected from basic fluid-structure interaction theory the amplitude of these motions increases with increasing mean velocity \citeneeded{motion increasing with fluid velocity?}.
+As discussed in detail in the companion paper, the mooring motion of the TTM, $\spec{\uhead}$, has a peak at 0.1 to 0.2 Hz from swaying of the mooring that is most likely driven by eddy-shedding from the spherical buoy (Figure \ref{fig:spec01}, red lines). There is also broad-band motion that is associated with fluttering of the strongback fin around the mooring line. Both of these motions are especially energetic in the $v$-component spectra, because this is the direction in-which the TTM mooring system is most unstable. As would be expected from basic fluid-structure interaction theory the amplitude of these motions increases with increasing mean velocity \citeneeded{motion increasing with fluid velocity?}.
 
-The mooring motion contaminates the uncorrected ADV-measurements of velocity, \spec{\umeas}, whenever the amplitude of the motion is similar to or greater than the amplitude of the turbulence. Fortunately, much of this motion can be removed using the IMU's motion signals as detailed in section \ref{sec:methods}. Lacking an independent measurement of turbulence velocity at this site, we interpret the agreement of these spectra with turbulence theory as evidence of the success of the method. In particular, for each mean-flow the measurements seem to measure an inertial subrange where the spectra decay with a $f^{-5/3}$ slope, and have equal amplitude (i.e. the spectra are isotropic).
+The mooring motion contaminates the uncorrected ADV-measurements of velocity, \spec{\umeas}, whenever the amplitude of the motion is similar to or greater than the amplitude of the turbulence. Fortunately, much of this motion can be removed using the IMU's motion signals as detailed in section \ref{sec:methods}. Lacking an independent measurement of turbulence velocity at this site, we interpret the agreement of these spectra with turbulence theory as evidence of the success of the method. In particular, for each mean-flow speed the spectra decay with a $f^{-5/3}$ slope and have equal amplitude across the velocity components. These results are consistent with Kolmogorov's (1941) theory of isotropic turbulence, and are consistent with other measurements of turbulence in energetic tidal channels from stationary platforms \citep[]{Kolmogorov1941c,Thomson++2010}.  \citeneeded{are there more citations here? Should I add a fig from the TTT?}
 
-Furthermore, are consistent with similar measurements of turbulence in energetic tidal channels from stationary platforms \citep[]{Thomson++2010} \citeneeded{are there more citations here? Should I add a fig from the TTT}. They have constant amplitude at low frequencies, and roll off to a $f^{-5/3}$ slope at high frequencies that is consistent with Kolmogorov's theory of locally isotropic turbulence \citep[]{Kolmogorov1941c}. 
+As successful as motion correction is, some of the motion contamination persists in $\spec{\ue}$. This is most notable in the $v$-component spectra at the highest flow speeds where a peak in $\spec{v}$ at 0.15 Hz is nearly an order of magnitude larger than a typical turbulence spectral fit to the other frequencies would indicate. This persistent motion contamination is evident to a lesser degree in the $u$-component spectra at the highest flow speed, and in the $v$-component spectra at lower flow speeds.  The $w$-component spectra appear to have no persistent motion contamination. This is largely because the amplitude of the motion in this direction is much lower than for the other two components. In fact, for these measurements, the $w$-component of mooring motion is so low that $w$-component motion correction is significant only at the highest flow speeds (i.e. motion correction removes the 0.15 Hz peak).
+
+A benefit of this measurement approach is 
+For many applications, such as estimating the turbulence dissipation rate, or turbulent kinetic energy, estimating the spectra 
+
+- \uhead\ allows justification of removing portions of the signal.
+- Can estimate \epsilon, tke
+- Can remove up to 10x signal motion
+
+
+are essentially uncontaminated with motion correction providing only a small correction for the 
+
+predict to the other portions of . motion peak    The details of motion correction are a bit more complicated. 
+
+Furthermore, the shape of $\spec{\ue}$ are generally consistent with similar measurements of turbulence in energetic tidal channels from stationary platforms \citep[]{Thomson++2010} . They have constant amplitude at low frequencies, and roll off to a $f^{-5/3}$ slope at high frequencies that is consistent with Kolmogorov's theory of locally isotropic turbulence . 
+
+
 
 Figure \ref{fig:spec01} presents motion-corrected spectra from the Tidal Turbulence Mooring (blue), and compares them with the uncorrected spectra (black) and the spectra of ADV head motion (red) for different mean-flow speeds.  
 

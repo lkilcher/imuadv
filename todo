@@ -28,3 +28,9 @@ fig/SpecFig_annot
 - Consistent legends
 
 - Do we need the bench tests from Nortek?
+
+
+DISCUSSION
+- We tried a spectral approach to MC, but it diddn't work because you need the phase information.
+- Discuss SNR of \uhead compared to measurements.
+- These results are specific to this site and platform. In particular, the TKE+dissipation level, relative to the amplitude of motion, will determine the success of the approach.

@@ -92,6 +92,8 @@ robust and versatile tools
 
 This work is focused on measuring turbulence spectra from moored ADVs that are equipped with inertial motion sensors (IMU). The ADVs utilized for these measurements were all equipped with Microstrain 3DM-GX3-25 IMU sensors that captured all 6 components of the ADV motion (3 components of angular rotation and 3 components of linear acceleration), as well the orientation of the ADV pressure-case. The sampling of the motion sensor is tightly synchronized with the ADV measurements. The IMU measures its motion at 1kHz and uses internal signal integration (Kalman filtering) to output the motion signals at the same sample rate as the ADV's velocity measurements. This reduces aliasing of the IMU's motion measurements above the ADV's sample-rate \cite{3DM-GX3_coning_sculling}.
 
+\subsection{Measurements}
+
 This work utilizes data from two distinct mooring systems to demonstrate the advantages and limitations of each platform. Both mooring systems were deployed in Admiralty Inlet, Washington, approximately 500 meters (m) WSW of Admiralty Head--Fort Casey State Park--in 60 m of water at latitude 48.153 north and longitude 122.687 west (Figure \ref{fig:map}). Admiralty inlet possesses a large semi-diurnal tidal energy flux as it is the largest waterway connecting Puget Sound to the Strait of Juan de Fuca. The site is approximately 6 kilometers (km) east of Port Townsend, and 1 km north of the Port Townsend -- Coupeville ferry route.
 
 \begin{figure}[t]
@@ -101,7 +103,15 @@ This work utilizes data from two distinct mooring systems to demonstrate the adv
   \label{fig:map}
 \end{figure}
 
-The first mooring system was a simple fin suspended between a clump-weight anchor weighing 1200 kilograms (kg, dry) and a 0.93 m-diameter spherical steel buoy with a buoyancy of 320 kg. The ADVs pressure case (body) was hose-clamped to one side of the fin and the ADV sensor head was positioned in 10cm in front of the fin's leading edge (Figure \ref{fig:ttm:diagram}). The leading edge of the fin is fastened inline with the mooring line. This configuration  was designed to work similar to a weather-vane, such that the drag on the fin held the ADV head upstream of the mooring components. The ADVs were inclined at an angle of 18$^\circ$ to the leading edge of the fin to account for mooring blow-down during strong currents (Figure \ref{fig:ttm:photo}).
+\subsubsection{Tidal Turbulence Mooring (TTM)}
+
+The `Tidal Turbulence Mooring' (TTM) is a simple mooring system with a `strongback fin' suspended between a clump-weight anchor weighing 1200 kilograms (kg, dry) and a 0.93 m-diameter spherical steel buoy with a buoyancy of 320 kg \note{will I catch flak for using `kg' for `buoyancy'?}. The ADV pressure cases were clamped to one side of a `strongback' fin and the ADV sensor head was positioned 10cm in front of the fin's leading edge (Figure \ref{fig:ttm:diagram}). The leading edge of the fin is fastened inline with the mooring line. This configuration  was designed to work similar to a weather-vane, such that the drag on the fin held the ADV head upstream of the mooring components.  This work utilizes data from two TTM deployments. 
+
+The first was in June, 2012\note{... deployment dates, lat/lon.} Two ADVs were clamped to the fin such that the $z$-axis of the ADVs were parallel with the leading edge of the strongback. Only one of these ADVs was equipped with an IMU, the other was a traditional Nortek Vector. This TTM was equipped with an upward-looking acoustic Doppler profiler on the mooring anchor.
+
+Periods of time during which this mooring interfered with a beam of the Doppler profiler were identified by inspection of the profiler's acoustic amplitude signal. Periods during which one beam of the profiler had $>5\%$ higher acoustic amplitude than the other beams were flagged as `contaminated' and excluded from averaging.  5-minute averages in which more than 50\% of the data was contaminated in this way are not shown.
+
+The second TTM deployment was in June 2014\note{... deployment dates, lat/lon.} Two ADVs were mounted on this TTM. In this case, the ADVs were inclined at an angle of 18$^\circ$ to the leading edge of the fin to account for mooring blow-down during strong currents (Figure \ref{fig:ttm:photo}). The Contrary to the June 2012 deployment, during this deployment the ADV pressure cases were rotated such that the axis of the cylinder is parallel to the stream-wise flow when the mooring blows down at an angle of 18$^\circ$. This change reduces vibrational motion believed to be associated with vortex shedding from the ADV pressure cases when they are oriented cross-wise to the flow (as in the June 2012 deployment).
 
 \begin{figure}[t]
   \centering
@@ -117,7 +127,11 @@ The first mooring system was a simple fin suspended between a clump-weight ancho
   \label{fig:ttm:photo}
 \end{figure}
 
-The second mooring system was a cylindrical syntactic foam buoy that was anchored to a clump weight that weighed 2700 lbs (Figure \ref{fig:SM}). The buoy is 3.5 m long and 0.45 m in diameter with a tail ring that is 0.76 m in diameter. It weighs 295 kg in air, and has a buoyancy of 185 kg in water. An ADV head was positioned 0.1 m in front of the buoy nose.  The buoy was equipped with a 300 kHz RDI workhorse acoustic Doppler profiler that was pointed downward and configured to measure water velocity below the platform in \note{how many bins?} and measure buoy motion (`bottom tracking') at 1 Hz. The buoy platform was ballasted to pitch upward a few degrees in zero-flow to avoid `flying downward'. In the presence of an oncoming current the tail fins help to orient it into the flow. The anchor for this buoy is similar to that of the TTM, including an acoustic release so the mooring and anchor can be recovered separately. Additional details, photos, and schematic diagrams of both mooring systems are available in \cite{Harding_MotionPaper}.
+\subsubsection{StableMoor}
+
+The second mooring system was a cylindrical syntactic foam buoy (manufacturer: Deep Water Buoyancy) that was anchored to a clump weight that weighed 2700 lbs (Figure \ref{fig:SM}). The buoy is 3.5 m long and 0.45 m in diameter with a tail ring that is 0.76 m in diameter. It weighs 295 kg in air, and has a buoyancy of 185 kg in water. An ADV head was positioned 0.1 m in front of the buoy nose.  The buoy was equipped with a 300 kHz RDI workhorse acoustic Doppler profiler that was pointed downward and configured to measure water velocity below the platform in \note{how many bins?} and measure buoy motion (`bottom tracking') at 1 Hz. The buoy platform was ballasted to pitch upward a few degrees in zero-flow to avoid `flying downward'. In the presence of an oncoming current the tail fins help to orient it into the flow. The anchor for this buoy is similar to that of the TTM, including an acoustic release so the mooring and anchor can be recovered separately. Additional details, photos, and schematic diagrams of both mooring systems are available in \cite{Harding_MotionPaper}.
+
+\note{Add deployment dates, lat/lon.}
 
 
 \begin{figure}[t]
@@ -128,13 +142,10 @@ The second mooring system was a cylindrical syntactic foam buoy that was anchore
   \label{fig:SM}
 \end{figure}
 
-\note{Need to describe the measurements for each data source.}
 
-Periods of time during which the mooring interfered with a beam of the Doppler profiler were identified by inspection of the profiler's acoustic amplitude signal. Periods during which one beam of the profiler had $>5\%$ higher acoustic amplitude than the other beams were flagged as `contaminated' and excluded from averaging.  5-minute averages in which more than 50\% of the data was contaminated in this way are not shown.
+\subsection{Maths}
 
-\note{END: Add data sources}
-
-Unless stated otherwise, vector quantities in this work are in a fixed `principal-axes' coordinate system that is aligned with the bi-directional tidal flow: positive $u$ is in the direction of ebb (310$\circ$ True), positive $w$ is vertically upward, and $v$ is the cross-stream component in a right-handed coordinate system. The full velocity vector, $\vec{\tilde{u}} = (\tilde{u}, \tilde{v}, \tilde{w})$, is separated into a mean and turbulent component as $\vec{\tilde{u}} = \vec{\bar{u}} + \vec{u}$, where--here and throughout this work--the over-bar denotes a 5 minute average.  All time series are linearly detrended and Hanning windowed prior to computing spectra to reduce spectral reddening. All spectra are computed as the variance preserving squared magnitude of the Fourier transform using standardized fast Fourier transform routines (i.e. $\int S(u)\mathrm{d}f = \overline{u^2}$).
+Unless stated otherwise, vector quantities in this work are in a fixed `principal-axes' coordinate system that is aligned with the bi-directional tidal flow: positive $u$ is in the direction of ebb (310$\circ$ True), positive $w$ is vertically upward, and $v$ is the cross-stream component in a right-handed coordinate system. The full velocity vector, $\vec{\tilde{u}} = (\tilde{u}, \tilde{v}, \tilde{w})$, is separated into a mean and turbulent component as $\vec{\tilde{u}} = \vec{\bar{u}} + \vec{u}$, where--here and throughout this work--the over-bar denotes a 5 minute average.  All time series are linearly detrended and Hanning windowed prior to computing spectra to reduce spectral reddening. All spectra are computed as the variance preserving squared magnitude of the Fourier transform using standardized fast Fourier transform routines (i.e. $\int \spec{u}\mathrm{d}f = \overline{u^2}$).
 
 \section{Methodology}
 \label{sec:methods}
@@ -182,11 +193,15 @@ Note here that the `+'-sign is correct because head motion, $\uhead$, induces a 
   \label{fig:vel_time}
 \end{figure}
 
+\subsection{Mean velocity}
+
 A comparison of mean velocity measured by an IMU-ADV mounted on a TTM, to that of an upward-looking acoustic Doppler profiler mounted on the TTM anchor is presented in Figure \ref{fig:vel_time}. This shows excellent agreement between the ADV and Doppler profiler measurements of velocity. The $u$, $v$ and $w$ components have a root-mean-square error of 0.05, 0.13 and 0.03 m/s, respectively. 
 It is unclear why the $v$-component has a larger error than the others, but it may be due to side-lobe interference of an AWAC beam that was not captured by the screening methodology described in section \ref{sec:meas}. It is also possible that this discrepancy is due to incomplete motion correction that aliases into the mean signal.
 %The $v$ component error is likely larger because the IMU's magnetometer provides a noisier estimate of heading than the accelerometers provide for vertical. 
 
 The agreement between the magnitude and direction of these independent measurements indicates that the IMU provides an useful estimate of the ADV's orientation in the Earth's reference frame. This is a highly encouraging result considering most ADV manufacturers previously assumed these instruments would be stationary and therefore relied on slow-response orientation sensors.
+
+\subsection{TTM Spectra}
 
 \begin{figure*}[t]
   \centering
@@ -201,19 +216,22 @@ The mooring motion contaminates the uncorrected ADV-measurements of velocity, \s
 
 As successful as motion correction is, some of the motion contamination persists in $\spec{\ue}$. This is most notable in the $v$-component spectra at the highest flow speeds where a peak in $\spec{v}$ at 0.15 Hz is nearly an order of magnitude larger than a typical turbulence spectral fit to the other frequencies would indicate. This persistent motion contamination is evident to a lesser degree in the $u$-component spectra at the highest flow speed, and in the $v$-component spectra at lower flow speeds.  The $w$-component spectra appear to have no persistent motion contamination. This is largely because the amplitude of the motion in this direction is much lower than for the other two components. In fact, for these measurements, the $w$-component of mooring motion is so low that $w$-component motion correction is significant only at the highest flow speeds (i.e. motion correction removes the 0.15 Hz peak).
 
-A benefit of this measurement approach is 
+The amplitude of the persistent motion contamination peaks at 0.15 Hz are a factor of 5 to 10 times smaller than the amplitude of the ADV head motion itself. This suggests the Microstrain IMU's motion signals can be used to effectively correct for mooring motion at 0.15 Hz when the amplitude of that motion is less than 5 times the amplitude of the real turbulence spectrum.
+% Does this belong in the discussion?
+This reveals an ancillary benefit of the IMU measurements, which is that they can assist with identifying and accounting for persistent sources of motion contamination. For example, one of the most common uses of turbulence spectra is for the calculation of the turbulent kinetic energy dissipation rate, $\epsilon$, or for calculating the total turbulent kinetic energy, $\tke$. In particular, the regions of the spectrum where the motion is a factor of 3 to 5 larger than the measured signal can be excluded from a spectral fit. The fit can the be used to estimate the $\tke$ and $\epsilon$. 
+% Do we need to say something about the $v$-component time series being contaminated, but the $w$ and $u$ are relatively clean?
+
 For many applications, such as estimating the turbulence dissipation rate, or turbulent kinetic energy, estimating the spectra 
 
-- \uhead\ allows justification of removing portions of the signal.
-- Can estimate \epsilon, tke
+- $\uhead$ provides a justification, and a screening criteria(?), for removing portions of the signal.
+- Can estimate $\epsilon$, tke
 - Can remove up to 10x signal motion
-
 
 are essentially uncontaminated with motion correction providing only a small correction for the 
 
 predict to the other portions of . motion peak    The details of motion correction are a bit more complicated. 
 
-Furthermore, the shape of $\spec{\ue}$ are generally consistent with similar measurements of turbulence in energetic tidal channels from stationary platforms \citep[]{Thomson++2010} . They have constant amplitude at low frequencies, and roll off to a $f^{-5/3}$ slope at high frequencies that is consistent with Kolmogorov's theory of locally isotropic turbulence . 
+Furthermore, the shape of $\spec{\ue}$ are generally consistent with similar measurements of turbulence in energetic tidal channels from stationary platforms \citep[]{Thomson++2010} . They have constant amplitude at low frequencies, and roll off to a $f^{-5/3}$ slope at high frequencies that is consistent with Kolmogorov's theory of locally isotropic turbulence. 
 
 
 

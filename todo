@@ -1,6 +1,7 @@
 py/make_map.py
 - Make map of larger area?
 - Change font sizes?
+- Indicate direction of principal axes.
 
 fig/TTM_Image01
 - Add l* vec?

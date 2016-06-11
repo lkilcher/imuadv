@@ -1,19 +1,18 @@
+import numpy as np
+import ptools as pt
 from scipy.io import loadmat
 import scipy.signal as sig
 import matplotlib.pyplot as plt
 import ttm.sm2015 as data_api
-import numpy as np
 import dolfyn.adv.api as avm
-import matplotlib.dates as dt
-plt.ion()
 
 flag = {}
-#flag['save fig'] = True
+flag['save fig'] = True
 #flag['bt_basic_time'] = True
 #flag['bt_filt_time'] = True
 #flag['nofilt spec'] = True
-#flag['show cohere'] = True
-flag['phase'] = True
+flag['show cohere'] = True
+#flag['phase'] = True
 
 filt_freqs = {'unfilt': 0.0,
               '5s': 1. / 5,
@@ -146,35 +145,61 @@ if flag.get('show cohere', False):
     coha = ((np.abs(cpsda[:, inds].mean(1)) ** 2) /
             (sp_acc[:, inds].mean(1) * sp_bt[:, inds].mean(1)))
 
-    fig = plt.figure(300, figsize=[6, 9])
-    fig.clf()
-    fig, axs = plt.subplots(3, 1, num=fig.number,
-                            gridspec_kw=dict(right=0.75,
-                                             left=0.1,
-                                             top=0.96,
-                                             bottom=0.06,
-                                             hspace=0.08),
-                            sharex=True, sharey=True, )
+    with pt.style['twocol']():
 
-    for iax, ax in enumerate(axs):
-        ax.semilogx(cohfreq, coh[iax],
-                    'k', label='$u_{mot}$', lw=2, zorder=5)
-        ax.semilogx(cohfreq, coha[iax],
-                    'b', label='$u_{acc}$')
-        ax.semilogx(cohfreq, cohr[iax],
-                    'g', label='$u_{rot}$')
-        ax.text(0.02, 0.98, ['u', 'v', 'w'][iax] + '-component',
-                transform=ax.transAxes,
-                ha='left', va='top')
+        fig, axs = pt.newfig(300, 3, 1, figsize=8,
+                             sharex=True, sharey=True,
+                             right=0.75, left=0.1,
+                             top=0.96, bottom=0.06,
+                             hspace=0.08)
 
-    axs[0].set_title('Coherence with $u_{bt}$ (%s coord sys)' %
-                     dnow.props['coord_sys'], size='large')
-    axs[0].legend(loc='upper left', bbox_to_anchor=[1.02, 1])
-    ax.set_ylim([0, 1])
-    ax.set_xlim([1e-3, 1])
-    ax.set_xlabel('freq [hz]')
-    if flag.get('save fig', False):
-        fig.savefig('../fig/BT_IMU_Coherence01.pdf')
+        for iax, ax in enumerate(axs):
+            ax.semilogx(cohfreq, coh[iax],
+                        'k', label='$u_{mot}$', lw=2, zorder=5)
+            ax.semilogx(cohfreq, coha[iax],
+                        'b', label='$u_{acc}$')
+            ax.semilogx(cohfreq, cohr[iax],
+                        'g', label='$u_{rot}$')
+            ax.text(0.02, 0.98, ['u', 'v', 'w'][iax] + '-component',
+                    transform=ax.transAxes,
+                    ha='left', va='top')
+
+        axs[0].set_title('Coherence with $u_{bt}$ (%s coord sys)' %
+                         dnow.props['coord_sys'], size='large')
+        axs[0].legend(loc='upper left', bbox_to_anchor=[1.02, 1])
+        ax.set_ylim([0, 1])
+        ax.set_xlim([1e-3, 1])
+        ax.set_xlabel('freq [hz]')
+        if flag.get('save fig', False):
+            fig.savefig(pt.figdir + 'BT_IMU_Coherence01.pdf')
+
+
+    with pt.style['onecol']():
+
+        fig, ax = pt.newfig(200, 1, 1, figsize=3,
+                            sharex=True, sharey=True,
+                            right=0.95, left=0.19,
+                            top=0.86, bottom=0.16,
+                            hspace=0.08)
+
+        ax.semilogx(cohfreq, coh[0],
+                    'k', label='$u$',
+                    lw=2, zorder=5, )
+        ax.semilogx(cohfreq, coh[1],
+                    'b', label='$v$',
+                    lw=2, zorder=3, )
+        ax.semilogx(cohfreq, coh[2],
+                    'r', label='$w$',
+                    lw=2, zorder=1)
+
+        ax.legend(loc='upper left')
+        ax.set_ylim([0, 1])
+        ax.set_xlim([1e-3, 1])
+        ax.set_xlabel('$f\ \mathrm{[Hz]}$')
+        ax.set_title('Coherence between IMU motion\nand Doppler profiler bottom track')
+        if flag.get('save fig', False):
+            fig.savefig(pt.figdir + 'BT_IMU_Coherence02.pdf')
+
 
 if flag.get('phase', False):
 
@@ -182,15 +207,11 @@ if flag.get('phase', False):
     phr = binner.phase_angle(dnow.urot, ubt, n_fft=n_fft)[:, inds].mean(1)
     pha = binner.phase_angle(dnow.uacc, ubt, n_fft=n_fft)[:, inds].mean(1)
 
-    fig = plt.figure(301, figsize=[6, 9])
-    fig.clf()
-    fig, axs = plt.subplots(3, 1, num=fig.number,
-                            gridspec_kw=dict(right=0.75,
-                                             left=0.1,
-                                             top=0.96,
-                                             bottom=0.06,
-                                             hspace=0.08),
-                            sharex=True, sharey=True, )
+    fig = plt.newfig(301, 3, 1, figsize=8,
+                     sharex=True, sharey=True,
+                     right=0.75, left=0.1,
+                     top=0.96, bottom=0.06,
+                     hspace=0.08, )
 
     for iax, ax in enumerate(axs):
         ax.semilogx(cohfreq, np.angle(ph[iax]),
@@ -218,22 +239,21 @@ if flag.get('phase', False):
     ax.set_xlim([1e-3, 1])
     ax.set_xlabel('freq [hz]')
     if flag.get('save fig', False):
-        fig.savefig('../fig/BT_IMU_Phase01.pdf')
+        fig.savefig(pt.figdir + 'BT_IMU_Phase01.pdf')
 
 if flag.get('nofilt spec', False):
 
     bnow = bindat_filt['unfilt'].copy()
     bnow = bindat_filt['5m'].copy()
     bnow['Spec_ubt'] = bindat_filt['unfilt']['Spec_ubt']
-    fig = plt.figure(400, figsize=[6, 9])
-    fig.clf()
-    fig, axs = plt.subplots(3, 1, num=fig.number,
-                            gridspec_kw=dict(right=0.75,
-                                             left=0.13,
-                                             top=0.96,
-                                             bottom=0.06,
-                                             hspace=0.08),
-                            sharex=True, sharey=True)
+
+    fig = pt.newfig(400, 3, 1, figsize=8,
+                    sharex=True, sharey=True,
+                    right=0.75,
+                    left=0.13,
+                    top=0.96,
+                    bottom=0.06,
+                    hspace=0.08, )
 
     for iax, ax in enumerate(axs):
         # ax.loglog(bnow.freq,
@@ -265,4 +285,4 @@ if flag.get('nofilt spec', False):
                      dnow.props['coord_sys'], size='large')
 
     if flag.get('save fig', False):
-        fig.savefig('../fig/NoMC_Spectra01.pdf')
+        fig.savefig(pt.figdir + 'NoMC_Spectra01.pdf')

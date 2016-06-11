@@ -57,12 +57,12 @@ The earth coordinate system is the coordinate system in-which the orientation of
 \item[$\hat{z}\earth$:] Up.
 \end{itemize}
 
-\begin{figure*}
+\begin{figure}
   \centering
-  \includegraphics[width=4in]{IMUtest}
+  \includegraphics[width=\onewidth]{IMU_Diagram04}
   \caption{The circuit-board and pressure-case end-cap of a Nortek Vector equipped with a Microstrain IMU.  The ADV-body coordinate system (yellow) is depicted on the right. The notch in the end-cap defines the $\hat{x}^*$ direction (out of the page), and the $\hat{z}^*$ direction points back along the pressure case axis. A zoom-in on the Microstrain chip highlights its coordinate system (magenta) relative to the body. }
   \label{fig:imu_orient}
-\end{figure*}
+\end{figure}
 
 To combine signals from an IMU with those of an ADV to perform motion correction the coordinate systems in which each of the measurements are made must be carefully accounted for. 
 
@@ -108,12 +108,12 @@ For cable-head ADVs, the position and orientation of the ADV head is arbitrary. 
 In general $\rmat$ will not necessarily be symmetric nor will it have so many zero-elements (i.e. these characteristics are specific to the head-body alignment of the example).
 
 
-\begin{figure*}
+\begin{figure}
   \centering
-    \includegraphics[width=4in]{ADV_coord_sys4}
+  \includegraphics[width=\onewidth]{ADV_coord_sys}
   \caption{Coordinate systems of the ADV body and head. A) A strongback with an ADV rests on a block of wood. Coordinate systems of the ADV head (magenta) and body (yellow) are shown. The $\hat{x}^\mathrm{head}$-direction is known by the black-band around the transducer arm, and the $\hat{x}^*$ direction is marked by a notch on the end-cap (indiscernible in the image). The cyan arrow indicates the body-to-head vector, $\bhv$.  The perspective slightly distorts the fact that  $\hat{x}^\mathrm{head} \parallel -\hat{z}^* $, $\hat{y}^\mathrm{head} \parallel -\hat{y}^* $, and $\hat{z}^\mathrm{head} \parallel -\hat{x}^* $.  B) Coordinate system of the ADV head as defined in the Nortek Vector manual \cite[]{vector_manual2005}. }
   \label{fig:adv-coord-sys}
-\end{figure*}
+\end{figure}
 
 \subsubsection{The IMU coordinate system}\label{apdx:coord-sys:imu}
 

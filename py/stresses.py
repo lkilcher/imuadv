@@ -56,7 +56,7 @@ for idat, dat_nm in enumerate(['ttm', 'sm']):
         velrng = (1, 1.5)
 
         print('\n{: >4} Stresses:   spec      mean     <spec:uncorr>'.format(dat_nm.upper()))
-        inds = (velrng[0] < np.abs(bd['u'])) & np.abs(bd['u'] < velrng[1])
+        inds = (velrng[0] < bd['u']) & (bd['u'] < velrng[1])
         f = bd.freq
         for irow, axrow in enumerate(axs):
             dtmp = bd.Cspec_u[irow][inds].mean(0) * pii
@@ -111,7 +111,7 @@ for idat, dat_nm in enumerate(['ttm', 'sm']):
                              sharex=True, sharey=True,
                              right=0.8, bottom=0.08)
 
-        inds = (velrng[0] < np.abs(bd['u'])) & np.abs(bd['u'] < velrng[1])
+        inds = (velrng[0] < bd['u']) & (bd['u'] < velrng[1])
         f = bd.freq
         for irow, axrow in enumerate(axs):
             dtmp = bd.Cspec_u[irow][inds].mean(0) * pii
@@ -165,16 +165,12 @@ for idat, dat_nm in enumerate(['ttm', 'sm']):
         f = bd.freq
         for icol, vr in enumerate(velranges):
             axcol = axs[:, icol]
-            inds = (vr[0] < np.abs(bd['u'])) & np.abs(bd['u'] < vr[1])
+            inds = (vr[0] < bd['u']) & (bd['u'] < vr[1])
             axs[0, icol].text(.9, .9, 'N={}'.format(inds.sum()),
                               ha='right', va='top', fontsize='medium',
                               transform=axs[0, icol].transAxes)
-            if vr[0] == 0:
-                axs[0, icol].set_title(r"$ |\bar{u}| < %0.1f$" % vr[1],
-                                       fontsize='medium')
-            else:
-                axs[0, icol].set_title(r"$%0.1f < |\bar{u}| < %0.1f$" % vr,
-                                       fontsize='medium')
+            axs[0, icol].set_title(r"$%0.1f < \bar{u} < %0.1f$" % vr,
+                                   fontsize='medium')
             for irow, ax in enumerate(axcol):
                 dtmp = bd.Cspec_u[irow][inds].mean(0) * pii
                 ax.text(.9, .1,

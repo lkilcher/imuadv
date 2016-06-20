@@ -226,3 +226,58 @@ filestart = {'Xw': 'Xwing',
              'T2': 'ttm02',
              'T1b': 'ttm01b',
              'T2b': 'ttm02b'}
+
+
+def drawmapscale(l, figpos, scale_style='simple', scale_colors=None,
+                 height_pts=6, units='km', ax=None, text_kwargs={},
+                 bg_color='none', bg_edgecolor='none'):
+    if ax is None:
+        ax = plt.gca()
+    if scale_colors is None:
+        scale_colors = 'k'
+    l_val = l
+    txtkws = dict(ha='center', va='top', size='x-small')
+    txtkws.update(**text_kwargs)
+    if units == 'km':
+        l = l * 1000
+    elif units == 'mile':
+        l = l * 1609.34
+    elif units == 'm':
+        pass
+    else:
+        raise Exception("Unknown unit.")
+    fig = ax.figure
+    axsize = fig.transFigure.inverted().transform(
+        (np.diff(ax.transData.transform([(0, 0), (l, 0)])[:, 0])[0], height_pts))
+    scax = fig.add_axes(list(figpos) + list(axsize), frameon=False)
+    scax.set_xticks(np.linspace(0, 1, 3) * l_val)
+    scax.set_xlim([0, l_val])
+    if scale_style == 'simple':
+        c = mplc.colorConverter.to_rgb(scale_colors)
+        scax.plot([0, 0, 0, 1, 1, 1],
+                  [0, 1, 0.5, 0.5, 1, 0],
+                  color=c, transform=scax.transAxes)
+        scax.text(0.5, 0.0, '{} {}'.format(l_val, units), transform=scax.transAxes, **txtkws)
+        scax.xaxis.set_visible(False)
+    elif scale_style == 'fancy':
+        nbar = 4
+        w = 1. / nbar
+        y = [0, 0, 1, 1, 0]
+        x = np.array([0, w, w, 0, 0])
+        for ival in range(nbar):
+            scax.fill(x + ival * w, y,
+                      facecolor=['w', 'k'][ival % 2],
+                      edgecolor='k', linewidth=1., clip_on=False,
+                      transform=scax.transAxes)
+        scax.xaxis.set_tick_params(direction='out',
+                                   labelsize=txtkws['size'], pad= -2)
+        scax.xaxis.set_ticks_position('bottom')
+        scax.set_xlabel(units, labelpad=1, size=txtkws['size'])
+    else:
+        raise Exception("Invalid scale_style: {'simple' or 'fancy'}.")
+    scax.yaxis.set_visible(False)
+    if bg_color not in ['none', None]:
+        scax.fill([-0.07, 1.07, 1.07, -0.07, -0.07], [-5, -5, 2, 2, 0],
+                  fc=bg_color, ec=bg_edgecolor,
+                  transform=scax.transAxes, clip_on=False, zorder=-10)
+    return scax

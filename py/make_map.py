@@ -129,7 +129,7 @@ ax.text(200, 80, '(Fort Casey\nState Park)',
 # t=text(-800,-400,'Tidal
 # Flow',bbox=bbox_props,zorder=10,ha='center',va='center',rotation=pt.principal_angle,size='large')
 
-bbox_props = dict(boxstyle='darrow,pad=0.3', fc='cyan', ec='none', lw=2)
+bbox_props = dict(boxstyle='darrow,pad=0.3', fc='magenta', ec='none', lw=2)
 t = ax.text(-800, -500, 'Tidal Flow',
             bbox=bbox_props, zorder=10,
             ha='center', va='center',

@@ -24,7 +24,7 @@ def onecol():
 style = dict(
     onecol=lambda: plt.style.context('./amspub.mplstyle'),
     twocol=lambda: plt.style.context(['./amspub.mplstyle',
-                                     './amspub_twocol.mplstyle']),
+                                      './amspub_twocol.mplstyle']),
     stylegg=lambda: plt.style.context('ggplot'),
     classic=lambda: plt.style.context('classic'),
 )
@@ -257,7 +257,8 @@ def drawmapscale(l, figpos, scale_style='simple', scale_colors=None,
         scax.plot([0, 0, 0, 1, 1, 1],
                   [0, 1, 0.5, 0.5, 1, 0],
                   color=c, transform=scax.transAxes)
-        scax.text(0.5, 0.0, '{} {}'.format(l_val, units), transform=scax.transAxes, **txtkws)
+        scax.text(0.5, 0.0, '{} {}'.format(l_val, units),
+                  transform=scax.transAxes, **txtkws)
         scax.xaxis.set_visible(False)
     elif scale_style == 'fancy':
         nbar = 4
@@ -270,7 +271,7 @@ def drawmapscale(l, figpos, scale_style='simple', scale_colors=None,
                       edgecolor='k', linewidth=1., clip_on=False,
                       transform=scax.transAxes)
         scax.xaxis.set_tick_params(direction='out',
-                                   labelsize=txtkws['size'], pad= -2)
+                                   labelsize=txtkws['size'], pad=-2)
         scax.xaxis.set_ticks_position('bottom')
         scax.set_xlabel(units, labelpad=1, size=txtkws['size'])
     else:
@@ -281,3 +282,82 @@ def drawmapscale(l, figpos, scale_style='simple', scale_colors=None,
                   fc=bg_color, ec=bg_edgecolor,
                   transform=scax.transAxes, clip_on=False, zorder=-10)
     return scax
+
+
+def slice1d_along_axis(arr_shape, axis=0):
+    """
+    Return an iterator object for looping over 1-D slices, along *axis*, of
+    an array of shape arr_shape.
+
+    Parameters
+    ----------
+    arr_shape : tuple,list
+        Shape of the array over which the slices will be made.
+    axis : integer
+        Axis along which `arr` is sliced.
+
+    Returns
+    -------
+    Iterator object.
+    The iterator object returns slice objects which slices arrays of shape arr_shape
+    into 1-D arrays.
+
+    Example
+    -------
+
+        out = np.empty(replace(arr.shape, 0, 1))
+
+        for slc in slice1d_along_axis(arr.shape, axis=0):
+            out[slc]=my_1d_function(arr[slc])
+
+    """
+    nd = len(arr_shape)
+    if axis < 0:
+        axis += nd
+    ind = [0] * (nd - 1)
+    i = np.zeros(nd, 'O')
+    indlist = range(nd)
+    indlist.remove(axis)
+    i[axis] = slice(None)
+    itr_dims = np.asarray(arr_shape).take(indlist)
+    Ntot = np.product(itr_dims)
+    i.put(indlist, ind)
+    k = 0
+    while k < Ntot:
+        # increment the index
+        n = -1
+        while (ind[n] >= itr_dims[n]) and (n > (1 - nd)):
+            ind[n - 1] += 1
+            ind[n] = 0
+            n -= 1
+        i.put(indlist, ind)
+        yield tuple(i)
+        ind[-1] += 1
+        k += 1
+
+
+def boot(x, m=500, alpha=0.05, axis=None):
+    """
+    Generate *m* bootstrap resamplings of the data *x*, and return the
+    1-*alpha* confidence interval and
+    """
+    if axis is not None:
+        outshape = np.array(x.shape)
+        outshape[axis] = 1
+        out = np.empty(outshape, dtype=x.dtype)
+        for slc in slice1d_along_axis(x.shape, axis):
+            out[slc] = boot(x[slc], m=m, alpha=alpha)
+        return out
+    n = len(x)
+    mi = np.empty(m, dtype=x.dtype)
+    for idx in range(m):
+        mi[idx] = x[np.random.random_integers(0, n - 1, n)].mean()
+        # mi[idx]=array([random.choice(x) for i in range(n)]).mean() # This is
+        # EXCEEDINGLY slow.
+    mi.sort()
+    idx = np.round(m * alpha / 2)
+    return mi[idx], x.mean(), mi[-idx - 1]
+
+
+def within(dat, minval, maxval):
+    return (minval < dat) & (dat < maxval)

@@ -10,7 +10,9 @@ flag = {}
 #flag['bt_filt_time'] = True
 #flag['bt_filt_spec'] = True
 #flag['all spec'] = True
-flag['multi spec'] = True
+#flag['multi spec'] = True
+#flag['eps v U'] = True
+flag['eps v U2'] = True
 
 filt_freqs = {
     #'unfilt': 0.0,
@@ -20,6 +22,12 @@ filt_freqs = {
 }
 
 pii = 2 * np.pi
+
+doppler_noise = [2e-5, 2e-5, 0]
+
+eps_freqs = np.array([[.1, 3],
+                      [.1, 3],
+                      [.1, 3], ])
 
 # 4800 points is 5min at 16hz
 binner = avm.TurbBinner(4800, 16)
@@ -82,11 +90,28 @@ if 'dat' not in vars():
         else:
             datbd.Spec_umot = binner.psd(datnow.uacc +
                                          datnow.urot)
+        epstmp = np.zeros_like(datbd.u)
+        Ntmp = 0
+        for idx, frq_rng in enumerate(eps_freqs):
+            if frq_rng is None:
+                continue
+            om_rng = frq_rng * 2 * np.pi
+            N = ((om_rng[0] < datbd.omega) & (datbd.omega < om_rng[1])).sum()
+            epstmp += binner.calc_epsilon_LT83(datbd.Spec[idx] - doppler_noise[idx],
+                                               datbd.omega,
+                                               np.abs(datbd.U),
+                                               om_rng) * N
+            Ntmp += N
+        epstmp /= Ntmp
+        # epstmp[np.abs(datbd.U) < 0.2] = np.NaN
+        datbd.add_data('epsilon', epstmp, 'main')
+
         bindat_filt[filt_tag] = datbd
 
     dat = dat.subset(slice(offind, (offind + len(bt['t_IMU']))))
 
-doppler_noise = [2e-5, 2e-5, 0]
+
+dnow = bindat_filt['5s']
 
 # The mean velocity is totally contaminated by motion correction, so
 # lets fix it here
@@ -97,10 +122,6 @@ if 'unfilt' in dat_filt:
 
 def offset_scale(dat, offset, scale, ):
     return (dat - offset) * scale
-
-
-def within(dat, minval, maxval):
-    return (minval < dat) & (dat < maxval)
 
 
 if flag.get('bt_basic_time', False):
@@ -191,7 +212,7 @@ if flag.get('bt_filt_spec', False):
                                  bottom=0.17,
                                  sharex=True, sharey=True)
 
-            inds = within(np.abs(datbd.u), *velrange)
+            inds = pt.within(np.abs(datbd.u), *velrange)
 
             for iax, ax in enumerate(axs):
                 ax.loglog(datbd.freq,
@@ -245,7 +266,7 @@ if flag.get('all spec'):
                                              hspace=0.08),
                             sharex=True, sharey=True)
 
-        inds = within(np.abs(datbd.u), *velrange)
+        inds = pt.within(np.abs(datbd.u), *velrange)
 
         for iax, kwd in enumerate([dict(color='b', label='u'),
                                    dict(color='g', label='v'),
@@ -301,8 +322,6 @@ if flag.get('multi spec'):
         ),
     )
 
-    dat = bindat_filt['5s']
-
     with pt.style['twocol']():
 
         velranges = [(0, 0.5),
@@ -316,7 +335,7 @@ if flag.get('multi spec'):
 
         for icol in range(axs.shape[1]):
             vr = velranges[icol]
-            umag = np.abs(dat.u)
+            umag = np.abs(dnow.u)
             inds = (vr[0] < umag) & (umag < vr[1])
             axs[-1, icol].set_xlabel('$f\ \mathrm{[Hz]}$')
             if vr[0] == 0:
@@ -338,7 +357,7 @@ if flag.get('multi spec'):
                     # The col-row-var loop
                     kwd = vard[v].copy()
                     n = kwd.pop('noise')[irow]
-                    ax.loglog(dat.freq, dat[v][irow, inds].mean(0) * pii - n,
+                    ax.loglog(dnow.freq, dnow[v][irow, inds].mean(0) * pii - n,
                               **kwd)
         for irow in range(axs.shape[0]):
             # The row-only loop
@@ -353,3 +372,99 @@ if flag.get('multi spec'):
         ax.set_xlim((1e-3, 5))
 
         fig.savefig(pt.figdir + 'SpecFig02_SMnose.pdf')
+
+
+if flag.get('eps v U'):
+
+    with pt.style['onecol']():
+
+        fig, ax = pt.newfig(202, 1, 1,
+                            figsize=3,
+                            left=0.2, right=0.95,
+                            bottom=0.15,)
+
+        inds = dnow.u > 0
+        ax.loglog(np.abs(dnow.U[inds]), dnow.epsilon[inds], 'r.')
+        ax.loglog(np.abs(dnow.U[~inds]), dnow.epsilon[~inds], 'k.')
+        for fctr in np.logspace(-2, 1, 4):
+            ax.loglog(np.array([1e-3, 100]) ** (1. / 3) * fctr, np.array([1e-6, 0.1]), 'k:')
+
+        ax.set_xlim([1e-2, 1e1])
+        ax.set_ylim([1e-6, 1e-2])
+
+        ax.set_ylabel(r'$\epsilon\ \mathrm{[W/kg]}$')
+        ax.set_xlabel(r'$|\bar{U}|$')
+
+        fig.savefig(pt.figdir + 'EpsVU_SM_01.pdf')
+
+if flag.get('eps v U2'):
+
+    with pt.style['twocol']():
+
+        fig, axs = pt.newfig(203, 1, 2,
+                             sharex=True, sharey=True,
+                             figsize=3,
+                             left=0.1, right=0.95,
+                             bottom=0.15, top=0.92)
+
+        u_rngs = np.arange(0.2, 3., 0.2)
+        Utmp = np.array([1e-5, 1e5])
+        for iax, ax in enumerate(axs):
+            if iax == 0:
+                inds = (dnow.u > 0.6) & ~np.isnan(dnow.epsilon)
+                ax.set_title('Ebb')
+            else:
+                inds = (dnow.u < -0.6) & ~np.isnan(dnow.epsilon)
+                ax.set_title('Flood')
+            U = np.abs(dnow.U[inds])
+            eps = dnow.epsilon[inds]
+            l_ratio = np.exp(np.log(eps / U ** 3).mean())
+            print l_ratio
+            # ax.scatter(U, eps, c=np.angle(dnow.U[inds]),
+            #            s=8, marker='o', linewidths=0,
+            #            cmap='viridis')
+            ax.scatter(U, eps, c='0.7',
+                       s=8, marker='o', linewidths=0, )
+            for ur in zip(u_rngs[:-1], u_rngs[1:]):
+                i2 = pt.within(U, *ur)
+                if i2.sum() <= 5:
+                    continue
+                ax.plot(np.mean(ur), eps[i2].mean(), 'b.')
+                unc = pt.boot(eps[i2])
+                # uncvals = (np.nanmean(dnow.epsilon[i2]) +
+                #            np.array([-1, 1]) * np.nanstd(dnow.epsilon[i2]))
+                # uncvals[uncvals < 0] = 1e-12
+                ax.plot(np.mean(ur) * np.array([1, 1]),
+                        [unc[0], unc[-1]], 'b-')
+            ax.set_xscale('log')
+            ax.set_yscale('log')
+            ax.set_xlabel(r'$|\bar{U}|$')
+            ticks = np.arange(0.4, 3, 0.4)
+            ax.xaxis.set_ticks(ticks)
+            ax.xaxis.set_ticklabels(['{:0.1f}'.format(tk) for tk in ticks])
+            ax.xaxis.set_ticks(np.arange(0.2, 3, 0.2), minor=True)
+            ax.xaxis.grid(True, 'minor')
+            ax.plot(Utmp, l_ratio * (Utmp ** 3), 'r-', zorder=-5)
+            # print eps.max()
+            ax.annotate(r'$\epsilon = |\bar{U}|^3 \cdot$ %0.1e m$^{-1}$' % (l_ratio),
+                        (0.7, l_ratio * 0.7 ** 3),
+                        (0.04, 0.04), textcoords='axes fraction',
+                        bbox=dict(boxstyle="round", fc=(1, 0.7, 0.7), ec='none'),
+                        arrowprops=dict(arrowstyle="simple",
+                                        fc=(1, 0.7, 0.7), ec="none",
+                                        #connectionstyle="arc3,rad=-0.3",
+                        ),
+            )
+            # ax.text(0.96, 0.04,
+            #         r'$\epsilon = |U|^3 \cdot$ %0.1e m$^{-1}$' % (l_ratio),
+            #         color='r',
+            #         transform=ax.transAxes, ha='right', va='bottom', )
+        # axs[0].plot(Utmp, 6e-5 * (Utmp ** 3), 'r-')
+        # axs[1].plot(Utmp, 2e-5 * (Utmp ** 3), 'r-')
+        ax.set_xlim([0.6, 2.4])
+        ax.set_ylim([1e-6, 3e-3])
+        axs[0].set_ylabel(r'$\epsilon\ \mathrm{[W/kg]}$')
+        fig.savefig(pt.figdir + 'EpsVU_SM_02.pdf')
+
+
+

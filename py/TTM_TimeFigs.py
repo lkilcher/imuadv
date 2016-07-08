@@ -1,4 +1,5 @@
 import ptools as pt
+import dolfyn.adv.api as avm
 from dolfyn.tools.misc import delta
 import numpy as np
 import dolfyn.data.binned as binmod
@@ -18,6 +19,8 @@ def rms(arr, ax=-1):
 
 datdir = '/Users/lkilcher/data/ttm/June2012/'
 
+binner = avm.TurbBinner(9600, 32)
+
 flg = {}
 # flg['do_time_all'] = True
 # flg['do_time_u'] = True
@@ -26,7 +29,7 @@ flg = {}
 #flg['do_awacVadv_up'] = True
 flg['show awac avg fix'] = True
 #flg['show awac avg2'] = True
-flg['save figs'] = True
+#flg['save figs'] = True
 
 if 'dat_mc' not in vars():
     dat_mc = j12.load('NREL', coordsys='pax', bin=True)

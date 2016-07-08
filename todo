@@ -24,6 +24,8 @@ fig/TimeFig01
 ? Change y-axis sizes so that 1m/s is the same vertical size on all plots
 ? Plot mag/direction instead? Difference?
 
+- Add figures that plot epsilon and stresses vs. time
+- Add figure that compares epsilon with u^3
 
 fig/SpecFig_annot
 - Consistent mplstyle

@@ -17,7 +17,7 @@
 %Citations should be of the form ``author year''  not ``author, year''
 \bibpunct{(}{)}{;}{a}{}{,}
 
-\title{Turbulence spectral estimates from motion-sensor equipped ADVs on compliant moorings}
+\title{Turbulence measurements from velocimeters on compliant mid-water moorings}
 
 \authors{Levi Kilcher\correspondingauthor{National Renewable Energy Laboratory, Golden, Colorado}, Jim Thomson, Samuel Harding and Sven Nylund}
 
@@ -52,29 +52,30 @@ THE ABSTRACT.
 \item Discussion of ADV v. ADP measurement
 \item ADVs have been difficult to deploy at mid-depths
 \item Availability of cheap+accurate IMUs (from smartphone tech) facilitates a new era of ADV measurement from moored platforms.
+\item Emphasize noise issue and spatial smearing of ADPs.
 \end{itemize}
 
 \section{Measurements}
 \label{sec:meas}
 
-This work is focused on measuring turbulence spectra from moored ADVs that are equipped with inertial motion sensors (IMU). The ADVs utilized for these measurements were all equipped with Microstrain 3DM-GX3-25 IMU sensors that captured all 6 components of the ADV motion (3 components of angular rotation and 3 components of linear acceleration), as well the orientation of the ADV pressure-case. The sampling of the motion sensor is tightly synchronized with the ADV measurements. The IMU measures its motion at 1kHz and uses internal signal integration (Kalman filtering) to output the motion signals at the same sample rate as the ADV's velocity measurements. This reduces aliasing of the IMU's motion measurements above the ADV's sample-rate \cite{3DM-GX3_coning_sculling}.
+This work is focused on measuring turbulence spectra from moored ADVs that are equipped with inertial motion sensors (IMU). The ADVs utilized for these measurements were all equipped with Microstrain 3DM-GX3-25 IMU sensors that captured all 6 components of the ADV motion (3 components of angular rotation and 3 components of linear acceleration), as well the orientation of the ADV pressure-case. The sampling of the motion sensor is tightly synchronized with the ADV measurements. The IMU measures its motion at 1kHz and uses internal signal integration (Kalman filtering) to output the motion signals at the same sample rate as the ADV's velocity measurements. This reduces aliasing of the IMU's motion measurements above the ADV's sample-rate \citep[]{3DM-GX3_coning_sculling}.
 
 \subsection{Measurements}
 
-This work utilizes data from two distinct mooring systems to demonstrate the advantages and limitations of each platform. Both mooring systems were deployed in Admiralty Inlet, Washington, approximately 500 meters (m) WSW of Admiralty Head--Fort Casey State Park--in 60 m of water at latitude 48.153 north and longitude 122.687 west (Figure \ref{fig:map}). Admiralty inlet possesses a large semi-diurnal tidal energy flux as it is the largest waterway connecting Puget Sound to the Strait of Juan de Fuca. The site is approximately 6 kilometers (km) east of Port Townsend, and 1 km north of the Port Townsend -- Coupeville ferry route.
+This work utilizes data from two distinct mooring systems to demonstrate the advantages and limitations of each platform. Both mooring systems were deployed in Admiralty Inlet, Washington, approximately 500 meters (m) WSW of Admiralty Head--Fort Casey State Park--in 60 m of water depth at latitude 48.153 north and longitude 122.687 west (Figure \ref{fig:map}). Admiralty inlet possesses a large semi-diurnal tidal energy flux as it is the largest waterway connecting Puget Sound to the Strait of Juan de Fuca. The site is approximately 6 kilometers (km) east of Port Townsend, and 1 km north of the Port Townsend -- Coupeville ferry route.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=3.4in]{map02}
+  \includegraphics[width=3.4in]{map04.pdf}
   \caption{Bathymetry of Admiralty Inlet at Admiralty Head.}
   \label{fig:map}
 \end{figure}
 
 \subsubsection{Tidal Turbulence Mooring (TTM)}
 
-The `Tidal Turbulence Mooring' (TTM) is a simple mooring system with a `strongback fin' suspended between a clump-weight anchor weighing 1200 kilograms (kg, dry) and a 0.93 m-diameter spherical steel buoy with a buoyancy of 320 kg \note{will I catch flak for using `kg' for `buoyancy'?}. The ADV pressure cases were clamped to one side of a `strongback' fin and the ADV sensor head was positioned 10cm in front of the fin's leading edge (Figure \ref{fig:ttm:diagram}). The leading edge of the fin is fastened inline with the mooring line. This configuration  was designed to work similar to a weather-vane, such that the drag on the fin held the ADV head upstream of the mooring components.  This work utilizes data from two TTM deployments. 
+The `Tidal Turbulence Mooring' (TTM) is a simple mooring system with a `strongback fin' suspended between a steel clump-weight anchor weighing 1200 kilograms (kg, dry) and a 0.93 m-diameter spherical steel buoy with a buoyancy of 320 kg . The ADV pressure cases were clamped to one side of a `strongback' fin and the ADV sensor head was positioned 10cm in front of the fin's leading edge (Figure \ref{fig:ttm:diagram}). The leading edge of the fin is fastened inline with the mooring line. This configuration  was designed to work similar to a weather-vane, such that the drag on the fin held the ADV head upstream of the mooring components.  This work utilizes data from two TTM deployments. 
 
-The first was in June, 2012\note{... deployment dates, lat/lon.} Two ADVs were clamped to the fin such that the $z$-axis of the ADVs were parallel with the leading edge of the strongback. Only one of these ADVs was equipped with an IMU, the other was a traditional Nortek Vector. This TTM was equipped with an upward-looking acoustic Doppler profiler on the mooring anchor.
+The first was in June of 2012 at 48.153 north, 122.686 west, near Admiralty Head in Puget Sound, Washington (USA). The mooring was in the water from 17:30 on the 12th until 14:30 on the 14th. Two ADVs were clamped to the fin such that the $z$-axis of the ADVs were parallel with the leading edge of the strongback. Only one of these ADVs was equipped with an IMU, the other was a traditional Nortek Vector. This TTM was equipped with an upward-looking acoustic Doppler profiler on the mooring anchor.
 
 Periods of time during which this mooring interfered with a beam of the Doppler profiler were identified by inspection of the profiler's acoustic amplitude signal. Periods during which one beam of the profiler had $>5\%$ higher acoustic amplitude than the other beams were flagged as `contaminated' and excluded from averaging.  5-minute averages in which more than 50\% of the data was contaminated in this way are not shown.
 
@@ -100,7 +101,7 @@ The second mooring system was a cylindrical syntactic foam buoy (manufacturer: D
 
 The StableMoor platform has two primary advantages compared to the TTM. First, it is significantly more massive and hydro-dynamically stable than the TTM, which reduces the frequency of motions of the platform. The other major advantage of the StableMoor platform is that it is capable of supporting an acoustic Doppler profiler that provides an independent measure of the platform's translational motion by bottom-tracking. The disadvantages of the Stable Moor is that its size introduces new challenges in deployment and recovery, and it is significantly more expensive than the TTM system.
 
-The StableMoor weighs 295 kg in air, and has a buoyancy of 185 kg in water. An ADV head was positioned 0.1 m in front of the buoy nose.  The buoy was equipped with a 300 kHz RDI workhorse acoustic Doppler profiler that was pointed downward and configured to measure water velocity below the platform in \note{how many bins?} and measure buoy motion (`bottom tracking') at 1 Hz. 
+The StableMoor weighs 295 kg in air, and has a buoyancy of 185 kg in water. An ADV head was positioned 0.1 m in front of the buoy nose.  The buoy was equipped with a 300 kHz RDI workhorse acoustic Doppler profiler that was pointed downward and configured to measure water velocity below the platform in 12 1 m bins and measure buoy motion (`bottom tracking') at 1 Hz.
 
 % \note{is 1 Hz correct? Check xlim of coherence fig!)}
 The buoy platform was ballasted to pitch upward a few degrees in zero-flow to avoid `flying downward'. In the presence of an oncoming current the tail fins help to orient it into the flow. The anchor for this buoy is similar to that of the TTM, including an acoustic release so the mooring and anchor can be recovered separately. Additional details, photos, and schematic diagrams of both mooring systems are available in \cite{Harding_MotionPaper}.
@@ -137,7 +138,7 @@ The essential approach of this methodology is to estimate time-series of velocit
 \end{align}
 Here `$*$' superscripts denote quantities in the ADV's locale coordinate system, $\omatinv$ is the IMU orientation matrix that rotates vectors from the IMU to the earth reference frame, and $\l^*$ is the vector from the IMU to the ADV head. The notation $\{\Accel\}_{HP(f_a)}$ indicates that the IMU's accelerometer signal is high-pass filtered (in the earth's stationary reference frame) at a chosen filter-frequency, $f_a$. This is necessary because accelerometers have low-frequency noise, sometimes referred to as `bias-drift' \citeneeded{Accelerometer noise}. This noise is amplified by integration of the acceleration signal such that it contaminates the motion correction, especially at low-frequencies (Figure \ref{fig:stationary_noise}).  This issue means that low-frequency motion is not well resolved by the IMU, and so there is a residual low-frequency translational motion, $\ulow$, that needs to be considered when performing motion correction.
 
-For the TTM we utilize $f_a = 0.0333 Hz$ (30 second period), and assume that $\ulow = 0$. For the StableMoor $f_a = 0.2 Hz$ (5 second period). The bottom-track velocity was  low-pass filtered at this frequency to provide an estimate of $\ulow$, and $\Accel$ was high-pass filtered at this frequency. We used 4-pole, bi-directional (zero-phase) Hanning filters for these filtering operations. 
+For the TTM we utilize $f_a = 0.0333 Hz$ (30 second period), and assume that $\ulow = 0$. For the StableMoor $f_a = 0.2 Hz$ (5 second period). The bottom-track velocity was  low-pass filtered at this frequency to provide an estimate of $\ulow$, and $\Accel$ was high-pass filtered at this frequency. We use 4-pole, bi-directional (zero-phase), Hanning filters for all filtering operations. 
 
 % Do I need to say something about filtering out gravity here too?
 
@@ -147,7 +148,7 @@ For the TTM we utilize $f_a = 0.0333 Hz$ (30 second period), and assume that $\u
 % For moorings whose low-frequency motion is limited by the mooring line itself this is a reasonable approach.  
 % Assuming that the displacement of the ADV head (from the mooring's neutral position) is likely to be  $< 20 \% $ of its distance from the bottom, then for ADVs deployed at 10m depth the speed of their low-frequency motion (i.e. below $ f_a = 0.03 $ Hz) will be $<0.07 \mathrm{m/s} $.  In other words, for a 10m mooring the choice of $f_a = 0.03$Hz allows for low-frequency motion contamination on the order of 7cm/s to persist.  This is a notable but relatively minor level of uncertainty in the context of the highly energetic flows that exist at tidal energy sites.
 
-The choice of high-pass filter to be used to correct for low-frequency accelerometer noise issue depends on the application (e.g. deployment platform), and the turbulence level of the measurement environment. In particular, this involves a trade off between filtering-out this noise and not filtering measured motion (Figure \ref{fig:stationary_noise}). If an independent measure of low-frequency motion is available, it is possible to combine that signal with the IMU's high-frequency motion measurements to obtain a complete estimate of ADV motion. An example of this operation is presented in section \ref{sec:stablemoor_motion}. Lacking an independent measure of low-f motion, the user may instead choose to neglect the portion of the spectrum below the filter frequency, or demonstrate that platform motion at those frequencies is small compared to the measured signal based on other considerations. 
+The choice of high-pass filter to be used to correct for low-frequency accelerometer noise issue depends on the application (e.g. deployment platform), and the turbulence level of the measurement environment. In particular, this involves a trade off between filtering-out this noise and not filtering measured motion (Figure \ref{fig:stationary_noise}). If an independent measure of low-frequency motion is available, it is possible to combine that signal with the IMU's high-frequency motion measurements to obtain a complete estimate of ADV motion. Lacking an independent measure of low-f motion, the user may instead choose to neglect the portion of the spectrum below the filter frequency, or demonstrate that platform motion at those frequencies is small compared to the measured signal based on other considerations. 
 
 \begin{figure}
   \centering
@@ -174,11 +175,7 @@ Note here that the `+'-sign is correct because head motion, $\uhead$, induces a 
 
 \subsection{Mean velocity}
 
-A comparison of mean velocity measured by an IMU-ADV mounted on a TTM, to that of an upward-looking acoustic Doppler profiler mounted on the TTM anchor is presented in Figure \ref{fig:vel_time}. This shows excellent agreement between the ADV and Doppler profiler measurements of velocity. The $u$, $v$ and $w$ components have a root-mean-square error of 0.05, 0.13 and 0.03 m/s, respectively. 
-It is unclear why the $v$-component has a larger error than the others, but it may be due to side-lobe interference of an AWAC beam that was not captured by the screening methodology described in section \ref{sec:meas}. It is also possible that this discrepancy is due to incomplete motion correction that aliases into the mean signal.
-%The $v$ component error is likely larger because the IMU's magnetometer provides a noisier estimate of heading than the accelerometers provide for vertical. 
-
-The agreement between the magnitude and direction of these independent measurements indicates that the IMU provides an useful estimate of the ADV's orientation in the Earth's reference frame. This is a highly encouraging result considering most ADV manufacturers previously assumed these instruments would be stationary and therefore relied on slow-response orientation sensors.
+A comparison of mean velocity measured by an ADV-IMU mounted on a TTM, to that of an upward-looking acoustic Doppler profiler mounted on the TTM anchor is presented in Figure \ref{fig:vel_time}. This shows excellent agreement between the ADV and Doppler profiler measurements of velocity. The $u$, $v$ and $w$ components have a root-mean-square error of 0.05, 0.13 and 0.03 m/s, respectively. While it is important to note that their is some discrepancy between ADP and ADV measured velocities (especially in the $v$-component, which is most likely due to incomplete motion correction), the agreement between the magnitude and direction of these independent velocity measurements indicates that moored ADV-IMUs provide a reliable estimate of velocity in the Earth's reference frame.
 
 \subsection{TTM Spectra}
 
@@ -189,9 +186,9 @@ The agreement between the magnitude and direction of these independent measureme
   \label{fig:spec:ttm}
 \end{figure*}
 
-As discussed in detail in the companion paper, the mooring motion of the TTM, $\spec{\uhead}$, has a peak at 0.1 to 0.2 Hz from swaying of the mooring that is most likely driven by eddy-shedding from the spherical buoy (Figure \ref{fig:spec01}, red lines). There is also broad-band motion that is associated with fluttering of the strongback fin around the mooring line. Both of these motions are especially energetic in the $v$-component spectra, because this is the direction in-which the TTM mooring system is most unstable. As would be expected from basic fluid-structure interaction theory the amplitude of these motions increases with increasing mean velocity \citeneeded{motion increasing with fluid velocity?}.
+As discussed in detail in the companion paper, the mooring motion of the TTM, $\spec{\uhead}$, has a peak at 0.1 to 0.2 Hz from swaying of the mooring that is most likely driven by eddy-shedding from the spherical buoy (Figure \ref{fig:spec:ttm}, red lines). There is also broad-band motion that is associated with fluttering of the strongback fin around the mooring line. Both of these motions are especially energetic in the $v$-component spectra, because this is the direction in-which the TTM mooring system is most unstable. As would be expected from basic fluid-structure interaction theory the amplitude of these motions increases with increasing mean velocity \citeneeded{motion increasing with fluid velocity?}.
 
-The mooring motion contaminates the uncorrected ADV-measurements of velocity, \spec{\umeas}, whenever the amplitude of the motion is similar to or greater than the amplitude of the turbulence. Fortunately, much of this motion can be removed using the IMU's motion signals as detailed in section \ref{sec:methods}. Lacking an independent measurement of turbulence velocity at this site, we interpret the agreement of these spectra with turbulence theory as evidence of the success of the method. In particular, for each mean-flow speed the spectra decay with a $f^{-5/3}$ slope and have equal amplitude across the velocity components. These results are consistent with Kolmogorov's (1941) theory of isotropic turbulence, and are consistent with other measurements of turbulence in energetic tidal channels from stationary platforms \citep[]{Kolmogorov1941c,Thomson++2010}.  \citeneeded{are there more citations here? Should I add a fig from the TTT?}
+The mooring motion contaminates the uncorrected ADV-measurements of velocity, \spec{\umeas}, whenever the amplitude of the motion is similar to or greater than the amplitude of the turbulence. Fortunately, much of this motion can be removed using the IMU's motion signals as detailed in section \ref{sec:methods}. Lacking an independent measurement of turbulence velocity at this site, we interpret the agreement of these spectra with turbulence theory as evidence of the success of the method. In particular, for each mean-flow speed the spectra decay with a $f^{-5/3}$ slope and have equal amplitude across the velocity components. These results are consistent with Kolmogorov's (1941) theory of isotropic turbulence, and are consistent with other measurements of turbulence in energetic tidal channels from stationary platforms \citep[]{Kolmogorov1941c,Walter++2011,Thomson++2012,McMillan++2016}.
 
 As successful as motion correction is, some of the motion contamination persists in $\spec{\ue}$. This is most notable in the $v$-component spectra at the highest flow speeds where a peak in $\spec{v}$ at 0.15 Hz is nearly an order of magnitude larger than a typical turbulence spectral fit to the other frequencies would indicate. This persistent motion contamination is evident to a lesser degree in the $u$-component spectra at the highest flow speed, and in the $v$-component spectra at lower flow speeds.  The $w$-component spectra appear to have no persistent motion contamination. This is largely because the amplitude of the motion in this direction is much lower than for the other two components. In fact, for these measurements, the $w$-component of mooring motion is so low that $w$-component motion correction is significant only at the highest flow speeds (i.e. motion correction removes the 0.15 Hz peak).
 
@@ -203,7 +200,7 @@ This reveals an ancillary benefit of the IMU measurements, which is that they ca
 
 \subsection{StableMoor Spectra}
 
-The spectra of the stablemoor motion has a broader peak with a maximum amplitude that is at approximately half the frequency of the TTM spectral peak (Figure \ref{fig:specSM01}). The motion of this platform also does not have high-frequency `sub-peaks' or other high-frequency broad-banded excitation. These characteristics of the motion are most-likely due to the more massive and hydro-dynamically streamlined nature of the platform. 
+The spectra of the stablemoor motion has a broader peak with a maximum amplitude that is at approximately half the frequency of the TTM spectral peak (Figure \ref{fig:spec:sm}). The motion of this platform also does not have high-frequency `sub-peaks' or other high-frequency broad-banded excitation. These characteristics of the motion are most-likely due to the more massive and hydro-dynamically streamlined nature of the platform. 
 
 Like the TTM, the motion-corrected spectra from the StableMoor are consistent with turbulence theory and previous observations. Most importantly, there is an improvement in the quality of the motion corrected spectra compared to the TTM. In particular their does not appear to be significant persistent motion contamination peaks in these spectra. When the assumption that $\ulow=0$ is made, peaks and troughs are seen in the data, which suggests that the improvement in motion correction is largely the result of an accurate measurement of $\ulow$.
 
@@ -228,7 +225,7 @@ Like the TTM, the motion-corrected spectra from the StableMoor are consistent wi
 \begin{figure*}[t]
   \centering
   \includegraphics{StressSpec_TTM_03}
-  \caption{The real part of the cross-spectral density between velocity components measured by the TTM. The upper-row is the $u'v'$ cross-spectral density, the middle-row is the $u'w'$ cross-spectral density, and the bottom-row is the $v'w'$ cross-spectral density.  The columns are for different ranges of the stream-wise mean velocity magnitude. The blue line is the cross-spectrum between components of motion-corrected velocity, the red line is the cross-spectrum between components of head-motion, and the black line is the cross-spectrum between components of uncorrected velocity. N is the number of spectral ensembles in each column. The number in the lower right corner of each panel is the motion-corrected Reynold's stress (integral of the blue line) in units of 1e-4 $\mathrm{m^2s^{-2}}$.}
+  \caption{The real part of the cross-spectral density between velocity components measured by the TTM. The upper-row is the $u$-$v$ cross-spectral density, the middle-row is the $u$-$w$ cross-spectral density, and the bottom-row is the $v$-$w$ cross-spectral density.  The columns are for different ranges of the stream-wise mean velocity magnitude. The blue line is the cross-spectrum between components of motion-corrected velocity, the red line is the cross-spectrum between components of head-motion, and the black line is the cross-spectrum between components of uncorrected velocity. N is the number of spectral ensembles in each column. The number in the lower right corner of each panel is the motion-corrected Reynold's stress (integral of the blue line) in units of 1e-4 $\mathrm{m^2s^{-2}}$.}
   \label{fig:stressspec:ttm}
 \end{figure*}
 
@@ -237,6 +234,29 @@ Like the TTM, the motion-corrected spectra from the StableMoor are consistent wi
   \includegraphics{StressSpec_SM_03}
   \caption{The real part of the cross-spectral density between velocity components measured by the StableMoor buoy. The axes-layout and annotations are identical to Figure \ref{fig:stressspec:ttm}.}
   \label{fig:stressspec:sm}
+\end{figure*}
+
+%\section{Other stuff}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics{TurbTime_TTM_01}
+  \caption{Time-series of mean velocities (A), turbulence energy and its components (B), Reynold's stresses (C), and turbulence dissipation rate (D) measured by the TTM during the June, 2014 deployment. Shading indicates periods of ebb ($\bar{u}>0.2$, grey), and flood ($\bar{u}<-0.2$, lighter grey).}
+  \label{fig:turbtime:ttm}
+\end{figure*}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics{EpsVU_TTM_02}
+  \caption{$\epsilon$ versus $|\bar{U}|$ for the June 2014 TTM deployment during ebb (left), and flood (right). Grey points are 5 minute averages. Blue dots are mean values of those points within speed bins of 0.2 m s$^{-1}$ width, with 95\% bootstrap confidence intervals (vertical blue lines). The red line shows a $|U|^3$ slope, where the proportionality constant (pink box) is calculated by taking the log-space mean of $\epsilon/|U|^3$. }
+  \label{fig:epsVu:ttm}
+\end{figure*}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics{EpsVU_SM_02}
+  \caption{$\epsilon$ versus $|\bar{U}|$ for the May 2015 StableMoor deployment during ebb (left), and flood (right). The markers and annotations are identical to figure \ref{fig:epsVu:ttm}. }
+  \label{fig:epsVu:sm}
 \end{figure*}
 
 
@@ -273,15 +293,16 @@ For many applications, such as estimating the turbulence dissipation rate, or tu
 
 \acknowledgments
 
+Many thanks to Joe Talbert, Alex DeKlerk, Captain Andy Reay-Ellers, Maricarmen Guerra, Marshall Richmond, James VanZwieten, Matthew Egeland and Jennifer Rinker.
 
 \clearpage %REMOVE_FOR_SUBMIT
 
 %%%%%%%%%%%%%%%%%
 %APPENDIXES
 %%%%%%%%%%%%%%%%%
-\appendix
+% \appendix
 
-\input{appendix_a}
+% \input{appendix_a}
 
 %%%%%%%%%%%%%%%%%
 %REFERENCES

@@ -4,6 +4,7 @@ py/make_map.py
 - Make map of larger area?
 - Change font sizes?
 - Indicate direction of principal axes.
+- Add tidal-flow arrow.
 
 fig/TTM_Image01
 - Add l* vec?
@@ -34,6 +35,9 @@ fig/SpecFig_annot
 
 - Do we need the bench tests from Nortek?
 
+DATA ORGANIZATION
+- Move epsilon/stress/stress-spec calcs to data-processing scripts?
+- Add DOLfYN support for CSV output.
 
 DISCUSSION
 - We tried a spectral approach to MC, but it diddn't work because you need the phase information.

@@ -11,7 +11,8 @@ flag = {}
 flag['multi-real'] = True
 flag['save fig'] = True
 
-binner = avm.TurbBinner(4800, 16)
+binners = dict(ttm=avm.TurbBinner(9600, 32),
+               sm=avm.TurbBinner(4800, 16))
 pii = 2 * np.pi
 
 if 'rdat' not in vars():
@@ -24,6 +25,7 @@ pairs = [(0, 1), (0, 2), (1, 2)]
 if 'bdat' not in vars():
     bdat = {}
 for nm in rdat:
+    binner = binners[nm]
     if nm not in bdat:
         rd = rdat[nm]
         bd = bdat[nm] = binner(rd)

@@ -2,10 +2,35 @@ import ttm.sm2015 as sm15
 import ptools as pt
 import numpy as np
 plt = pt.plt
+import dolfyn.adv.api as avm
+
+doppler_noise = [1.5e-5, 1.5e-5, 0]
+
+eps_freqs = np.array([[.1, 1],
+                      [.1, 1],
+                      [.1, 3], ])
+
+# 4800 points is 5min at 16hz
+binner = avm.TurbBinner(4800, 16)
 
 if 'dat' not in vars():
     dat = sm15.load('TTT_Davit_B', 'pax',
                     bin=True)
+    epstmp = np.zeros_like(dat.u)
+    Ntmp = 0
+    for idx, frq_rng in enumerate(eps_freqs):
+        if frq_rng is None:
+            continue
+        om_rng = frq_rng * 2 * np.pi
+        N = ((om_rng[0] < dat.omega) & (dat.omega < om_rng[1])).sum()
+        epstmp += binner.calc_epsilon_LT83(dat.Spec[idx] - doppler_noise[idx],
+                                           dat.omega,
+                                           np.abs(dat.U),
+                                           om_rng) * N
+        Ntmp += N
+    epstmp /= Ntmp
+    # epstmp[np.abs(dat.U) < 0.2] = np.NaN
+    dat.add_data('epsilon', epstmp, 'main')
 
 pii = 2 * np.pi
 

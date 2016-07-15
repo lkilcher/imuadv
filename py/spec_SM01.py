@@ -404,7 +404,7 @@ if flag.get('eps v U2'):
         fig, axs = pt.newfig(203, 1, 2,
                              sharex=True, sharey=True,
                              figsize=3,
-                             left=0.1, right=0.95,
+                             left=0.1, right=0.85,
                              bottom=0.15, top=0.92)
 
         u_rngs = np.arange(0.2, 3., 0.2)
@@ -413,50 +413,67 @@ if flag.get('eps v U2'):
             if iax == 0:
                 inds = (dnow.u > 0.6) & ~np.isnan(dnow.epsilon)
                 ax.set_title('Ebb')
+                angoff = dnow.principal_angle - np.pi
             else:
                 inds = (dnow.u < -0.6) & ~np.isnan(dnow.epsilon)
                 ax.set_title('Flood')
+                angoff = dnow.principal_angle
             U = np.abs(dnow.U[inds])
             eps = dnow.epsilon[inds]
+            clr = -(np.angle(dnow.U[inds]) - angoff) * 180 / np.pi
+            crange = [-30, 30]
             l_ratio = np.exp(np.log(eps / U ** 3).mean())
-            print l_ratio
-            # ax.scatter(U, eps, c=np.angle(dnow.U[inds]),
-            #            s=8, marker='o', linewidths=0,
-            #            cmap='viridis')
-            ax.scatter(U, eps, c='0.7',
-                       s=8, marker='o', linewidths=0, )
+            scat = ax.scatter(U, eps, c=clr,
+                              s=8, marker='o', linewidths=0,
+                              cmap='coolwarm',
+                              vmin=crange[0], vmax=crange[1])
+            cax = fig.add_axes([0.88, 0.15, 0.02, 0.77])
+            cbar = pt.plt.colorbar(scat, cax=cax)
+            cbar.set_label(r'$\Delta\theta\ \mathrm{[degrees]}$')
+            cbar.set_ticks(np.arange(-30, 31, 10))
+            # ax.scatter(U, eps, c='0.7',
+            #            s=8, marker='o', linewidths=0, )
             for ur in zip(u_rngs[:-1], u_rngs[1:]):
                 i2 = pt.within(U, *ur)
                 if i2.sum() <= 5:
                     continue
-                ax.plot(np.mean(ur), eps[i2].mean(), 'b.')
+                ax.plot(np.mean(ur), eps[i2].mean(), '.',
+                        color=[0, 1, 0],
+                        ms=7, zorder=2)
+                ax.plot(np.mean(ur), eps[i2].mean(), '.',
+                        color='k',
+                        ms=9, zorder=1)
                 unc = pt.boot(eps[i2])
                 # uncvals = (np.nanmean(dnow.epsilon[i2]) +
                 #            np.array([-1, 1]) * np.nanstd(dnow.epsilon[i2]))
                 # uncvals[uncvals < 0] = 1e-12
                 ax.plot(np.mean(ur) * np.array([1, 1]),
-                        [unc[0], unc[-1]], 'b-')
+                        [unc[0], unc[-1]], '-', lw=1,
+                        color=[0, 1, 0], zorder=2)
+                ax.plot(np.mean(ur) * np.array([1, 1]), 
+                        [unc[0], unc[-1]], '-', lw=1.8,
+                        color='k', zorder= 1)
             ax.set_xscale('log')
             ax.set_yscale('log')
-            ax.set_xlabel(r'$|\bar{U}|$')
+            ax.set_xlabel(r'$\bar{U}$')
             ticks = np.arange(0.4, 3, 0.4)
             ax.xaxis.set_ticks(ticks)
             ax.xaxis.set_ticklabels(['{:0.1f}'.format(tk) for tk in ticks])
             ax.xaxis.set_ticks(np.arange(0.2, 3, 0.2), minor=True)
             ax.xaxis.grid(True, 'minor')
-            ax.plot(Utmp, l_ratio * (Utmp ** 3), 'r-', zorder=-5)
+            ax.plot(Utmp, l_ratio * (Utmp ** 3), 'k-', zorder=-5)
             # print eps.max()
-            ax.annotate(r'$\epsilon = |\bar{U}|^3 \cdot$ %0.1e m$^{-1}$' % (l_ratio),
+            ax.annotate(r'$\epsilon = \bar{U}^3 \cdot$ %0.1e m$^{-1}$' % (l_ratio),
                         (0.7, l_ratio * 0.7 ** 3),
                         (0.04, 0.04), textcoords='axes fraction',
-                        bbox=dict(boxstyle="round", fc=(1, 0.7, 0.7), ec='none'),
+                        bbox=dict(boxstyle="round", fc='0.87', ec='none'),
                         arrowprops=dict(arrowstyle="simple",
-                                        fc=(1, 0.7, 0.7), ec="none",
+                                        fc='0.8', ec="none",
                                         #connectionstyle="arc3,rad=-0.3",
                         ),
             )
             # ax.text(0.96, 0.04,
-            #         r'$\epsilon = |U|^3 \cdot$ %0.1e m$^{-1}$' % (l_ratio),
+            #         r'$\epsilon = \bar{U}^3 \cdot$ %0.1e m$^{-1}$' % (l_ratio),
             #         color='r',
             #         transform=ax.transAxes, ha='right', va='bottom', )
         # axs[0].plot(Utmp, 6e-5 * (Utmp ** 3), 'r-')

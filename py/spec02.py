@@ -1,21 +1,15 @@
 import ttm.June2014 as j14
 import ptools as pt
 import numpy as np
-import dolfyn.adv.api as avm
 plt = pt.plt
-
-eps_freqs = np.array([[.3, 1],
-                      [.3, 1],
-                      [.3, 3], ])
 
 flag = {}
 
 #flag['multi spec'] = True
 #flag['turb time01'] = True
 #flag['epsVu01'] = True
-flag['epsVu02'] = True
-
-pii = 2 * np.pi
+#flag['epsVu02'] = True
+flag['multi spec norm'] = True
 
 vard = dict(
     Spec_umot=dict(color='r', lw=1.5, zorder=1,
@@ -36,27 +30,6 @@ vard = dict(
 if 'dat' not in vars():
     dat = j14.load('ttm02b-top', 'pax',
                    bin=True)
-
-    binner = avm.TurbBinner(dat.props['n_fft'], dat.fs)
-    epstmp = np.zeros_like(dat.u)
-    Ntmp = 0
-    noise = vard['Spec']['noise']
-    for idx, frq_rng in enumerate(eps_freqs):
-        if frq_rng is None:
-            continue
-        om_rng = frq_rng * pii
-        N = ((om_rng[0] < dat.omega) & (dat.omega < om_rng[1])).sum()
-        sptmp = dat.Spec[idx] - noise[idx] / pii
-        sptmp[sptmp < 0] = 0
-        tmp = binner.calc_epsilon_LT83(sptmp,
-                                       dat.omega,
-                                       np.abs(dat.U),
-                                       om_rng)
-        epstmp += tmp * N
-        Ntmp += N
-    epstmp /= Ntmp
-    # epstmp[np.abs(dat.U) < 0.2] = np.NaN
-    dat.add_data('epsilon', epstmp, 'main')
 
 if flag.get('multi spec'):
     with pt.style['twocol']():
@@ -94,7 +67,7 @@ if flag.get('multi spec'):
                     # The col-row-var loop
                     kwd = vard[v].copy()
                     n = kwd.pop('noise')[irow]
-                    ax.loglog(dat.freq, dat[v][irow, inds].mean(0) * pii - n,
+                    ax.loglog(dat.freq, dat[v][irow, inds].mean(0) * pt.pii - n,
                               **kwd)
         for irow in range(axs.shape[0]):
             # The col-only loop
@@ -113,68 +86,65 @@ if flag.get('multi spec'):
 
         fig.savefig(pt.figdir + 'SpecFig02_TTM02B-top.pdf')
 
-
-if flag.get('turb time01'):
-
+if flag.get('multi spec norm'):
     with pt.style['twocol']():
 
-        lgnd_kws = dict(loc='ul', bbox_to_anchor=(1.02, 1), )
+        velranges = [(0, 0.5),
+                     (1, 1.5),
+                     (2, 2.5)]
 
-        t = (dat.mpltime - (dat.mpltime[0] // 1)) * 24
-        fig, axs = pt.newfig(201, 4, 1,
-                             figsize=6,
-                             hspace=0.17,
-                             left=0.12, right=0.81,
-                             bottom=0.08, top=0.97,
-                             sharex=True, sharey=False)
+        fig, axs = pt.newfig(101, 3, len(velranges),
+                             figsize=5,
+                             right=0.86, bottom=0.1,
+                             sharex=True, sharey=True)
+        z = 10
+        for icol in range(axs.shape[1]):
+            vr = velranges[icol]
+            umag = np.abs(dat.u)
+            inds = (vr[0] < umag) & (umag < vr[1])
+            U = umag[inds].mean()
+            ustar2 = (dat.stress[:2] ** 2).mean(0)[inds].mean() ** 0.5
+            axs[-1, icol].set_xlabel('$f\ \mathrm{[Hz]}$')
+            if vr[0] == 0:
+                axs[0, icol].set_title(r"$ |\bar{u}| < %0.1f$" % vr[1],
+                                       fontsize='medium')
+            else:
+                axs[0, icol].set_title(r"$%0.1f < |\bar{u}| < %0.1f$" % vr,
+                                       fontsize='medium')
+            axs[0, icol].text(.9, .9, 'N={}'.format(inds.sum()),
+                              ha='right', va='top', fontsize='medium',
+                              transform=axs[0, icol].transAxes)
+            for irow in range(axs.shape[0]):
+                # The col-row loop
+                ax = axs[irow, icol]
+                for fctr in [1, 1e-2, 1e-4, 1e-6, 1e-8]:
+                    ax.loglog(*pt.powline(factor=fctr), linewidth=0.6,
+                              linestyle=':', zorder=-6, color='k')
+                for v in ['Spec', 'Spec_umot', 'Spec_uraw', ]:
+                    # The col-row-var loop
+                    kwd = vard[v].copy()
+                    n = kwd.pop('noise')[irow]
+                    spec = dat[v][irow, inds].mean(0) * pt.pii - n
+                    spec *= U / z / ustar2
+                    freq = dat.freq / (U * z)
+                    ax.loglog(freq, spec, **kwd)
+        for irow in range(axs.shape[0]):
+            # The col-only loop
+            axs[irow, 0].set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')
+            axs[irow, -1].text(1.04, 0.05, '$%s$' % (pt.vel_comps[irow]),
+                               ha='left', va='bottom', fontsize='x-large',
+                               transform=axs[irow, -1].transAxes, clip_on=False)
+            #                    ha='left', va='bottom', fontsize='medium',
+            #                    transform=axs[irow, -1].transAxes, clip_on=False)
 
-        ax = axs[0]
-        ax.plot(t, dat.u, 'b-', label=r'$\bar{u}$')
-        ax.plot(t, dat.v, 'g-', label=r'$\bar{v}$')
-        ax.plot(t, dat.w, 'r-', label=r'$\bar{w}$')
-        ax.axhline(0, color='k', linestyle=':')
-        ax.set_ylabel('$\mathrm{[m/s]}$')
-        ax.legend(**lgnd_kws)
+        axs[0, -1].legend(loc='upper left', bbox_to_anchor=[1.02, 1.0],
+                          handlelength=1.4, handletextpad=0.4,
+                          prop=dict(size='medium'))
+        ax.set_ylim((1e-4, 1))
+        ax.set_xlim((1e-3, 5))
 
-        ax = axs[1]
-        ax.semilogy(t, dat.tke, 'k-', label=r"tke")
-        ax.semilogy(t, dat.upup_, 'b-', label=r"$\overline{u^2}$")
-        ax.semilogy(t, dat.vpvp_, 'r-', label=r"$\overline{v^2}$")
-        ax.semilogy(t, dat.wpwp_, 'g-', label=r"$\overline{w^2}$")
-        ax.set_ylabel(r'$\mathrm{tke}\ \mathrm{[m^2/s^2]}$')
-        ax.legend(**lgnd_kws)
+        fig.savefig(pt.figdir + 'SpecFig03_TTM02B-top.pdf')
 
-        ax = axs[2]
-        ax.plot(t, dat.upvp_, 'b-', label=r"$\overline{uv}$")
-        ax.plot(t, dat.upwp_, 'r-', label=r"$\overline{uw}$")
-        ax.plot(t, dat.vpwp_, 'g-', label=r"$\overline{vw}$")
-        ax.set_ylabel(r'$\mathrm{stress}\ \mathrm{[m^2/s^2]}$')
-        ax.legend(**lgnd_kws)
-
-        ax = axs[3]
-        ax.semilogy(t, dat.epsilon, 'k.')
-        ax.set_ylabel('$\epsilon\ \mathrm{[W/kg]}$')
-
-        ax.set_xlim([t[0], t[-1]])
-        ax.set_xlabel('Time [Hours since 00:00 June 18, 2014]')
-
-        for iax, ax in enumerate(axs):
-            ax.text(0.02, 0.93, '({})'.format('ABCDEFG'[iax]),
-                    transform=ax.transAxes,
-                    va='top', ha='left')
-            ax.fill_between(t, 1, 0, where=dat.u > 0.2,
-                            edgecolor='none', facecolor='0.9',
-                            zorder=-10,
-                            transform=ax.get_xaxis_transform())
-            ax.fill_between(t, 1, 0, where=dat.u < -0.2,
-                            edgecolor='none', facecolor='0.95',
-                            zorder=-10,
-                            transform=ax.get_xaxis_transform())
-
-        axs[2].set_ylim([-0.02, 0.08])
-        axs[3].set_ylim([1e-6, 1e-2])
-
-        fig.savefig(pt.figdir + 'TurbTime_TTM_01.pdf')
 
 if flag.get('epsVu01'):
 
@@ -286,7 +256,3 @@ if flag.get('epsVu02'):
         ax.set_ylim([1e-6, 3e-3])
         axs[0].set_ylabel(r'$\epsilon\ \mathrm{[W/kg]}$')
         fig.savefig(pt.figdir + 'EpsVU_TTM_02.pdf')
-
-
-
-

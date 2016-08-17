@@ -12,6 +12,8 @@ plt.ion()
 datetime = dt.datetime.datetime
 rcParams = mpl.rcParams
 
+pii = 2 * np.pi
+
 
 def twocol():
     plt.style.use(['./amspub.mplstyle',

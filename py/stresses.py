@@ -3,13 +3,15 @@ import ttm.sm2015 as sm15
 import ptools as pt
 import dolfyn.adv.api as avm
 import numpy as np
+from scipy.integrate import cumtrapz
 plt = pt.plt
 
 flag = {}
 # flag['amp/phase'] = True
 # flag['real/imag'] = True
-flag['multi-real'] = True
+#flag['multi-real'] = True
 flag['save fig'] = True
+flag['multi-ogive'] = True
 
 binners = dict(ttm=avm.TurbBinner(9600, 32),
                sm=avm.TurbBinner(4800, 16))
@@ -206,3 +208,59 @@ for idat, dat_nm in enumerate(['ttm', 'sm']):
 
         if flag.get('save fig'):
             fig.savefig(pt.figdir + 'StressSpec_{}_03.pdf'.format(dat_nm.upper()))
+
+    if flag.get('multi-ogive'):
+
+        velranges = [(0, 0.5),
+                     (1, 1.5),
+                     (2, 2.5)]
+
+        fig, axs = pt.newfig(1000 * idat + 503,
+                             3, len(velranges),
+                             figsize=5,
+                             sharex=True, sharey=True,
+                             right=0.8, left=0.11,
+                             bottom=0.08)
+
+        f = bd.freq
+        for icol, vr in enumerate(velranges):
+            axcol = axs[:, icol]
+            inds = (vr[0] < bd['u']) & (bd['u'] < vr[1])
+            axs[0, icol].text(.9, .9, 'N={}'.format(inds.sum()),
+                              ha='right', va='top', fontsize='medium',
+                              transform=axs[0, icol].transAxes)
+            axs[0, icol].set_title(r"$%0.1f < \bar{u} < %0.1f$" % vr,
+                                   fontsize='medium')
+            for irow, ax in enumerate(axcol):
+                dtmp = cumtrapz(bd.Cspec_u[irow][inds].mean(0) * pii, f, initial=0)
+                ax.text(.9, .1,
+                        r"%2.2g" % (np.trapz(bd.Cspec_u[irow][inds].mean(0) * pii, f) * 10000, ),
+                        ha='right', va='bottom',
+                        transform=ax.transAxes)
+                # r"$\overline{%s'%s'}=$%0.0e" % (pt.vel_comps[pairs[irow][0]],
+                #                                 pt.vel_comps[pairs[irow][1]],
+                #                                 np.trapz(dtmp, f), ),
+                ax.semilogx(f, dtmp.real, 'b-', label=pt.latex['ue'])
+                dtmp = cumtrapz(bd.Cspec_umot[irow][inds].mean(0) * pii, f, initial=0)
+                ax.semilogx(f, dtmp.real, 'r-', label=pt.latex['uhead'], zorder=-2)
+                dtmp = cumtrapz(bd.Cspec_uraw[irow][inds].mean(0) * pii, f, initial=0)
+                ax.semilogx(f, dtmp.real, 'k-', zorder=-5, label=pt.latex['umeas'])
+                ax.axhline(0, color='k', linestyle=':', zorder=-5, lw=1)
+
+        axs[0, -1].legend(loc='upper left', bbox_to_anchor=[1.1, 1])
+
+        # axs[0, 0].set_ylim([-0.2, 0.2])
+        # axs[0, 1].set_ylim([-np.pi, np.pi])
+        axs[0, 0].set_xlim(1e-3, 5)
+        for icol in range(axs.shape[1]):
+            axs[-1, icol].set_xlabel(r'$f\ \mathrm{[Hz]}$')
+        for irow in range(axs.shape[0]):
+            axs[irow, 0].set_ylabel('$\mathrm{m^2s^{-2}/Hz}$')
+            axs[irow, -1].text(1.03, 0.03,
+                               r'$C_R\{%s,%s\}$' % (pt.vel_comps[pairs[irow][0]],
+                                                    pt.vel_comps[pairs[irow][1]]),
+                               ha='left', va='bottom',
+                               transform=axs[irow, -1].transAxes)
+
+        if flag.get('save fig'):
+            fig.savefig(pt.figdir + 'StressSpec_{}_04.pdf'.format(dat_nm.upper()))

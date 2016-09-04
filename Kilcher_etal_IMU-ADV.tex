@@ -198,7 +198,7 @@ As successful as motion correction is, some of the motion contamination persists
 The amplitude of the persistent motion contamination peaks at 0.15 Hz are a factor of 5 to 10 times smaller than the amplitude of the ADV head motion itself. This suggests the Microstrain IMU's motion signals can be used to effectively correct for mooring motion at 0.15 Hz when the amplitude of that motion is less than 5 times the amplitude of the real turbulence spectrum.
 
 % Does this belong in the discussion?
-This reveals an ancillary benefit of the IMU measurements, which is that they can assist with identifying and accounting for persistent sources of motion contamination. For example, one of the most common uses of turbulence spectra is for the calculation of the turbulent kinetic energy dissipation rate, $\epsilon$, or for calculating the total turbulent kinetic energy, $\tke$. In particular, the regions of the spectrum where the motion is a factor of 3 to 5 larger than the measured signal can be excluded from a spectral fit. The fit can the be used to estimate $\tke$ and $\epsilon$. 
+This reveals an ancillary benefit of the IMU measurements, which is that they can assist with identifying and accounting for persistent sources of motion contamination. For example, one of the most common uses of turbulence spectra is for the calculation of the turbulent kinetic energy dissipation rate, $\epsilon$, or for calculating the total turbulent kinetic energy, $\tke$. In particular, the regions of the spectrum where the motion is a factor of 3 to 5 larger than the measured signal can be excluded from a spectral fit. The fit can then be used to estimate $\tke$ and $\epsilon$. 
 % Do we need to say something about the $v$-component time series being contaminated, but the $w$ and $u$ are relatively clean?
 
 \subsection{StableMoor Spectra}
@@ -248,6 +248,10 @@ Like the TTM, the motion-corrected spectra from the StableMoor are consistent wi
   \label{fig:turbtime:ttm}
 \end{figure*}
 
+
+
+\section{Discussion}
+
 \begin{figure*}[t]
   \centering
   \includegraphics{EpsVU_TTM_02}
@@ -262,26 +266,16 @@ Like the TTM, the motion-corrected spectra from the StableMoor are consistent wi
   \label{fig:epsVu:sm}
 \end{figure*}
 
-
-
-\section{Discussion}
+This discussion needs to focus on turbulence measurements.
 
 For many applications, such as estimating the turbulence dissipation rate, or turbulent kinetic energy, estimating the spectra is an intermediate step...
 \begin{itemize}
-\item Compare the motion correction of SM to TTM: SM does better because it is more stable, and has a measurement of $u_\mathrm{low}$. Discuss spectral coherence of $u_\mathrm{BT}$ with IMU, i.e. Figure \ref{fig:SM_coh}. This is important because it shows the low-$f$ limit of the IMU measured motion.
 \item $\uhead$ provides a justification, and a screening criteria(?), for removing portions of the signal.
 \item Can estimate $\epsilon$, tke with fits that exclude contaminated portions of the spectra.
 \item Can remove up to 10x signal motion
 \item Discuss the time-domain method vs. spectral (cross-coherence) methods, and the need for phase information.
 \item Should we estimate $\epsilon$ in this paper? If so, should this be in the Results section?
 \end{itemize}
-
-\begin{figure}[t]
-  \centering
-  \includegraphics{BT_IMU_Coherence02}
-  \caption{Coherence between stablemoor IMU measured motion and bottom track velocity.}
-  \label{fig:SM_coh}
-\end{figure}
 
 \section{Conclusion}
 
@@ -303,9 +297,9 @@ Many thanks to Joe Talbert, Alex DeKlerk, Captain Andy Reay-Ellers, Maricarmen G
 %%%%%%%%%%%%%%%%%
 %APPENDIXES
 %%%%%%%%%%%%%%%%%
-% \appendix
+\appendix
 
-% \input{appendix_a}
+\input{appendix_SMcoh}
 
 %%%%%%%%%%%%%%%%%
 %REFERENCES

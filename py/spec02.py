@@ -101,6 +101,7 @@ if flag.get('multi spec norm'):
         for icol in range(axs.shape[1]):
             vr = velranges[icol]
             umag = np.abs(dat.u)
+            #umag = dat.u
             inds = (vr[0] < umag) & (umag < vr[1])
             U = umag[inds].mean()
             ustar2 = (dat.stress[:2] ** 2).mean(0)[inds].mean() ** 0.5
@@ -125,8 +126,9 @@ if flag.get('multi spec norm'):
                     kwd = vard[v].copy()
                     n = kwd.pop('noise')[irow]
                     spec = dat[v][irow, inds].mean(0) * pt.pii - n
-                    spec *= U / z / ustar2
-                    freq = dat.freq / (U * z)
+                    f0 = U / z
+                    spec *= f0 / ustar2
+                    freq = dat.freq / f0
                     ax.loglog(freq, spec, **kwd)
         for irow in range(axs.shape[0]):
             # The col-only loop

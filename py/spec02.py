@@ -9,7 +9,8 @@ flag = {}
 #flag['turb time01'] = True
 #flag['epsVu01'] = True
 #flag['epsVu02'] = True
-flag['multi spec norm'] = True
+#flag['multi spec norm'] = True
+#flag['multi spec norm2'] = True
 
 vard = dict(
     Spec_umot=dict(color='r', lw=1.5, zorder=1,
@@ -146,6 +147,83 @@ if flag.get('multi spec norm'):
         ax.set_xlim((1e-3, 5))
 
         fig.savefig(pt.figdir + 'SpecFig03_TTM02B-top.pdf')
+
+if flag.get('multi spec norm2'):
+    with pt.style['twocol']():
+
+        velranges = [(0, 0.5),
+                     (1, 1.5),
+                     (2, 2.5)]
+
+        fig, axs = pt.newfig(111, 3, len(velranges),
+                             figsize=5,
+                             right=0.86, bottom=0.1,
+                             sharex=True, sharey=True)
+
+        def interpavg(x, xp, fp, navg=3):
+            fout = np.interp(x, xp, fp)
+            xr = np.empty(len(x) + 1)
+            xr[1:-1] = (x[1:] + x[:-1]) / 2
+            xr[0] = x[0] - np.diff(x[:2]) / 2
+            xr[-1] = x[-1] + np.diff(x[-2:]) / 2
+            # c = np.zeros(len(x), dtype=np.int)
+            for idx in range(len(x)):
+                inds = (xr[idx] <= xp) & (xp <= xr[idx + 1])
+                # c[idx] = inds.sum()
+                if inds.sum() >= navg:
+                    fout[idx] = fp[inds].mean()
+            return fout
+
+        z = 10
+        ustar2 = np.sqrt((dat.stress[:2] ** 2).mean(0))
+        U = np.abs(dat.U)
+        noise = np.array(vard['Spec']['noise'])[:, None, None]
+        specnd = ((dat.Spec * pt.pii - noise) *
+                  U[None, :, None] / (z * ustar2[None, :, None]))
+        freqnd = dat.freq[None, None, :] / (U[None, :, None] / z)
+        fnd = np.logspace(-3, 0, 1000)
+        snd = np.empty(list(specnd.shape[:2]) + [len(fnd)], dtype=np.float32)
+        for i0 in range(snd.shape[0]):
+            for i1 in range(snd.shape[1]):
+                snd[i0, i1, :] = interpavg(fnd, freqnd[0, i1], specnd[i0, i1])
+
+        for icol in range(axs.shape[1]):
+            vr = velranges[icol]
+            umag = np.abs(dat.u)
+            inds = (vr[0] < umag) & (umag < vr[1])
+            axs[-1, icol].set_xlabel('$fz/U$')
+            if vr[0] == 0:
+                axs[0, icol].set_title(r"$ |\bar{u}| < %0.1f$" % vr[1],
+                                       fontsize='medium')
+            else:
+                axs[0, icol].set_title(r"$%0.1f < |\bar{u}| < %0.1f$" % vr,
+                                       fontsize='medium')
+            axs[0, icol].text(.9, .9, 'N={}'.format(inds.sum()),
+                              ha='right', va='top', fontsize='medium',
+                              transform=axs[0, icol].transAxes)
+            for irow in range(axs.shape[0]):
+                # The col-row loop
+                ax = axs[irow, icol]
+                for fctr in [1, 1e-2, 1e-4, 1e-6, 1e-8]:
+                    ax.loglog(*pt.powline(factor=fctr), linewidth=0.6,
+                              linestyle=':', zorder=-6, color='k')
+                ax.loglog(fnd, snd[irow, inds].mean(0), 'b-')
+        for irow in range(axs.shape[0]):
+            # The col-only loop
+            axs[irow, 0].set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')
+            axs[irow, -1].text(1.04, 0.05, '$%s$' % (pt.vel_comps[irow]),
+                               ha='left', va='bottom', fontsize='x-large',
+                               transform=axs[irow, -1].transAxes, clip_on=False)
+            #                    ha='left', va='bottom', fontsize='medium',
+            #                    transform=axs[irow, -1].transAxes, clip_on=False)
+
+        axs[0, -1].legend(loc='upper left', bbox_to_anchor=[1.02, 1.0],
+                          handlelength=1.4, handletextpad=0.4,
+                          prop=dict(size='medium'))
+        ax.set_ylim((1e-4, 1))
+        ax.set_xlim((1e-3, 5))
+
+        # fig.savefig(pt.figdir + 'SpecFig04_TTM02B-top.pdf')
 
 
 if flag.get('epsVu01'):

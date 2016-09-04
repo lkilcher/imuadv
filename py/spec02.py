@@ -6,6 +6,7 @@ plt = pt.plt
 flag = {}
 
 #flag['multi spec'] = True
+flag['multi spec color-vel'] = True
 #flag['turb time01'] = True
 #flag['epsVu01'] = True
 #flag['epsVu02'] = True
@@ -224,6 +225,63 @@ if flag.get('multi spec norm2'):
         ax.set_xlim((1e-3, 5))
 
         # fig.savefig(pt.figdir + 'SpecFig04_TTM02B-top.pdf')
+
+if flag.get('multi spec color-vel'):
+    with pt.style['onecol']():
+
+        velranges = [(0, 0.5),
+                     (1, 1.5),
+                     (2, 2.5)]
+
+        fig, axs = pt.newfig(301, 3, 1,
+                             figsize=5,
+                             right=0.7, bottom=0.1,
+                             sharex=True, sharey=True, squeeze=False)
+
+        cmap = plt.get_cmap('jet')
+
+        for icol in range(len(velranges)):
+            vr = velranges[icol]
+            umag = np.abs(dat.u)
+            inds = (vr[0] < umag) & (umag < vr[1])
+            axs[-1, 0].set_xlabel('$f\ \mathrm{[Hz]}$')
+            if vr[0] == 0:
+                label = r"$ |\bar{u}| < %0.1f$" % vr[1]
+            else:
+                label = r"$%0.1f < |\bar{u}| < %0.1f$" % vr
+            # axs[0, icol].text(.9, .9, 'N={}'.format(inds.sum()),
+            #                   ha='right', va='top', fontsize='medium',
+            #                   transform=axs[0, icol].transAxes)
+            for irow in range(axs.shape[0]):
+                # The col-row loop
+                ax = axs[irow, 0]
+                for fctr in [1, 1e-2, 1e-4, 1e-6, 1e-8]:
+                    ax.loglog(*pt.powline(factor=fctr), linewidth=0.6,
+                              linestyle=':', zorder=-6, color='k')
+                for v in ['Spec']:
+                    # The col-row-var loop
+                    kwd = vard[v].copy()
+                    kwd['label'] = label
+                    n = kwd.pop('noise')[irow]
+                    kwd['color'] = cmap(float(icol) / (len(velranges) - 1))
+                    ax.loglog(dat.freq, dat[v][irow, inds].mean(0) * pt.pii - n,
+                              **kwd)
+        for irow in range(axs.shape[0]):
+            # The col-only loop
+            axs[irow, 0].set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')
+            axs[irow, -1].text(1.04, 0.05, '$%s$' % (pt.vel_comps[irow]),
+                               ha='left', va='bottom', fontsize='x-large',
+                               transform=axs[irow, -1].transAxes, clip_on=False)
+            #                    ha='left', va='bottom', fontsize='medium',
+            #                    transform=axs[irow, -1].transAxes, clip_on=False)
+
+        axs[0, -1].legend(loc='upper left', bbox_to_anchor=[1.02, 1.0],
+                          handlelength=1.4, handletextpad=0.4,
+                          prop=dict(size='medium'))
+        ax.set_ylim((1e-4, 1))
+        ax.set_xlim((1e-3, 5))
+
+        fig.savefig(pt.figdir + 'SpecFig04_TTM02B-top.pdf')
 
 
 if flag.get('epsVu01'):

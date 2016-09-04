@@ -12,3 +12,5 @@
 ams/
 auto/
 tmp/
+
+.DS_Store

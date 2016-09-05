@@ -5,11 +5,14 @@ import numpy as np
 import gis
 
 flg = {}
-#flg['turb time01'] = True
+flg['turb time01'] = True
 #flg['turb time02'] = True
-flg['epsVprod01'] = True
+#flg['epsVprod01'] = True
 #flg['epsVprod02'] = True
-#flg['save figs'] = True
+flg['save figs'] = True
+
+lgnd_kws = dict(loc='upper left', bbox_to_anchor=(1.02, 1), )
+
 
 if 'dat' not in vars():
     dat = j14.load('ttm02b-top', 'pax',
@@ -25,10 +28,9 @@ if flg.get('turb time01'):
 
     with pt.style['twocol']():
 
-        lgnd_kws = dict(loc='ul', bbox_to_anchor=(1.02, 1), )
 
         t = (dat.mpltime - (dat.mpltime[0] // 1)) * 24
-        fig, axs = pt.newfig(201, 5, 1,
+        fig, axs = pt.newfig(201, 4, 1,
                              figsize=6,
                              hspace=0.17,
                              left=0.12, right=0.81,
@@ -46,8 +48,8 @@ if flg.get('turb time01'):
         ax = axs[1]
         ax.semilogy(t, dat.tke, 'k-', label=r"tke")
         ax.semilogy(t, dat.upup_, 'b-', label=r"$\overline{u^2}$")
-        ax.semilogy(t, dat.vpvp_, 'r-', label=r"$\overline{v^2}$")
-        ax.semilogy(t, dat.wpwp_, 'g-', label=r"$\overline{w^2}$")
+        ax.semilogy(t, dat.vpvp_, 'g-', label=r"$\overline{v^2}$")
+        ax.semilogy(t, dat.wpwp_, 'r-', label=r"$\overline{w^2}$")
         ax.set_ylabel(r'$\mathrm{tke}\ \mathrm{[m^2/s^2]}$')
         ax.legend(**lgnd_kws)
 
@@ -59,14 +61,13 @@ if flg.get('turb time01'):
         ax.legend(**lgnd_kws)
 
         ax = axs[3]
-        ax.semilogy(t, dat.epsilon, 'k.')
+        ax.semilogy(t, dat.epsilon, 'k.', ms=6, zorder=6)
         ax.set_ylabel('$\epsilon\ \mathrm{[W/kg]}$')
 
-        ax = axs[4]
         prod = -(dat.u - dat2.u) / 0.5 * dat.upwp_
         inds = prod > 0
-        ax.semilogy(t[inds], prod[inds], 'k.')
-        ax.semilogy(t[~inds], -prod[~inds], 'r.')
+        ax.semilogy(t[inds], prod[inds], 'b.', ms=6, zorder=5)
+        ax.semilogy(t[~inds], -prod[~inds], 'r.', ms=4, zorder=8)
         ax.set_ylim([1e-6, 1e-2])
         #ax.set_ylabel('$\partial u/\partial z\ \mathrm{[s^{-1}]}$')
 

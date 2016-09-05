@@ -10,10 +10,20 @@ The essential approach of this methodology is to estimate time-series of velocit
 \begin{align}
   \uhead & = \urot + \uacc + \ulow \\
       & = \omatinv \cdot \AngRt^*(t)\times\l^* + \int \{\Accel(t)\}_{HP(f_{a})} \mathrm{d}t + \ulow
+        \label{eqn:uhead}
 \end{align}
 Here `$*$' superscripts denote quantities in the ADV's locale coordinate system, $\omatinv$ is the IMU orientation matrix that rotates vectors from the IMU to the earth reference frame, and $\l^*$ is the vector from the IMU to the ADV head. The notation $\{\Accel\}_{HP(f_a)}$ indicates that the IMU's accelerometer signal is high-pass filtered (in the earth's stationary reference frame) at a chosen filter-frequency, $f_a$. This is necessary because accelerometers have low-frequency noise, sometimes referred to as `bias-drift' \citeneeded{Accelerometer noise}. This noise is amplified by integration of the acceleration signal such that it contaminates the motion correction, especially at low-frequencies (Figure \ref{fig:stationary_noise}).  This issue means that low-frequency motion is not well resolved by the IMU, and so there is a residual low-frequency translational motion, $\ulow$, that needs to be considered when performing motion correction.
 
-For the TTM we utilize $f_a = 0.0333 Hz$ (30 second period), and assume that $\ulow = 0$. For the StableMoor $f_a = 0.2 Hz$ (5 second period). The bottom-track velocity was  low-pass filtered at this frequency to provide an estimate of $\ulow$, and $\Accel$ was high-pass filtered at this frequency. We use 4-pole, bi-directional (zero-phase), Hanning filters for all filtering operations. 
+The choice of high-pass filter to be used to correct for low-frequency accelerometer noise issue on the application (e.g. deployment platform), and the turbulence level of the measurement environment. In particular, this involves a trade off between filtering-out this noise and not filtering measured motion that is unresolved by an independent measurement of $\ulow$. If an independent measure of low-frequency motion is available it can be used to increase the accuracy of $\uhead$ at low-frequency. Note that, to avoid double counting, $\ulow$ should be estimated by applying the complimentary low-pass filter to the independent measurement of low-frequency motion.
+
+With this estimate of ADV head motion it is straightforward to correct the measured velocity, $\umeas$, to estimate the velocity in the earth's inertial reference frame:
+\begin{align}
+  \label{eqn:u_mot_def}
+  \ue(t) & = \umeas(t) + \uhead(t) &  .
+\end{align}
+Note here that the `+'-sign is correct because head motion, $\uhead$, induces a measured velocity in the opposite direction of the head motion itself ($\umeas = \ue - \uhead$).
+
+For the TTM and Turbulence Torpedo we utilize $f_a = 0.0333 Hz$ (30 second period), and assume that $\ulow = 0$. For the StableMoor $f_a = 0.2 Hz$ (5 second period). The bottom-track velocity was low-pass filtered at this frequency to provide an estimate of $\ulow$, and $\Accel$ was high-pass filtered at this frequency. We use 4-pole, bi-directional (zero-phase), Hanning filters for all filtering operations. 
 
 % Do I need to say something about filtering out gravity here too?
 
@@ -23,21 +33,12 @@ For the TTM we utilize $f_a = 0.0333 Hz$ (30 second period), and assume that $\u
 % For moorings whose low-frequency motion is limited by the mooring line itself this is a reasonable approach.  
 % Assuming that the displacement of the ADV head (from the mooring's neutral position) is likely to be  $< 20 \% $ of its distance from the bottom, then for ADVs deployed at 10m depth the speed of their low-frequency motion (i.e. below $ f_a = 0.03 $ Hz) will be $<0.07 \mathrm{m/s} $.  In other words, for a 10m mooring the choice of $f_a = 0.03$Hz allows for low-frequency motion contamination on the order of 7cm/s to persist.  This is a notable but relatively minor level of uncertainty in the context of the highly energetic flows that exist at tidal energy sites.
 
-The choice of high-pass filter to be used to correct for low-frequency accelerometer noise issue depends on the application (e.g. deployment platform), and the turbulence level of the measurement environment. In particular, this involves a trade off between filtering-out this noise and not filtering measured motion (Figure \ref{fig:stationary_noise}). If an independent measure of low-frequency motion is available, it is possible to combine that signal with the IMU's high-frequency motion measurements to obtain a complete estimate of ADV motion. Lacking an independent measure of low-f motion, the user may instead choose to neglect the portion of the spectrum below the filter frequency, or demonstrate that platform motion at those frequencies is small compared to the measured signal based on other considerations. 
-
 \begin{figure}
   \centering
   \label{fig:stationary_noise}
   \includegraphics[width=\onewidth]{stationary_noise03}
   \caption{Spectra of $\urot$ (yellow) and $\uacc$ signals from the Microstrain IMU sitting on a motionless table. The $\uacc$ signals are unfiltered (black), and high-pass filtered at 30s (magenta), 10s (blue), 5s (green). Vertical dotted lines indicate the filter frequency. The black horizontal dotted line indicates the noise-level of a Nortek Vector ADV configured to measure $\pm$4m/s. The shaded region indicates the range of spectra presented herein (0.002 $< \tke <$ 0.03 $\mathrm{m^2/s^2}$, 1e-5 $< \epsilon <$ 5e-4 $\mathrm{W/kg}$).}
 \end{figure}
-
-With this estimate of ADV head motion it is straightforward to correct the measured velocity, $\umeas$, to estimate the velocity in the earth's inertial reference frame:
-\begin{align}
-  \label{eqn:u_mot_def}
-  \ue(t) & = \umeas(t) + \uhead(t) &  .
-\end{align}
-Note here that the `+'-sign is correct because head motion, $\uhead$, induces a measured velocity in the opposite direction of the head motion itself ($\umeas = \ue - \uhead$).
 
 Additional details on motion correction--including a detailed accounting of the distinct coordinate systems of the IMU, ADV pressure case, and ADV head--can be found in \cite{Kilcher++2016}. Open-source Python tools for performing motion correction of ADV-IMU data--including scripts that write processed data in Matlab and tabulated formats--are available at \url{http://lkilcher.github.io/dolfyn/}.
 

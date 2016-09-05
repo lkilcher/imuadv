@@ -20,23 +20,24 @@ A comparison of mean velocity measured by an ADV-IMU mounted on a TTM, to that o
   \label{fig:spec:ttm}
 \end{figure*}
 
-As discussed in detail in the companion paper, the mooring motion of the TTM, $\spec{\uhead}$, has a peak at 0.1 to 0.2 Hz from swaying of the mooring that is most likely driven by eddy-shedding from the spherical buoy (Figure \ref{fig:spec:ttm}, red lines). There is also broad-band motion that is associated with fluttering of the strongback fin around the mooring line. Both of these motions are especially energetic in the $v$-component spectra, because this is the direction in-which the TTM mooring system is most unstable. As is expected from fluid-structure interaction theory the amplitude of these motions increases with increasing mean velocity \cite[]{Morison++1950}.
+As discussed in detail in Part 1 the mooring motion of the TTM $\spec{\uhead}$, has a peak at 0.1 to 0.2 Hz from swaying of the mooring that is most likely driven by eddy-shedding from the spherical buoy (Figure \ref{fig:spec:ttm}, red lines). There is also broad-band motion that is associated with fluttering of the strongback fin around the mooring line. Both of these motions are especially energetic in the $v$-component spectra, because this is the direction in-which the TTM mooring system is most unstable. As is expected from fluid-structure interaction theory the amplitude of these motions increases with increasing mean velocity \cite[]{Morison++1950}.
 
-The mooring motion contaminates the uncorrected ADV-measurements of velocity, \spec{\umeas}, whenever the amplitude of the motion is similar to or greater than the amplitude of the turbulence. Fortunately, much of this motion can be removed using the IMU's motion signals as detailed in section \ref{sec:methods}. Lacking an independent measurement of turbulence velocity at this site, we interpret the agreement of these spectra with turbulence theory as evidence of the success of the method. In particular, for each mean-flow speed the spectra decay with a $f^{-5/3}$ slope and have equal amplitude across the velocity components. These results are consistent with Kolmogorov's (1941) theory of isotropic turbulence, and are consistent with other measurements of turbulence in energetic tidal channels from stationary platforms \citep[]{Kolmogorov1941c,Walter++2011,Thomson++2012,McMillan++2016}.
+The mooring motion contaminates the uncorrected ADV-measurements of velocity, $\spec{\umeas}$, whenever the amplitude of the motion is similar to or greater than the amplitude of the turbulence. Fortunately, much of this motion can be removed using the IMU's motion signals as detailed in section \ref{sec:methods}. Lacking an independent measurement of turbulence velocity at this site, we interpret the agreement of these spectra with turbulence theory as evidence of the success of the method. In particular, at high-frequencies ($f>0.3$ Hz) for each mean-flow speed the spectra decay with a $f^{-5/3}$ slope and have equal amplitude across the velocity components. These results are consistent with Kolmogorov's (1941) theory of isotropic turbulence, and are consistent with other measurements of turbulence in energetic tidal channels from stationary platforms \citep[]{Kolmogorov1941c,Walter++2011,Thomson++2012,McMillan++2016}.
+
+At low frequencies, the spectra tend to become roughly constant (especially at higher flow speeds), which is also consistent with previous works. Note here, that the very-low magnitude of $\spec{\uhead}$ at low frequencies is partially a result of filtering the IMU's accelerometer signal when calculating $\uacc$. The true low-frequency spectrum of ADV-head motion is unknown and probably larger than indicated. Still, the amplitude of the TTM motion is bounded by the system's kinematics: assuming the TTM sways less than $20^\circ$ in a 5-minute averaging period, that means it's lateral motion is constrained to a maximum of $<3.5$ m, and it's vertical motion is constrained to $<1.2$ m. The maximum spectral amplitude that this motion is simply this length scale times frequency, squared.
 
 As successful as motion correction is, some of the motion contamination persists in $\spec{\ue}$. This is most notable in the $v$-component spectra at the highest flow speeds where a peak in $\spec{v}$ at 0.15 Hz is nearly an order of magnitude larger than a typical turbulence spectral fit to the other frequencies would indicate. This persistent motion contamination is evident to a lesser degree in the $u$-component spectra at the highest flow speed, and in the $v$-component spectra at lower flow speeds.  The $w$-component spectra appear to have no persistent motion contamination. This is largely because the amplitude of the motion in this direction is much lower than for the other two components. In fact, for these measurements, the $w$-component of mooring motion is so low that $w$-component motion correction is significant only at the highest flow speeds (i.e. motion correction removes the 0.15 Hz peak).
 
-The amplitude of the persistent motion contamination peaks at 0.15 Hz are a factor of 5 to 10 times smaller than the amplitude of the ADV head motion itself. This suggests the Microstrain IMU's motion signals can be used to effectively correct for mooring motion at 0.15 Hz when the amplitude of that motion is less than 5 times the amplitude of the real turbulence spectrum.
+The amplitude of the persistent motion contamination peaks at 0.15 Hz are a factor of 5 to 10 times smaller than the amplitude of the ADV head motion itself. This suggests the Microstrain IMU can be used to effectively correct for mooring motion at 0.15 Hz when the amplitude of that motion is less than 5 times the amplitude of the real turbulence spectrum.
 
 % Does this belong in the discussion?
-This reveals an ancillary benefit of the IMU measurements, which is that they can assist with identifying and accounting for persistent sources of motion contamination. For example, one of the most common uses of turbulence spectra is for the calculation of the turbulent kinetic energy dissipation rate, $\epsilon$, or for calculating the total turbulent kinetic energy, $\tke$. In particular, the regions of the spectrum where the motion is a factor of 3 to 5 larger than the measured signal can be excluded from a spectral fit. The fit can then be used to estimate $\tke$ and $\epsilon$. 
-% Do we need to say something about the $v$-component time series being contaminated, but the $w$ and $u$ are relatively clean?
+This reveals an ancillary benefit of the IMU measurements, which is that they can assist with identifying and accounting for persistent sources of motion contamination. For example, one of the most common uses of turbulence spectra is for the calculation of the turbulent kinetic energy dissipation rate, $\epsilon$, or for calculating the total turbulent kinetic energy, $\tke$. For these purposes, based on the relative amplitudes of the 0.15 Hz peaks, we assume that persistent motion contamination is likely where $\spec{\uhead}/\spec{\ue} > 3$ and exclude these regions from spectral fits.
+
+In the present case, for the $u$ and $w$ spectra, this criteria only excludes a narrow range of frequencies at the 0.15 Hz motion peak for some cases. This criteria is more restrictive of the $v$-component spectra at high frequencies for $U>1.0$ m/s, but this may be acceptable because the amplitude of the spectrum at these frequencies---i.e. in the isotropic inertial subrange---should be equal to that of $u$ and $w$ \citep[]{Kolmogorov1941c}.
+
+Agreement of the $v$-component spectral amplitude with that of $u$ and $w$ at frequencies $>0.3$ Hz indicates that motion correction is effective at those frequencies even when $\spec{\uhead}/\spec{\ue} > 3$. This suggests that our screening threshold is excessively conservative at those frequencies, and that a more precise screening threshold is frequency dependent. For example, it might take into account the $~f^3$ character of the noise in $\spec{\uacc}$ (Figure \ref{fig:stationary_noise}). For the purposes of this work the $\spec{\uhead}/\spec{\ue} < 3$ threshold for spectral fits is sufficient, and detailed characterization of the IMU's motion- and frequency-dependent noise level is left for future work.
 
 \subsection{StableMoor Spectra}
-
-The spectra of the stablemoor motion has a broader peak with a maximum amplitude that is at approximately half the frequency of the TTM spectral peak (Figure \ref{fig:spec:sm}). The motion of this platform also does not have high-frequency `sub-peaks' or other high-frequency broad-banded excitation. These characteristics of the motion are most-likely due to the more massive and hydro-dynamically streamlined nature of the platform. 
-
-Like the TTM, the motion-corrected spectra from the StableMoor are consistent with turbulence theory and previous observations. Most importantly, there is an improvement in the quality of the motion corrected spectra compared to the TTM. In particular their does not appear to be significant persistent motion contamination peaks in these spectra. When the assumption that $\ulow=0$ is made, peaks and troughs are seen in the data, which suggests that the improvement in motion correction is largely the result of an accurate measurement of $\ulow$.
 
 \begin{figure*}[t]
   \centering
@@ -45,39 +46,41 @@ Like the TTM, the motion-corrected spectra from the StableMoor are consistent wi
   \label{fig:spec:sm}
 \end{figure*}
 
+The spectra of the stablemoor motion has a broader peak with a maximum amplitude that is at approximately half the frequency of the TTM spectral peak (Figure \ref{fig:spec:sm}). The motion of this platform also does not have high-frequency `sub-peaks' or other high-frequency broad-banded excitation. These characteristics of the motion are most-likely due to the more massive and hydro-dynamically streamlined nature of the platform. 
+
+Like the TTM, the motion-corrected spectra from the StableMoor are consistent with turbulence theory and previous observations. Most importantly, there is an improvement in the quality of the motion corrected spectra compared to the TTM. In particular the persistent motion contamination peaks are essentially gone. That is, this measurement system provides an accurate estimate of the turbulence spectra at this location from low frequencies to more than 1Hz---well into the inertial sub-range.
+
+Note that this level of accuracy can not be obtained without the independent estimate of $\ulow$. That is, if we assume that $\ulow=0$ a similar plot to Figure \ref{fig:spec:sm} (not shown) reveals persistent motion-contamination peaks and troughs in the $u$- and $v$-spectra regardless of the choice of $f_a$. This indicates that the low-frequency motion of the StableMoor is below a threshold where the IMU's signal to noise ratio is high enough to resolve its motion. In other words, compared to the TTM, the StableMoor platform provides a more accurate measurement of turbulence when it includes an independent measure of $\ulow$ (here a bottom-tracking ADCP), but it does no better---and perhaps worse---when it doesn't.
+
 \subsection{Torpedo Spectra}
 
 \begin{figure}[t]
   \centering
   \includegraphics{SpecFig03_TTT}
   \caption{Turbulence spectra from the turbulence torpedo during a 35 minute period when the mean velocity was 1.3 m/s. Annotations and line colors are identical to Figure \ref{fig:spec:ttm}.}
-  \label{fig:spec:ttt}
+  \label{fig:spec:torpedo}
 \end{figure}
 
-\subsection{Reynold's stresses}
+The $u$ and $v$ motion of the Turbulence Torpedo is broad-banded and the $w$ motion has a narrow peak at 0.3 Hz (Figure \ref{fig:spec:torpedo}). Because $\uhead$ is estimated using $f_a = 0.0333Hz$ and assuming $\ulow=0$ its spectra rolls-off quickly below $f_a$. Side note: even with the high-pass filtering the integration of the low-$f$ accelerometer noise appears as a `rebound' of the spectrum of $\uhead$ at the lowest frequencies.
+
+Motion correction of the Torpedo data appears to effectively remove a motion from the $w$-component spectra at 0.3Hz, and straightens out the $v$-component spectra between 0.04 and 0.6Hz. The $u$-component motion is relatively unimproved by motion correction, apparently because the Torpedo motion is slightly smaller than the turbulence in this direction. At frequencies below $f_a$, the spectral amplitude of the $u$- and $v$-components increase dramatically. This suggests that unresolved low-frequency motion of the Torpedo is contaminating the velocity measurements at these frequencies. It may be possible to correct for some of this using a measurement of the ship's motion as a proxy for the Torpedo's low-frequency motion, but this has not been done. Still, above $f_a$, the Torpedo appears to provide a reliable estimate of spectral amplitude in the inertial subrange and can therefore be used to estimate $\epsilon$. Considering the simplicity of the Torpedo it may be a useful option for quantifying this essential turbulence quantity. If a GPS is positioned above it, it may be capable of providing even more.
+
+\subsection{Cross-spectra}
 
 \begin{figure*}[t]
   \centering
   \includegraphics{StressSpec_TTM_03}
   \caption{The real part of the cross-spectral density between velocity components measured by the TTM. The upper-row is the $u$-$v$ cross-spectral density, the middle-row is the $u$-$w$ cross-spectral density, and the bottom-row is the $v$-$w$ cross-spectral density.  The columns are for different ranges of the stream-wise mean velocity magnitude. The blue line is the cross-spectrum between components of motion-corrected velocity, the red line is the cross-spectrum between components of head-motion, and the black line is the cross-spectrum between components of uncorrected velocity. N is the number of spectral ensembles in each column. The number in the lower right corner of each panel is the motion-corrected Reynold's stress (integral of the blue line) in units of 1e-4 $\mathrm{m^2s^{-2}}$.}
-  \label{fig:stressspec:ttm}
+  \label{fig:cspec:ttm}
 \end{figure*}
 
-\begin{figure*}[t]
-  \centering
-  \includegraphics{StressSpec_SM_03}
-  \caption{The real part of the cross-spectral density between velocity components measured by the StableMoor buoy. The axes-layout and annotations are identical to Figure \ref{fig:stressspec:ttm}.}
-  \label{fig:stressspec:sm}
-\end{figure*}
+Inspection of cross-spectra from TTM measurements demonstrates that motion correction can reduce motion contamination to produce reliable estimates of velocity cross-spectra (Figure \ref{fig:cspec:ttm}). At low flow speeds (left column), cross-spectra between components of $\uhead$ (i.e. between components of head-motion) are small compared to correlated velocities. This indicates that there is minimal need for motion correction to estimate cross-spectra and Reynold's stresses. As the velocity magnitude increases (center, and right columns), the swaying motion of the TTM at 0.15 Hz appears as a peak in the amplitude of the cross-spectra of $\uhead$ and $\umeas$ for all three components of cross-spectra (rows). Fortunately, motion correction reduces the amplitude of this peak dramatically, so that the cross-spectral amplitude of $\ue$ is small at 0.15 Hz compared to lower frequencies.
+
+This result indicates that motion-corrected TTM velocity measurements can be used to obtain reliable estimates of turbulence Reynold's stresses, which are the integral of the cross-spectra. Without motion correction, Reynold's stress estimates would be contaminated by the large peaks in the cross-spectra that are due to the swaying and fluttering motion of the TTM vane.
+
+A similar investigation of StableMoor cross-spectra (not shown) indicates that cross-spectral motion contamination is much lower amplitude than for the TTM. The low-frequency ($<0.3$ Hz) `swimming' motion of that platform produces minimal cross-spectral signal, and the relative large-mass of the platform minimizes the kinds of higher-frequency swaying/fluttering that creates large values of cross-spectral head-motion. Thus, the StableMoor platform also produces reliable estimates of Reynold's stresses, which are presumed to be improved by motion correction.  
 
 %\section{Other stuff}
-
-\begin{figure*}[t]
-  \centering
-  \includegraphics{TurbTime_TTM_01}
-  \caption{Time-series of mean velocities (A), turbulence energy and its components (B), Reynold's stresses (C), and turbulence dissipation rate (D) measured by the TTM during the June, 2014 deployment. Shading indicates periods of ebb ($\bar{u}>0.2$, grey), and flood ($\bar{u}<-0.2$, lighter grey).}
-  \label{fig:turbtime:ttm}
-\end{figure*}
 
 
 

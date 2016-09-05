@@ -1,4 +1,9 @@
-Add reference to DOLfYN.
+py/stresses.py
+- Change to 'C{u,v}' (i.e. drop R)
+
+fig/SpecFig02
+- Make u_h line dashed below filter frequency (also show filter frequency).
+- Do this for both the TTM and Torpedo.
 
 py/make_map.py
 - Make map of larger area?

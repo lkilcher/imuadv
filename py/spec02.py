@@ -5,8 +5,8 @@ plt = pt.plt
 
 flag = {}
 
-#flag['multi spec'] = True
-flag['multi spec color-vel'] = True
+flag['multi spec'] = True
+#flag['multi spec color-vel'] = True
 #flag['turb time01'] = True
 #flag['epsVu01'] = True
 #flag['epsVu02'] = True
@@ -21,13 +21,17 @@ vard = dict(
     Spec_uraw=dict(color='k', zorder=2,
                    label=pt.latex['umeas'].spec,
                    noise=[1.5e-4, 1.5e-4, 1.5e-5, ],
-
     ),
     Spec=dict(color='b', lw=1.5, zorder=3,
               label=pt.latex['ue'].spec,
               noise=[1.5e-4, 1.5e-4, 1.5e-5, ],
     ),
 )
+
+filtfreq = 1. / 30
+
+# These come from 11 * sin(20), and 11 * sin(20)*tan(20) for w
+lscale = [3.8, 3.8, 1.4]
 
 if 'dat' not in vars():
     dat = j14.load('ttm02b-top', 'pax',
@@ -62,6 +66,8 @@ if flag.get('multi spec'):
             for irow in range(axs.shape[0]):
                 # The col-row loop
                 ax = axs[irow, icol]
+                ax.axvline(filtfreq, linewidth=0.6,
+                           linestyle=':', zorder=-6, color='r')
                 for fctr in [1, 1e-2, 1e-4, 1e-6, 1e-8]:
                     ax.loglog(*pt.powline(factor=fctr), linewidth=0.6,
                               linestyle=':', zorder=-6, color='k')
@@ -69,8 +75,15 @@ if flag.get('multi spec'):
                     # The col-row-var loop
                     kwd = vard[v].copy()
                     n = kwd.pop('noise')[irow]
-                    ax.loglog(dat.freq, dat[v][irow, inds].mean(0) * pt.pii - n,
-                              **kwd)
+                    dnow = dat[v][irow, inds].mean(0) * pt.pii - n
+                    if v == 'Spec_umot':
+                        _itmp = dat.freq < filtfreq
+                        ax.loglog(dat.freq[~_itmp], dnow[~_itmp], **kwd)
+                        kwd['linestyle'] = '--'
+                        kwd.pop('label')
+                        ax.loglog(dat.freq[_itmp], dnow[_itmp], **kwd)
+                    else:
+                        ax.loglog(dat.freq, dnow, **kwd)
         for irow in range(axs.shape[0]):
             # The col-only loop
             axs[irow, 0].set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')

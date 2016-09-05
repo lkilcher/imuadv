@@ -10,9 +10,9 @@ flag = {}
 #flag['bt_filt_time'] = True
 #flag['bt_filt_spec'] = True
 #flag['all spec'] = True
-#flag['multi spec'] = True
+flag['multi spec'] = True
 #flag['eps v U'] = True
-flag['eps v U2'] = True
+#flag['eps v U2'] = True
 
 filt_freqs = {
     #'unfilt': 0.0,
@@ -112,6 +112,7 @@ if 'dat' not in vars():
 
 
 dnow = bindat_filt['5s']
+filtfreq = filt_freqs['5s']
 
 # The mean velocity is totally contaminated by motion correction, so
 # lets fix it here
@@ -350,6 +351,8 @@ if flag.get('multi spec'):
             for irow in range(axs.shape[0]):
                 # The col-row loop
                 ax = axs[irow, icol]
+                ax.axvline(filtfreq, linewidth=0.6,
+                           linestyle=':', zorder=-6, color='r')
                 for fctr in [1, 1e-2, 1e-4, 1e-6, 1e-8]:
                     ax.loglog(*pt.powline(factor=fctr), linewidth=0.6,
                               linestyle=':', zorder=-6, color='k')

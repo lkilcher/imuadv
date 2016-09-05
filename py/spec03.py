@@ -10,6 +10,8 @@ eps_freqs = np.array([[.1, 1],
                       [.1, 1],
                       [.1, 3], ])
 
+filtfreq = 1. / 30
+
 # 4800 points is 5min at 16hz
 binner = avm.TurbBinner(4800, 16)
 
@@ -77,6 +79,8 @@ with pt.style['onecol']():
         for irow in range(axs.shape[0]):
             # The col-row loop
             ax = axs[irow, icol]
+            ax.axvline(filtfreq, linewidth=0.6,
+                       linestyle=':', zorder=-6, color='r')
             for fctr in [1, 1e-2, 1e-4, 1e-6, 1e-8]:
                 ax.loglog(*pt.powline(factor=fctr), linewidth=0.6,
                           linestyle=':', zorder=-6, color='k')
@@ -84,8 +88,15 @@ with pt.style['onecol']():
                 # The col-row-var loop
                 kwd = vard[v].copy()
                 n = kwd.pop('noise')[irow]
-                ax.loglog(dat.freq, dat[v][irow, inds].mean(0) * pii - n,
-                          **kwd)
+                dnow = dat[v][irow, inds].mean(0) * pt.pii - n
+                if v == 'Spec_umot':
+                    _itmp = dat.freq < filtfreq
+                    ax.loglog(dat.freq[~_itmp], dnow[~_itmp], **kwd)
+                    kwd['linestyle'] = '--'
+                    kwd.pop('label')
+                    ax.loglog(dat.freq[_itmp], dnow[_itmp], **kwd)
+                else:
+                    ax.loglog(dat.freq, dnow, **kwd)
     for irow in range(axs.shape[0]):
         # The col-only loop
         axs[irow, 0].set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')

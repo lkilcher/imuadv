@@ -38,11 +38,21 @@ if flg.get('turb time01'):
                              sharex=True, sharey=False)
 
         ax = axs[0]
+        ax.plot(t, np.sqrt(dat.u ** 2 + dat.v ** 2), 'k-', label=r'$\bar{U}$')
         ax.plot(t, dat.u, 'b-', label=r'$\bar{u}$')
         ax.plot(t, dat.v, 'g-', label=r'$\bar{v}$')
         ax.plot(t, dat.w, 'r-', label=r'$\bar{w}$')
         ax.axhline(0, color='k', linestyle=':')
         ax.set_ylabel('$\mathrm{[m/s]}$')
+        ax.text(12.7, .97, 'ebb 1',
+                va='top', ha='center',
+                transform=ax.get_xaxis_transform())
+        ax.text(18.9, .97, 'flood',
+                va='top', ha='center',
+                transform=ax.get_xaxis_transform())
+        ax.text(26.2, 0.97, 'ebb 2',
+                va='top', ha='center',
+                transform=ax.get_xaxis_transform())
         ax.legend(**lgnd_kws)
 
         ax = axs[1]
@@ -50,26 +60,37 @@ if flg.get('turb time01'):
         ax.semilogy(t, dat.upup_, 'b-', label=r"$\overline{u^2}$")
         ax.semilogy(t, dat.vpvp_, 'g-', label=r"$\overline{v^2}$")
         ax.semilogy(t, dat.wpwp_, 'r-', label=r"$\overline{w^2}$")
-        ax.set_ylabel(r'$\mathrm{tke}\ \mathrm{[m^2/s^2]}$')
+        ax.set_ylabel(r'$\mathrm{[m^2/s^2]}$')
         ax.legend(**lgnd_kws)
 
         ax = axs[2]
-        ax.plot(t, dat.upvp_, 'b-', label=r"$\overline{uv}$")
-        ax.plot(t, dat.upwp_, 'r-', label=r"$\overline{uw}$")
-        ax.plot(t, dat.vpwp_, 'g-', label=r"$\overline{vw}$")
-        ax.set_ylabel(r'$\mathrm{stress}\ \mathrm{[m^2/s^2]}$')
+        ax.plot(t, dat.upvp_, '-', c=[0, 0.8, 0.8], label=r"$\overline{uv}$")
+        ax.plot(t, dat.upwp_, '-', c=[0.8, 0, 0.8], label=r"$\overline{uw}$")
+        ax.plot(t, dat.vpwp_, '-', c=[0.8, 0.8, 0], label=r"$\overline{vw}$")
+        ax.set_ylabel(r'$\mathrm{[m^2/s^2]}$')
         ax.legend(**lgnd_kws)
 
         ax = axs[3]
-        ax.semilogy(t, dat.epsilon, 'k.', ms=6, zorder=6)
-        ax.set_ylabel('$\epsilon\ \mathrm{[W/kg]}$')
+        ax.semilogy(t, dat.epsilon, 'ko', ms=3, zorder=4,
+                    mfc='k', mec='none',
+                    label='$\epsilon$')
+        ax.set_ylabel('$\mathrm{[W/kg]}$')
 
         prod = -(dat.u - dat2.u) / 0.5 * dat.upwp_
         inds = prod > 0
-        ax.semilogy(t[inds], prod[inds], 'b.', ms=6, zorder=5)
-        ax.semilogy(t[~inds], -prod[~inds], 'r.', ms=4, zorder=8)
+        ax.semilogy(t[inds], prod[inds], 'ro', ms=3, zorder=5,
+                    mfc='r', mec='none', alpha=.6,
+                    label='$P_{uz}$')
+        ax.semilogy(t[~inds], -prod[~inds], 'ro', ms=2.5, zorder=6,
+                    mfc='none', mec='r', alpha=0.6,
+                    label='$-P_{uz}$')
+
         ax.set_ylim([1e-6, 1e-2])
         #ax.set_ylabel('$\partial u/\partial z\ \mathrm{[s^{-1}]}$')
+        lkw = lgnd_kws.copy()
+        lkw['numpoints'] = 1
+        lkw['handletextpad'] = 0.2
+        ax.legend(**lkw)
 
         ax.set_xlim([t[0], t[-1]])
         ax.set_xlabel('Time [Hours since 00:00 June 18, 2014]')
@@ -137,9 +158,6 @@ if flg.get('turb time02'):
         ax.set_ylim([1e-6, 1e-2])
         #ax.set_ylabel('$\partial u/\partial z\ \mathrm{[s^{-1}]}$')
 
-        if flg.get('save figs'):
-            fig.savefig(pt.figdir + 'EpsVProd01.pdf')
-
 if flg.get('epsVprod01'):
 
     with pt.style['onecol']():
@@ -160,13 +178,16 @@ if flg.get('epsVprod01'):
         iumag = np.abs(dnow0.u) > 1.0
         inds = (prod > 0)
 
-        axs.loglog(eps[inds & iumag], prod[inds & iumag], '.',
-                   color='k', label='$P_{uz}>0$ (n=%d)' % (inds & iumag).sum(),
+        axs.loglog(eps[inds & iumag], prod[inds & iumag], 'o',
+                   label='$P_{uz}>0\ \mathrm{(N = %d)}$' % (inds & iumag).sum(),
+                   mfc='k', mec='none', ms=3,
                    zorder=2)
-        axs.loglog(eps[~inds & iumag], -prod[~inds & iumag], '.',
-                   color='0.6', label='$P_{uz}<0$ (n=%d)' % (~inds & iumag).sum(),
+        axs.loglog(eps[~inds & iumag], -prod[~inds & iumag], 'o',
+                   label='$P_{uz}<0\ \mathrm{(N = %d)}$' % (~inds & iumag).sum(),
+                   mfc='none', mec='k', ms=2.5,
                    zorder=-2)
         axs.legend(loc='upper left', numpoints=1, handlelength=1,
+                   handletextpad=0.2,
                    prop=dict(size='medium'))
 
         axs.plot([1e-8, 1], [1e-8, 1], 'k:')
@@ -175,6 +196,8 @@ if flg.get('epsVprod01'):
         axs.set_xlabel('$\epsilon\ \mathrm{[W/kg]}$')
         axs.set_ylabel('$P_{uz}\ \mathrm{[W/kg]}$')
 
+    if flg.get('save figs'):
+        fig.savefig(pt.figdir + 'EpsVProd01.pdf')
 
 if flg.get('epsVprod02'):
 
@@ -197,6 +220,9 @@ if flg.get('epsVprod02'):
 
         # dat.u is the top
         dudz = (dat.u - dat2.u) / 0.5
+
+        dwdx = (dat.w[2:] - dat.w[:-2]) / (dat.u[1:-1] * 297.6)
+        dudx = (dat.u[2:] - dat.u[:-2]) / (dat.u[1:-1] * 297.6)
 
         prod_uy = -dudy * (dat.upvp_ + dat2.upvp_ + dat3.upvp_ + dat4.upvp_) / 4.
 

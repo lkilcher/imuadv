@@ -10,9 +10,9 @@ flag = {}
 #flag['bt_filt_time'] = True
 #flag['bt_filt_spec'] = True
 #flag['all spec'] = True
-flag['multi spec'] = True
-#flag['eps v U'] = True
-#flag['eps v U2'] = True
+#flag['multi spec'] = True
+flag['eps v U'] = True
+flag['eps v U2'] = True
 
 filt_freqs = {
     #'unfilt': 0.0,
@@ -124,107 +124,164 @@ if 'unfilt' in dat_filt:
 def offset_scale(dat, offset, scale, ):
     return (dat - offset) * scale
 
+if __name__ == '__main__':
 
-if flag.get('bt_basic_time', False):
+    if flag.get('bt_basic_time', False):
 
-    datmc = dat_filt['30s']
+        datmc = dat_filt['30s']
 
-    fig, ax = pt.newfig(301, 1, 1, )
-    inds = slice(int(1.2e4), int(1.4e4))
-    toff = dat.mpltime[inds.start]
-
-    ax.plot(offset_scale(datmc.mpltime[inds], toff, 24 * 36000),
-            datmc.uacc[0][inds],
-            label='$u_{acc}$', color='r')
-    ax.plot(offset_scale(datmc.mpltime[inds], toff, 24 * 36000),
-            datmc.urot[0][inds],
-            label='$u_{rot}$', color='g')
-    ax.plot(offset_scale(datmc.mpltime[inds], toff, 24 * 36000),
-            datmc.uacc[0][inds] + datmc.urot[0][inds],
-            label='$u_{mot}$', color='m')
-    ax.plot(offset_scale(bt['t_IMU'][inds], toff, 24 * 36000),
-            bt['IMU_INST'][0][inds],
-            label='$u_{mot2}$', color='y')
-    ax.plot(offset_scale(bt['t_IMU'][inds], toff, 24 * 36000),
-            bt['BT_INST_interp'][0][inds],
-            label='$u_{bt}$', color='b')
-    ax.legend()
-    ax.set_xlabel('Time [sec]')
-
-    ax.set_ylabel('[m/s]')
-    fig.savefig(pt.figdir + 'BT_basic_plot01.pdf')
-    with file('fig/BT_basic_plot01.caption', 'w') as fl:
-        fl.write("""This shows the basic variables
-
-        This confirms that the datasets overlap and that things
-        basically look correct.  Note here that the u_bt data is
-        VERY different from the u_mot data. This suggests that
-        u_acc is wrong somehow, and provides the impetus for doing
-        this work.
-        """)
-    #ax.set_xlim(datmc.mpltime[inds][[0, -1]])
-    #ax.set_ylim([-0.05, 0.05])
-
-if flag.get('bt_filt_time', False):
-
-    for ifilt, (filt_tag, filt_freq) in enumerate(filt_freqs.iteritems()):
-        datnow = dat_filt[filt_tag]
-
-        fig, ax = pt.newfig(320 + ifilt, 1, 1)
+        fig, ax = pt.newfig(301, 1, 1, )
         inds = slice(int(1.2e4), int(1.4e4))
-        toff = datnow.mpltime[inds.start]
+        toff = dat.mpltime[inds.start]
 
-        ax.plot(offset_scale(datnow.mpltime[inds], toff, 24 * 36000),
-                datnow.uacc[0][inds] + datnow.urot[0][inds],
-                label='$u_{mot}$', color='y')
-        ax.plot(offset_scale(datnow.mpltime[inds], toff, 24 * 36000),
-                ur_adp[0][inds],
-                label='$u_{adp:rot}$', color='r')
+        ax.plot(offset_scale(datmc.mpltime[inds], toff, 24 * 36000),
+                datmc.uacc[0][inds],
+                label='$u_{acc}$', color='r')
+        ax.plot(offset_scale(datmc.mpltime[inds], toff, 24 * 36000),
+                datmc.urot[0][inds],
+                label='$u_{rot}$', color='g')
+        ax.plot(offset_scale(datmc.mpltime[inds], toff, 24 * 36000),
+                datmc.uacc[0][inds] + datmc.urot[0][inds],
+                label='$u_{mot}$', color='m')
+        ax.plot(offset_scale(bt['t_IMU'][inds], toff, 24 * 36000),
+                bt['IMU_INST'][0][inds],
+                label='$u_{mot2}$', color='y')
         ax.plot(offset_scale(bt['t_IMU'][inds], toff, 24 * 36000),
                 bt['BT_INST_interp'][0][inds],
                 label='$u_{bt}$', color='b')
-        ax.plot(offset_scale(bt['t_IMU'][inds], toff, 24 * 36000),
-                datnow.ubt[0][inds],
-                label="$u_{bt}'$", color='b', linestyle=':')
-        ax.plot(offset_scale(bt['t_IMU'][inds], toff, 24 * 36000),
-                datnow.ubt2[0][inds] + datnow.uacc[0][inds] + datnow.urot[0][inds],
-                label='$u_{mot2}$', color='k', linestyle='-')
         ax.legend()
         ax.set_xlabel('Time [sec]')
-        ax.axhline(0, linestyle=':', color='k')
 
         ax.set_ylabel('[m/s]')
-        ax.set_title('{} filter'.format(filt_tag))
-        fig.savefig(pt.figdir + 'BT_time_filt{}.pdf'.format(filt_tag))
+        fig.savefig(pt.figdir + 'BT_basic_plot01.pdf')
+        with file('fig/BT_basic_plot01.caption', 'w') as fl:
+            fl.write("""This shows the basic variables
 
-if flag.get('bt_filt_spec', False):
+            This confirms that the datasets overlap and that things
+            basically look correct.  Note here that the u_bt data is
+            VERY different from the u_mot data. This suggests that
+            u_acc is wrong somehow, and provides the impetus for doing
+            this work.
+            """)
+        #ax.set_xlim(datmc.mpltime[inds][[0, -1]])
+        #ax.set_ylim([-0.05, 0.05])
 
-    line = {'x': np.array([1e-5, 100])}
-    line['y'] = 2e-4 * line['x'] ** (-5. / 3) * pii
+    if flag.get('bt_filt_time', False):
 
-    with pt.twocol():
+        for ifilt, (filt_tag, filt_freq) in enumerate(filt_freqs.iteritems()):
+            datnow = dat_filt[filt_tag]
+
+            fig, ax = pt.newfig(320 + ifilt, 1, 1)
+            inds = slice(int(1.2e4), int(1.4e4))
+            toff = datnow.mpltime[inds.start]
+
+            ax.plot(offset_scale(datnow.mpltime[inds], toff, 24 * 36000),
+                    datnow.uacc[0][inds] + datnow.urot[0][inds],
+                    label='$u_{mot}$', color='y')
+            ax.plot(offset_scale(datnow.mpltime[inds], toff, 24 * 36000),
+                    ur_adp[0][inds],
+                    label='$u_{adp:rot}$', color='r')
+            ax.plot(offset_scale(bt['t_IMU'][inds], toff, 24 * 36000),
+                    bt['BT_INST_interp'][0][inds],
+                    label='$u_{bt}$', color='b')
+            ax.plot(offset_scale(bt['t_IMU'][inds], toff, 24 * 36000),
+                    datnow.ubt[0][inds],
+                    label="$u_{bt}'$", color='b', linestyle=':')
+            ax.plot(offset_scale(bt['t_IMU'][inds], toff, 24 * 36000),
+                    datnow.ubt2[0][inds] + datnow.uacc[0][inds] + datnow.urot[0][inds],
+                    label='$u_{mot2}$', color='k', linestyle='-')
+            ax.legend()
+            ax.set_xlabel('Time [sec]')
+            ax.axhline(0, linestyle=':', color='k')
+
+            ax.set_ylabel('[m/s]')
+            ax.set_title('{} filter'.format(filt_tag))
+            fig.savefig(pt.figdir + 'BT_time_filt{}.pdf'.format(filt_tag))
+
+    if flag.get('bt_filt_spec', False):
+
+        line = {'x': np.array([1e-5, 100])}
+        line['y'] = 2e-4 * line['x'] ** (-5. / 3) * pii
+
+        with pt.twocol():
+            velrange = [1.2, 1.5]
+            #velrange = [0.5, 1.0]
+            for ifilt, (filt_tag, filt_freq) in enumerate(filt_freqs.iteritems()):
+                datbd = bindat_filt[filt_tag]
+
+                fig, axs = pt.newfig(330 + ifilt, 1, 3, figsize=2.4,
+                                     right=0.98,
+                                     bottom=0.17,
+                                     sharex=True, sharey=True)
+
+                inds = pt.within(np.abs(datbd.u), *velrange)
+
+                for iax, ax in enumerate(axs):
+                    ax.loglog(datbd.freq,
+                              (datbd.Spec[iax][inds].mean(0) - doppler_noise[iax]) * pii,
+                              'b', label=pt.latex['ue'].spec, linewidth=1.5, zorder=10)
+                    ax.loglog(datbd.freq,
+                              (datbd.Spec_uraw[iax][inds].mean(0) - doppler_noise[iax]) * pii,
+                              'k', label=pt.latex['umeas'].spec)
+                    ax.loglog(datbd.freq,
+                              datbd.Spec_umot[iax][inds].mean(0) * pii,
+                              'r', label=pt.latex['uhead'].spec, zorder=8, )
+                    # ax.loglog(datbd.freq,
+                    #           datbd.Spec_urot[iax][inds].mean(0) * pii,
+                    #           'm', label='$u_{rot}$')
+                    # ax.loglog(datbd.freq,
+                    #           datbd.Spec_uacc[iax][inds].mean(0) * pii,
+                    #           'b', label='$u_{acc}$')
+                    # ax.loglog(datbd.freq,
+                    #           datbd.Spec_ubt[iax][inds].mean(0) * pii,
+                    #           'r', label='$u_{bt}$')
+                    ax.plot(line['x'], line['y'], 'k--')
+                    ax.axvline(filt_freq, linestyle=':', color='k')
+                    ax.set_xlabel('$f\ \mathrm{[Hz]}$')
+
+                ax.set_xlim([1e-3, 2])
+                ax.set_ylim([1e-4, 1])
+                # axs[-1].legend(bbox_to_anchor=[1.02, 1], loc='upper left')
+                axs[0].legend(loc='lower left',
+                              prop=dict(size='small'))
+                axs[0].set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')
+                axs[0].set_xlabel('$f\ \mathrm{[Hz]}$')
+
+                fig.savefig(pt.figdir + 'SM_spec_filt{}.pdf'.format(filt_tag))
+
+
+    if flag.get('all spec'):
+
+        line = {'x': np.array([1e-5, 100])}
+        line['y'] = 2e-4 * line['x'] ** (-5. / 3) * pii
+
         velrange = [1.2, 1.5]
         #velrange = [0.5, 1.0]
         for ifilt, (filt_tag, filt_freq) in enumerate(filt_freqs.iteritems()):
             datbd = bindat_filt[filt_tag]
 
-            fig, axs = pt.newfig(330 + ifilt, 1, 3, figsize=2.4,
-                                 right=0.98,
-                                 bottom=0.17,
-                                 sharex=True, sharey=True)
+            fig, ax = pt.newfig(340 + ifilt, 1, 1, figsize=[5.5, 4.5],
+                                gridspec_kw=dict(right=0.8,
+                                                 top=0.95,
+                                                 left=0.15,
+                                                 bottom=0.15,
+                                                 hspace=0.08),
+                                sharex=True, sharey=True)
 
             inds = pt.within(np.abs(datbd.u), *velrange)
 
-            for iax, ax in enumerate(axs):
+            for iax, kwd in enumerate([dict(color='b', label='u'),
+                                       dict(color='g', label='v'),
+                                       dict(color='r', label='w')]):
                 ax.loglog(datbd.freq,
                           (datbd.Spec[iax][inds].mean(0) - doppler_noise[iax]) * pii,
-                          'b', label=pt.latex['ue'].spec, linewidth=1.5, zorder=10)
-                ax.loglog(datbd.freq,
-                          (datbd.Spec_uraw[iax][inds].mean(0) - doppler_noise[iax]) * pii,
-                          'k', label=pt.latex['umeas'].spec)
-                ax.loglog(datbd.freq,
-                          datbd.Spec_umot[iax][inds].mean(0) * pii,
-                          'r', label=pt.latex['uhead'].spec, zorder=8, )
+                          linewidth=2, zorder=10, **kwd)
+                # ax.loglog(datbd.freq,
+                #           (datbd.Spec_uraw[iax][inds].mean(0) - 2e-5) * pii,
+                #           'y', label='$u_{raw}$')
+                # ax.loglog(datbd.freq,
+                #           datbd.Spec_umot[iax][inds].mean(0) * pii,
+                #           'k', label='$u_{mot}$', zorder=8, linewidth=1.5)
                 # ax.loglog(datbd.freq,
                 #           datbd.Spec_urot[iax][inds].mean(0) * pii,
                 #           'm', label='$u_{rot}$')
@@ -236,255 +293,87 @@ if flag.get('bt_filt_spec', False):
                 #           'r', label='$u_{bt}$')
                 ax.plot(line['x'], line['y'], 'k--')
                 ax.axvline(filt_freq, linestyle=':', color='k')
-                ax.set_xlabel('$f\ \mathrm{[Hz]}$')
 
             ax.set_xlim([1e-3, 2])
-            ax.set_ylim([1e-4, 1])
-            # axs[-1].legend(bbox_to_anchor=[1.02, 1], loc='upper left')
-            axs[0].legend(loc='lower left',
-                          prop=dict(size='small'))
-            axs[0].set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')
-            axs[0].set_xlabel('$f\ \mathrm{[Hz]}$')
-
-            fig.savefig(pt.figdir + 'SM_spec_filt{}.pdf'.format(filt_tag))
-
-
-if flag.get('all spec'):
-
-    line = {'x': np.array([1e-5, 100])}
-    line['y'] = 2e-4 * line['x'] ** (-5. / 3) * pii
-
-    velrange = [1.2, 1.5]
-    #velrange = [0.5, 1.0]
-    for ifilt, (filt_tag, filt_freq) in enumerate(filt_freqs.iteritems()):
-        datbd = bindat_filt[filt_tag]
-
-        fig, ax = pt.newfig(340 + ifilt, 1, 1, figsize=[5.5, 4.5],
-                            gridspec_kw=dict(right=0.8,
-                                             top=0.95,
-                                             left=0.15,
-                                             bottom=0.15,
-                                             hspace=0.08),
-                            sharex=True, sharey=True)
-
-        inds = pt.within(np.abs(datbd.u), *velrange)
-
-        for iax, kwd in enumerate([dict(color='b', label='u'),
-                                   dict(color='g', label='v'),
-                                   dict(color='r', label='w')]):
-            ax.loglog(datbd.freq,
-                      (datbd.Spec[iax][inds].mean(0) - doppler_noise[iax]) * pii,
-                      linewidth=2, zorder=10, **kwd)
-            # ax.loglog(datbd.freq,
-            #           (datbd.Spec_uraw[iax][inds].mean(0) - 2e-5) * pii,
-            #           'y', label='$u_{raw}$')
-            # ax.loglog(datbd.freq,
-            #           datbd.Spec_umot[iax][inds].mean(0) * pii,
-            #           'k', label='$u_{mot}$', zorder=8, linewidth=1.5)
-            # ax.loglog(datbd.freq,
-            #           datbd.Spec_urot[iax][inds].mean(0) * pii,
-            #           'm', label='$u_{rot}$')
-            # ax.loglog(datbd.freq,
-            #           datbd.Spec_uacc[iax][inds].mean(0) * pii,
-            #           'b', label='$u_{acc}$')
-            # ax.loglog(datbd.freq,
-            #           datbd.Spec_ubt[iax][inds].mean(0) * pii,
-            #           'r', label='$u_{bt}$')
-            ax.plot(line['x'], line['y'], 'k--')
-            ax.axvline(filt_freq, linestyle=':', color='k')
-
-        ax.set_xlim([1e-3, 2])
-        ax.set_ylim([1e-5, 1])
-        # if filt_tag == 'unfilt':
-        #     axs[0].set_title('unfiltered'.format(filt_tag))
-        # else:
-        #     axs[0].set_title('{} filter'.format(filt_tag))
-        ax.legend(bbox_to_anchor=[1.02, 1], loc='upper left')
-        ax.set_xlabel('$f\ \mathrm{[hz]}$')
-        ax.set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')
-        fig.savefig(pt.figdir + 'VelSpec_filt{}.pdf'.format(filt_tag))
+            ax.set_ylim([1e-5, 1])
+            # if filt_tag == 'unfilt':
+            #     axs[0].set_title('unfiltered'.format(filt_tag))
+            # else:
+            #     axs[0].set_title('{} filter'.format(filt_tag))
+            ax.legend(bbox_to_anchor=[1.02, 1], loc='upper left')
+            ax.set_xlabel('$f\ \mathrm{[hz]}$')
+            ax.set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')
+            fig.savefig(pt.figdir + 'VelSpec_filt{}.pdf'.format(filt_tag))
 
 
-if flag.get('multi spec'):
+    if flag.get('multi spec'):
 
-    vard = dict(
-        Spec_umot=dict(color='r', lw=1.5, zorder=1,
-                       label=pt.latex['uhead'].spec,
-                       noise=np.zeros(3),
-        ),
-        Spec_uraw=dict(color='k', zorder=2,
-                       label=pt.latex['umeas'].spec,
-                       noise=[1.5e-4, 1.5e-4, 1.5e-5, ],
+        vard = dict(
+            Spec_umot=dict(color='r', lw=1.5, zorder=1,
+                           label=pt.latex['uhead'].spec,
+                           noise=np.zeros(3),
+            ),
+            Spec_uraw=dict(color='k', zorder=2,
+                           label=pt.latex['umeas'].spec,
+                           noise=[1.5e-4, 1.5e-4, 1.5e-5, ],
 
-        ),
-        Spec=dict(color='b', lw=1.5, zorder=3,
-                  label=pt.latex['ue'].spec,
-                  noise=[1.5e-4, 1.5e-4, 1.5e-5, ],
-        ),
-    )
+            ),
+            Spec=dict(color='b', lw=1.5, zorder=3,
+                      label=pt.latex['ue'].spec,
+                      noise=[1.5e-4, 1.5e-4, 1.5e-5, ],
+            ),
+        )
 
-    with pt.style['twocol']():
+        with pt.style['twocol']():
 
-        velranges = [(0, 0.5),
-                     (1, 1.5),
-                     (2, 2.5)]
+            velranges = [(0, 0.5),
+                         (1, 1.5),
+                         (2, 2.5)]
 
-        fig, axs = pt.newfig(101, 3, len(velranges),
-                             figsize=5,
-                             right=0.86, bottom=0.1,
-                             sharex=True, sharey=True)
+            fig, axs = pt.newfig(101, 3, len(velranges),
+                                 figsize=5,
+                                 right=0.86, bottom=0.1,
+                                 sharex=True, sharey=True)
 
-        for icol in range(axs.shape[1]):
-            vr = velranges[icol]
-            umag = np.abs(dnow.u)
-            inds = (vr[0] < umag) & (umag < vr[1])
-            axs[-1, icol].set_xlabel('$f\ \mathrm{[Hz]}$')
-            if vr[0] == 0:
-                axs[0, icol].set_title(r"$ |\bar{u}| < %0.1f$" % vr[1],
-                                       fontsize='medium')
-            else:
-                axs[0, icol].set_title(r"$%0.1f < |\bar{u}| < %0.1f$" % vr,
-                                       fontsize='medium')
-            axs[0, icol].text(.9, .9, 'N={}'.format(inds.sum()),
-                              ha='right', va='top', fontsize='medium',
-                              transform=axs[0, icol].transAxes)
+            for icol in range(axs.shape[1]):
+                vr = velranges[icol]
+                umag = np.abs(dnow.u)
+                inds = (vr[0] < umag) & (umag < vr[1])
+                axs[-1, icol].set_xlabel('$f\ \mathrm{[Hz]}$')
+                if vr[0] == 0:
+                    axs[0, icol].set_title(r"$ |\bar{u}| < %0.1f$" % vr[1],
+                                           fontsize='medium')
+                else:
+                    axs[0, icol].set_title(r"$%0.1f < |\bar{u}| < %0.1f$" % vr,
+                                           fontsize='medium')
+                axs[0, icol].text(.9, .9, 'N={}'.format(inds.sum()),
+                                  ha='right', va='top', fontsize='medium',
+                                  transform=axs[0, icol].transAxes)
+                for irow in range(axs.shape[0]):
+                    # The col-row loop
+                    ax = axs[irow, icol]
+                    ax.axvline(filtfreq, linewidth=0.6,
+                               linestyle=':', zorder=-6, color='r')
+                    for fctr in [1, 1e-2, 1e-4, 1e-6, 1e-8]:
+                        ax.loglog(*pt.powline(factor=fctr), linewidth=0.6,
+                                  linestyle=':', zorder=-6, color='k')
+                    for v in ['Spec', 'Spec_umot', 'Spec_uraw', ]:
+                        # The col-row-var loop
+                        kwd = vard[v].copy()
+                        n = kwd.pop('noise')[irow]
+                        ax.loglog(dnow.freq, dnow[v][irow, inds].mean(0) * pii - n,
+                                  **kwd)
             for irow in range(axs.shape[0]):
-                # The col-row loop
-                ax = axs[irow, icol]
-                ax.axvline(filtfreq, linewidth=0.6,
-                           linestyle=':', zorder=-6, color='r')
-                for fctr in [1, 1e-2, 1e-4, 1e-6, 1e-8]:
-                    ax.loglog(*pt.powline(factor=fctr), linewidth=0.6,
-                              linestyle=':', zorder=-6, color='k')
-                for v in ['Spec', 'Spec_umot', 'Spec_uraw', ]:
-                    # The col-row-var loop
-                    kwd = vard[v].copy()
-                    n = kwd.pop('noise')[irow]
-                    ax.loglog(dnow.freq, dnow[v][irow, inds].mean(0) * pii - n,
-                              **kwd)
-        for irow in range(axs.shape[0]):
-            # The row-only loop
-            axs[irow, 0].set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')
-            axs[irow, -1].text(1.04, 0.05, '$%s$' % (pt.vel_comps[irow]),
-                               ha='left', va='bottom', fontsize='x-large',
-                               transform=axs[irow, -1].transAxes, clip_on=False)
-        axs[0, -1].legend(loc='upper left', bbox_to_anchor=[1.02, 1.0],
-                          handlelength=1.4, handletextpad=0.4,
-                          prop=dict(size='medium'))
-        ax.set_ylim((1e-4, 1))
-        ax.set_xlim((1e-3, 5))
+                # The row-only loop
+                axs[irow, 0].set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')
+                axs[irow, -1].text(1.04, 0.05, '$%s$' % (pt.vel_comps[irow]),
+                                   ha='left', va='bottom', fontsize='x-large',
+                                   transform=axs[irow, -1].transAxes, clip_on=False)
+            axs[0, -1].legend(loc='upper left', bbox_to_anchor=[1.02, 1.0],
+                              handlelength=1.4, handletextpad=0.4,
+                              prop=dict(size='medium'))
+            ax.set_ylim((1e-4, 1))
+            ax.set_xlim((1e-3, 5))
 
-        fig.savefig(pt.figdir + 'SpecFig02_SMnose.pdf')
-
-
-if flag.get('eps v U'):
-
-    with pt.style['onecol']():
-
-        fig, ax = pt.newfig(202, 1, 1,
-                            figsize=3,
-                            left=0.2, right=0.95,
-                            bottom=0.15,)
-
-        inds = dnow.u > 0
-        ax.loglog(np.abs(dnow.U[inds]), dnow.epsilon[inds], 'r.')
-        ax.loglog(np.abs(dnow.U[~inds]), dnow.epsilon[~inds], 'k.')
-        for fctr in np.logspace(-2, 1, 4):
-            ax.loglog(np.array([1e-3, 100]) ** (1. / 3) * fctr, np.array([1e-6, 0.1]), 'k:')
-
-        ax.set_xlim([1e-2, 1e1])
-        ax.set_ylim([1e-6, 1e-2])
-
-        ax.set_ylabel(r'$\epsilon\ \mathrm{[W/kg]}$')
-        ax.set_xlabel(r'$|\bar{U}|$')
-
-        fig.savefig(pt.figdir + 'EpsVU_SM_01.pdf')
-
-if flag.get('eps v U2'):
-
-    with pt.style['twocol']():
-
-        fig, axs = pt.newfig(203, 1, 2,
-                             sharex=True, sharey=True,
-                             figsize=3,
-                             left=0.1, right=0.85,
-                             bottom=0.15, top=0.92)
-
-        u_rngs = np.arange(0.2, 3., 0.2)
-        Utmp = np.array([1e-5, 1e5])
-        for iax, ax in enumerate(axs):
-            if iax == 0:
-                inds = (dnow.u > 0.6) & ~np.isnan(dnow.epsilon)
-                ax.set_title('Ebb')
-                angoff = dnow.principal_angle - np.pi
-            else:
-                inds = (dnow.u < -0.6) & ~np.isnan(dnow.epsilon)
-                ax.set_title('Flood')
-                angoff = dnow.principal_angle
-            U = np.abs(dnow.U[inds])
-            eps = dnow.epsilon[inds]
-            clr = -(np.angle(dnow.U[inds]) - angoff) * 180 / np.pi
-            crange = [-30, 30]
-            l_ratio = np.exp(np.log(eps / U ** 3).mean())
-            scat = ax.scatter(U, eps, c=clr,
-                              s=8, marker='o', linewidths=0,
-                              cmap='coolwarm',
-                              vmin=crange[0], vmax=crange[1])
-            cax = fig.add_axes([0.88, 0.15, 0.02, 0.77])
-            cbar = pt.plt.colorbar(scat, cax=cax)
-            cbar.set_label(r'$\Delta\theta\ \mathrm{[degrees]}$')
-            cbar.set_ticks(np.arange(-30, 31, 10))
-            # ax.scatter(U, eps, c='0.7',
-            #            s=8, marker='o', linewidths=0, )
-            for ur in zip(u_rngs[:-1], u_rngs[1:]):
-                i2 = pt.within(U, *ur)
-                if i2.sum() <= 5:
-                    continue
-                ax.plot(np.mean(ur), eps[i2].mean(), '.',
-                        color=[0, 1, 0],
-                        ms=7, zorder=2)
-                ax.plot(np.mean(ur), eps[i2].mean(), '.',
-                        color='k',
-                        ms=9, zorder=1)
-                unc = pt.boot(eps[i2])
-                # uncvals = (np.nanmean(dnow.epsilon[i2]) +
-                #            np.array([-1, 1]) * np.nanstd(dnow.epsilon[i2]))
-                # uncvals[uncvals < 0] = 1e-12
-                ax.plot(np.mean(ur) * np.array([1, 1]),
-                        [unc[0], unc[-1]], '-', lw=1,
-                        color=[0, 1, 0], zorder=2)
-                ax.plot(np.mean(ur) * np.array([1, 1]), 
-                        [unc[0], unc[-1]], '-', lw=1.8,
-                        color='k', zorder= 1)
-            ax.set_xscale('log')
-            ax.set_yscale('log')
-            ax.set_xlabel(r'$\bar{U}$')
-            ticks = np.arange(0.4, 3, 0.4)
-            ax.xaxis.set_ticks(ticks)
-            ax.xaxis.set_ticklabels(['{:0.1f}'.format(tk) for tk in ticks])
-            ax.xaxis.set_ticks(np.arange(0.2, 3, 0.2), minor=True)
-            ax.xaxis.grid(True, 'minor')
-            ax.plot(Utmp, l_ratio * (Utmp ** 3), 'k-', zorder=-5)
-            # print eps.max()
-            ax.annotate(r'$\epsilon = \bar{U}^3 \cdot$ %0.1e m$^{-1}$' % (l_ratio),
-                        (0.7, l_ratio * 0.7 ** 3),
-                        (0.04, 0.04), textcoords='axes fraction',
-                        bbox=dict(boxstyle="round", fc='0.87', ec='none'),
-                        arrowprops=dict(arrowstyle="simple",
-                                        fc='0.8', ec="none",
-                                        #connectionstyle="arc3,rad=-0.3",
-                        ),
-            )
-            # ax.text(0.96, 0.04,
-            #         r'$\epsilon = \bar{U}^3 \cdot$ %0.1e m$^{-1}$' % (l_ratio),
-            #         color='r',
-            #         transform=ax.transAxes, ha='right', va='bottom', )
-        # axs[0].plot(Utmp, 6e-5 * (Utmp ** 3), 'r-')
-        # axs[1].plot(Utmp, 2e-5 * (Utmp ** 3), 'r-')
-        ax.set_xlim([0.6, 2.4])
-        ax.set_ylim([1e-6, 3e-3])
-        axs[0].set_ylabel(r'$\epsilon\ \mathrm{[W/kg]}$')
-        fig.savefig(pt.figdir + 'EpsVU_SM_02.pdf')
-
-
+            fig.savefig(pt.figdir + 'SpecFig02_SMnose.pdf')
 

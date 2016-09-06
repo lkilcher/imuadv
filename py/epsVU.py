@@ -1,5 +1,5 @@
 import ttm.June2014 as j14
-import spec_SM01 as sm
+import make_SMdata_wBT as sm
 import ptools as pt
 import numpy as np
 plt = pt.plt
@@ -18,7 +18,7 @@ if 'ttm' not in dat:
     dat['ttm'] = j14.load('ttm02b-top', 'pax',
                           bin=True)
 if 'sm' not in dat:
-    dat['sm'] = sm.dnow
+    dat['sm'] = sm.load('SMN-5s', bindat=True)
 
 
 def gt(val):

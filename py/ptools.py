@@ -62,6 +62,10 @@ class label(object):
     def spec(self, ):
         return label(prfx=r'S\{', sufx=self.sufx + r'\}', comp=self.comp)
 
+    @property
+    def cspec(self, ):
+        return label(prfx=r'C\{', sufx=self.sufx + r'\}', comp=self.comp)
+
 
 latex = dict(umeas=label(sufx=r'_\mathrm{m}'),
              ue=label(),

@@ -9,9 +9,9 @@ plt = pt.plt
 flag = {}
 # flag['amp/phase'] = True
 # flag['real/imag'] = True
-#flag['multi-real'] = True
+flag['multi-real'] = True
 flag['save fig'] = True
-flag['multi-ogive'] = True
+#flag['multi-ogive'] = True
 
 binners = dict(ttm=avm.TurbBinner(9600, 32),
                sm=avm.TurbBinner(4800, 16))
@@ -176,22 +176,30 @@ for idat, dat_nm in enumerate(['ttm', 'sm']):
             axs[0, icol].set_title(r"$%0.1f < \bar{u} < %0.1f$" % vr,
                                    fontsize='medium')
             for irow, ax in enumerate(axcol):
-                dtmp = bd.Cspec_u[irow][inds].mean(0) * pii
-                ax.text(.9, .1,
-                        r"%2.2g" % (np.trapz(dtmp, f) * 10000, ),
-                        ha='right', va='bottom',
-                        transform=ax.transAxes)
                 # r"$\overline{%s'%s'}=$%0.0e" % (pt.vel_comps[pairs[irow][0]],
                 #                                 pt.vel_comps[pairs[irow][1]],
                 #                                 np.trapz(dtmp, f), ),
-                ax.semilogx(f, dtmp.real, 'b-', label=pt.latex['ue'])
+                dtmp = bd.Cspec_u[irow][inds] * pii
+                # rng = np.empty((2, dtmp.shape[1]))
+                # for ifrq in range(dtmp.shape[1]):
+                #     rng[0, ifrq], mid, rng[1, ifrq] = pt.boot(dtmp[:, ifrq])
+                rng = dtmp.std(0)[None, :] * np.array([[-1], [1]]) + dtmp.mean(0)
+                ax.semilogx(f, dtmp.real.mean(0), 'b-', label=pt.latex['ue'].cspec)
+                ax.fill_between(f, rng[0], rng[1], zorder=-12,
+                                facecolor=[0, 0, 1, 0.3], edgecolor='none')
+                # ax.semilogx(f, dtmp.T * pii, '-', color='0.7', zorder=-10)
+                ax.text(.9, .1,
+                        r"%2.2g" % (np.trapz(dtmp.mean(0), f) * 10000, ),
+                        ha='right', va='bottom',
+                        transform=ax.transAxes)
                 dtmp = bd.Cspec_umot[irow][inds].mean(0) * pii
-                ax.semilogx(f, dtmp.real, 'r-', label=pt.latex['uhead'], zorder=-2)
+                ax.semilogx(f, dtmp.real, 'r-', label=pt.latex['uhead'].cspec, zorder=-2)
                 dtmp = bd.Cspec_uraw[irow][inds].mean(0) * pii
-                ax.semilogx(f, dtmp.real, 'k-', zorder=-5, label=pt.latex['umeas'])
+                ax.semilogx(f, dtmp.real, 'k-', zorder=-5, label=pt.latex['umeas'].cspec)
                 ax.axhline(0, color='k', linestyle=':', zorder=-5, lw=1)
 
-        axs[0, -1].legend(loc='upper left', bbox_to_anchor=[1.1, 1])
+        axs[0, -1].legend(loc='upper left', bbox_to_anchor=[1.1, 1],
+                          handletextpad=0.2, handlelength=2)
 
         axs[0, 0].set_ylim([-0.2, 0.2])
         # axs[0, 1].set_ylim([-np.pi, np.pi])
@@ -201,8 +209,8 @@ for idat, dat_nm in enumerate(['ttm', 'sm']):
         for irow in range(axs.shape[0]):
             axs[irow, 0].set_ylabel('$\mathrm{m^2s^{-2}/Hz}$')
             axs[irow, -1].text(1.03, 0.03,
-                               r'$C_R\{%s,%s\}$' % (pt.vel_comps[pairs[irow][0]],
-                                                    pt.vel_comps[pairs[irow][1]]),
+                               r'$C\{%s,%s\}$' % (pt.vel_comps[pairs[irow][0]],
+                                                  pt.vel_comps[pairs[irow][1]]),
                                ha='left', va='bottom',
                                transform=axs[irow, -1].transAxes)
 

@@ -1,9 +1,4 @@
-py/stresses.py
-- Change to 'C{u,v}' (i.e. drop R)
-
-fig/SpecFig02
-- Make u_h line dashed below filter frequency (also show filter frequency).
-- Do this for both the TTM and Torpedo.
+- Move SM bottom track incorporation into SM2015 data folder!!!
 
 py/make_map.py
 - Make map of larger area?
@@ -30,9 +25,6 @@ fig/TimeFig01
 ? Change y-axis sizes so that 1m/s is the same vertical size on all plots
 ? Plot mag/direction instead? Difference?
 
-- Add figures that plot epsilon and stresses vs. time
-- Add figure that compares epsilon with u^3
-
 fig/SpecFig_annot
 - Consistent mplstyle
 - Multiple velocity ranges?
@@ -41,8 +33,8 @@ fig/SpecFig_annot
 - Do we need the bench tests from Nortek?
 
 DATA ORGANIZATION
-- Move epsilon/stress/stress-spec calcs to data-processing scripts?
 - Add DOLfYN support for CSV output.
+
 
 DISCUSSION
 - We tried a spectral approach to MC, but it diddn't work because you need the phase information.

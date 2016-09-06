@@ -1,5 +1,5 @@
 import ttm.June2014 as j14
-import ttm.sm2015 as sm15
+import make_SMdata_wBT as smdat
 import ptools as pt
 import dolfyn.adv.api as avm
 import numpy as np
@@ -17,33 +17,10 @@ binners = dict(ttm=avm.TurbBinner(9600, 32),
                sm=avm.TurbBinner(4800, 16))
 pii = 2 * np.pi
 
-if 'rdat' not in vars():
-    rdat = {}
-    rdat['ttm'] = j14.load('ttm02b-top', 'pax', )
-    rdat['sm'] = sm15.load('SM_Nose', 'pax')
-
-pairs = [(0, 1), (0, 2), (1, 2)]
-
 if 'bdat' not in vars():
     bdat = {}
-for nm in rdat:
-    binner = binners[nm]
-    if nm not in bdat:
-        rd = rdat[nm]
-        bd = bdat[nm] = binner(rd)
-
-        bd.add_data('Cspec_u', np.empty_like(bd.Spec, dtype=np.complex64), 'spec')
-        bd.add_data('Cspec_umot', np.empty_like(bd.Spec, dtype=np.complex64), 'spec')
-        bd.add_data('Cspec_uraw', np.empty_like(bd.Spec, dtype=np.complex64), 'spec')
-        umot = rd.uacc + rd.urot
-        for ip, ipair in enumerate(pairs):
-            bd.Cspec_u[ip] = binner.cpsd(rd._u[ipair[0]], rd._u[ipair[1]],
-                                         n_fft=binner.n_fft)
-            bd.Cspec_umot[ip] = binner.cpsd(umot[ipair[0]], umot[ipair[1]],
-                                            n_fft=binner.n_fft)
-            bd.Cspec_uraw[ip] = binner.cpsd(rd.uraw[ipair[0]], rd.uraw[ipair[1]],
-                                            n_fft=binner.n_fft)
-
+    bdat['ttm'] = j14.load('ttm02b-top', 'pax', bin=True)
+    bdat['sm'] = smdat.load('SMN-5s', bindat=True)
 pt.twocol()
 
 

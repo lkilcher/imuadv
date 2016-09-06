@@ -7,9 +7,9 @@ import gis
 flg = {}
 flg['turb time01'] = True
 #flg['turb time02'] = True
-#flg['epsVprod01'] = True
+flg['epsVprod01'] = True
 #flg['epsVprod02'] = True
-flg['save figs'] = True
+#flg['save figs'] = True
 
 lgnd_kws = dict(loc='upper left', bbox_to_anchor=(1.02, 1), )
 
@@ -178,6 +178,8 @@ if flg.get('epsVprod01'):
         iumag = np.abs(dnow0.u) > 1.0
         inds = (prod > 0)
 
+        logbins = np.logspace(-6, -2, 13)
+
         axs.loglog(eps[inds & iumag], prod[inds & iumag], 'o',
                    label='$P_{uz}>0\ \mathrm{(N = %d)}$' % (inds & iumag).sum(),
                    mfc='k', mec='none', ms=3,
@@ -189,6 +191,12 @@ if flg.get('epsVprod01'):
         axs.legend(loc='upper left', numpoints=1, handlelength=1,
                    handletextpad=0.2,
                    prop=dict(size='medium'))
+
+        # for rng in zip(logbins[:-1], logbins[1:]):
+        #     inds = (rng[0] < eps) & (eps < rng[1])
+        #     xval = np.mean(rng)
+        #     plt.plot(xval, prod[inds].mean(), 'r.')
+        #     plt.plot(xval, -prod[inds].mean(), 'ro')
 
         axs.plot([1e-8, 1], [1e-8, 1], 'k:')
         axs.set_ylim([1e-6, 1e-2])

@@ -2,19 +2,25 @@
 \section{Methodology}
 \label{sec:methods}
 
+\def\ue{\ensuremath{\vec{\tilde{u}}\earth}}
+
 % The orientation matrix can be used to rotate all vector-quantities measured in the instrument frame (velocity, rotation rate, acceleration, etc.) into the earth's coordinate system. 
 % The angular rate and linear acceleration signals can be used to estimate the ADV head-motion, $\uhead$, which can then be removed from the measured velocity, $\umeas$, to estimate the `motion corrected' velocity in the earth frame,
 % Note that $\uhead$ is added to $\umeas$ because the measured velocity resulting from head motion is in the opposite direction of head motion itself (i.e., $\umeas = \ue - \uhead$).
 
-The essential approach of this methodology is to estimate time-series of velocity on a compliant mooring by obtaining an independent estimate of ADV head motion and removing that motion from the measured signal. Nortek offers an ADV that is equipped with an IMU that measures the linear acceleration, $\Accel$, rotational-motion, $\AngRt$, and orientation, $\omatinv$, of the ADV pressure case (body). So long as the ADV head is rigidly connected to the ADV pressure case, it is possible to utilize the IMU motion signals to calculate the motion of the ADV head, and remove it from the measured velocity signal.  The ADV head motion, is calculated as the sum of rotational and translational motion:
+The essential approach of this methodology is to estimate time-series of velocity on a compliant mooring by obtaining an independent estimate of ADV head motion and removing that motion from the measured signal. Nortek offers an ADV that is equipped with an IMU that measures the linear acceleration, $\Accel$, rotational-motion, $\AngRt$, and orientation matrix, $\omat$, of the ADV pressure case (body) in the earth reference frame. So long as the ADV head is rigidly connected to the ADV pressure case, it is possible to utilize the IMU motion signals to calculate the motion of the ADV head, and remove it from the measured velocity signal.  The ADV head motion, is calculated as the sum of rotational and translational motion:
 \begin{align}
+  \label{eqn:uhead}
+\begin{split}
   \uhead & = \urot + \uacc + \ulow \\
       & = \omatinv \cdot \AngRt^*(t)\times\l^* + \int \{\Accel(t)\}_{HP(f_{a})} \mathrm{d}t + \ulow
-        \label{eqn:uhead}
+\end{split}
 \end{align}
-Here `$*$' superscripts denote quantities in the ADV's locale coordinate system, $\omatinv$ is the IMU orientation matrix that rotates vectors from the IMU to the earth reference frame, and $\l^*$ is the vector from the IMU to the ADV head. The notation $\{\Accel\}_{HP(f_a)}$ indicates that the IMU's accelerometer signal is high-pass filtered (in the earth's stationary reference frame) at a chosen filter-frequency, $f_a$. This is necessary because accelerometers have low-frequency noise, sometimes referred to as `bias-drift' \citep[]{Barshan1995,Bevly2004,Gulmammadov2009}. Bench-tests of the Microstrain IMU indicate that its accelerometers drift for frequencies $<10^{-2}$Hz \citep[]{EgelandPhD2014}.  This noise is amplified by integration of the acceleration signal such that it contaminates the motion correction, especially at low-frequencies (Figure \ref{fig:stationary_noise}).  This issue means that low-frequency motion is not well resolved by the IMU, and so there is a residual low-frequency translational motion, $\ulow$, that needs to be considered when performing motion correction.
+Here `$*$' superscripts denote quantities in the ADV's local coordinate system, and $\l^*$ is the vector from the IMU to the ADV head. $\omatinv$---the inverse of the orientation matrix---rotates vectors from the IMU to the earth reference frame. The notation $\{\Accel\}_{HP(f_a)}$ indicates that the IMU's accelerometer signal is high-pass filtered (in the earth's stationary reference frame) at a chosen filter-frequency, $f_a$. This is necessary because accelerometers have low-frequency noise, sometimes referred to as `bias-drift' \citep[]{Barshan1995,Bevly2004,Gulmammadov2009}. 
 
-The choice of high-pass filter to be used to correct for low-frequency accelerometer noise issue on the application (e.g. deployment platform), and the turbulence level of the measurement environment. In particular, this involves a trade off between filtering-out this noise and not filtering measured motion that is unresolved by an independent measurement of $\ulow$. If an independent measure of low-frequency motion is available it can be used to increase the accuracy of $\uhead$ at low-frequency. Note that, to avoid double counting, $\ulow$ should be estimated by applying the complimentary low-pass filter to the independent measurement of low-frequency motion.
+Integrating $\Accel$ to estimate $\uacc$ amplifies the bias-drift noise at low-frequencies, which dramatically reduces the signal-to-noise ratio at those time scales (Figure \ref{fig:stationary_noise}).  The high-pass filtering reduces this noise so that it does not contaminate motion correction, but real motion that exists at these frequencies is still lost in the low signal-to-noise ratio \cite[]{EgelandPhD2014}. This means that low-frequency motion is not well resolved by the IMU, and so there is a residual low-frequency translational motion, $\ulow$, that needs to be measured independently---or at the very least considered---when using motion corrected ADV-IMU data.
+
+The choice of high-pass filter for low-frequency accelerometer noise depends on the flow conditions of the measurement, and the platform that is being used. In particular, filter-selection involves a trade off between filtering-out the bias-drift noise while not filtering-out measured motion that is unresolved by an independent measurement of $\ulow$. If an independent measure of low-frequency motion is available it can be used to increase the accuracy of $\uhead$ at low-frequency. Note that, to avoid double counting, $\ulow$ should be estimated by applying the complimentary low-pass filter to the independent measurement of low-frequency motion.
 
 With this estimate of ADV head motion it is straightforward to correct the measured velocity, $\umeas$, to estimate the velocity in the earth's inertial reference frame:
 \begin{align}
@@ -41,6 +47,8 @@ For the TTM and Turbulence Torpedo we utilize $f_a = 0.0333 Hz$ (30 second perio
 \end{figure}
 
 Additional details on motion correction--including a detailed accounting of the distinct coordinate systems of the IMU, ADV pressure case, and ADV head--can be found in \cite{Kilcher++2016}. Open-source Python tools for performing motion correction of ADV-IMU data--including scripts that write processed data in Matlab and tabulated formats--are available at \url{http://lkilcher.github.io/dolfyn/}.
+
+\def\ue{\ensuremath{\vec{u}\earth}}
 
 %%% Local Variables:
 %%% mode: latex

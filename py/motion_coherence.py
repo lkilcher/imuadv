@@ -192,6 +192,7 @@ if flag.get('show cohere', False):
                     'r', label='$w$',
                     lw=2, zorder=1)
 
+        ax.axhline(np.sqrt(6. / (4 * inds.sum())), linestyle=':', color='k')
         ax.legend(loc='upper left')
         ax.set_ylim([0, 1])
         ax.set_xlim([1e-3, 1])

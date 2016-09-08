@@ -19,13 +19,13 @@ The `tidal turbulence mooring' (TTM) is a simple mooring system with a `strongba
 
 \subsubsection{June 2012 TTM deployment}
 
-The first was in June of 2012 at 48.15285 north, 122.68581 west. The mooring was in the water from 17:30 on the 12th until 14:30 on the 14th (local, i.e. pacific daylight time). Two Nortek ADVs were clamped to either side of the fin such that the axis of their cylindrical pressure-cases were parallel with the leading edge of the strongback. Only one of these ADVs was equipped with an integrated IMU. This TTM also had an upward-looking acoustic Doppler profiler mounted on the mooring anchor.
+The first was in June of 2012 at 48.15285 north, 122.68581 west. The mooring was in the water from 17:30 on the 12th until 14:30 on the 14th (local, i.e. pacific daylight time). Two Nortek ADVs were clamped to either side of the fin such that the axis of their cylindrical pressure-cases were parallel with the leading edge of the strongback. The ADV heads were spaced 0.5 m apart vertically along the fin. Only one of these ADVs was equipped with an integrated IMU. This TTM also had an upward-looking acoustic Doppler profiler mounted on the mooring anchor.
 
 Periods of time during which this mooring interfered with a beam of the Doppler profiler were identified by inspection of the profiler's acoustic amplitude signal. Periods during which one beam of the profiler had $>5\%$ higher acoustic amplitude than the other beams were flagged as `contaminated' and excluded from averaging.  5-minute averages in which more than 50\% of the data was contaminated in this way were masked as invalid.
 
 \subsubsection{June 2014 TTM deployment}
 
-The second TTM deployment was in 2014 from 06:00 on June 17 to 05:00 on June 19 (local time). The mooring was positioned at 48.15327 north, 122.68654 west.  Two Nortek ADV-IMUs were mounted on this TTM. In this case the pressure-cases and ADV heads were inclined at an angle of 18$^\circ$ to the leading edge of the fin to account for mooring blow-down during strong currents (Figure \ref{fig:ttm:photo}). This change was made to reduce vibrational motion observed during the June 2012 deployment that was believed to be associated with the orientation of the pressure cases.
+The second TTM deployment was in 2014 from 06:00 on June 17 to 05:00 on June 19 (local time). The mooring was positioned at 48.15327 north, 122.68654 west.  Two Nortek ADV-IMUs were mounted on this TTM, with their heads spaced 0.5 m apart along the fin. In this case the pressure-cases and ADV heads were inclined at an angle of 18$^\circ$ to the leading edge of the fin to account for mooring blow-down during strong currents (Figure \ref{fig:ttm:photo}). This change was made to reduce vibrational motion observed during the June 2012 deployment that was believed to be associated with the orientation of the pressure cases.
 
 \begin{figure}[t]
   \centering
@@ -55,7 +55,7 @@ This work uses data from two deployments of the StableMoor. During both deployme
   \centering
   \includegraphics[width=2.6in]{SM_ondeck01}
   \includegraphics[width=2.6in]{SM_NoseMode01}
-  \includegraphics[width=2.6in]{SM_WingMode_Floating}
+  \includegraphics[width=2.6in]{SM_WingMode_Floating01}
   \caption{Top: Alex DeKlerk checks to ensure that the StableMoor buoy is properly fastened to its anchor; the RDI workhorse ADCP can be seen in the rear instrument bay. A bridle is draped across the top of the buoy for deployment and recovery, and a small marker buoy fastened to the tail is useful during recovery.  Middle: a close-up of the StableMoor in the `nose mode' configuration shows the ADV head and the top of its pressure case. Bottom: the StableMoor buoy in `wing mode', floating on the ocean surface with the marker buoy trailing behind. The ADV heads mounted at the ends of the cross-beam are protruding above the waterline.   }
   \label{fig:SM}
 \end{figure}
@@ -70,7 +70,7 @@ The StableMoor buoy we used was customized to have an optional 1.5 m oval beam t
 
 \subsection{Turbulence Torpedo}
 
-The turbulence torpedo is a simple sounding weight with an ADV head mounted forward of the nose, and the ADV pressure case strapped below. This platform was deployed on May 14 for 37 minutes starting at 07:41 local time \note{position of deployment not mentioned in decklog. Can we get this from ship data? Does this matter?}. This measurement was made from a davit that hung the system from the side of the ship to a depth of approximately 25 m. The primary logistical advantages of this platform are its compact size, low cost, and the flexibility to perform spatial transects.  
+The turbulence torpedo is a simple sounding weight with an ADV head mounted forward of the nose, and the ADV pressure case strapped below. This platform was deployed on May 14, 2015 for 37 minutes starting at 07:41 local time. \note{Position of deployment not mentioned in decklog. Can we get this from ship data? Does this matter?}. This measurement was made from a davit that hung the system from the side of the ship to a depth of approximately 25 m. The primary logistical advantages of this platform are its compact size, low cost, and the flexibility to perform spatial transects.  
 
 \begin{figure}[th]
   \centering
@@ -81,9 +81,11 @@ The turbulence torpedo is a simple sounding weight with an ADV head mounted forw
 
 \subsection{Coordinate system and turbulence averaging}
 
-Unless stated otherwise, vector quantities in this work are in a fixed `principal-axes' coordinate system that is aligned with the bi-directional tidal flow: positive $u$ is in the direction of ebb (310$^\circ$ True), positive $w$ is vertically upward, and $v$ is the cross-stream component in a right-handed coordinate system. The full velocity vector, $\vec{\tilde{u}} = (\tilde{u}, \tilde{v}, \tilde{w})$, is separated into a mean and turbulent component as $\vec{\tilde{u}} = \vec{\bar{u}} + \vec{u}$, where the over-bar denotes a 5 minute average. Turbulence kinetic energy, $\tke = \uu + \vv+\ww$, and Reynold's stresses, $\uv$, $\uw$, $\vw$ are computed by averaging over the 5-minute window.  Throughout this work we use $\bar{U} = (\bar{u}^2+\bar{v}^2)^{1/2}$ to denote the horizontal velocity magnitude. 
+Unless stated otherwise, vector quantities in this work are in a fixed `principal-axes' coordinate system that is aligned with the bi-directional tidal flow: positive $u$ is in the direction of ebb (310$^\circ$ True), positive $w$ is vertically upward, and $v$ is the cross-stream component in a right-handed coordinate system. The full velocity vector, $\vec{\tilde{u}} = (\tilde{u}, \tilde{v}, \tilde{w})$, is separated into a mean and turbulent component as $\vec{\tilde{u}} = \vec{\bar{u}} + \vec{u}$, where the over-bar denotes a 5 minute average. Turbulence kinetic energy, $\tke = \uu + \vv+\ww$, and Reynold's stresses, $\uv$, $\uw$, $\vw$ are computed by averaging over the 5-minute window.  Throughout this work we use $\bar{U} = (\bar{u}^2+\bar{v}^2)^{1/2}$ to denote the mean horizontal velocity magnitude. 
 
-All spectra, $\spec{x}(f)=|\fourier{x(t)}|^2$, and cross-spectra, $\cspec{x}{y}(f)=\mathrm{real}(\fourier{x(t)}\fourier{y(t)})$, are computed using NumPY fast Fourier transform routines \cite[]{Walt++2011}. Here, $\fourier{x(t)}$ denotes the fast Fourier transform of a signal $x(t)$.  Time series' are linearly detrended and Hanning windowed prior to computing $\fourier\{x\}$ to reduce spectral reddening.  Throughout the remainder of this work the dependence of $S$ and $C$ on $f$ is implied (e.g. $\spec{x}(f)$ is hereafter $\spec{x}$), and all other variables are functions of $t$. Spectra and cross-spectra are normalized to preserve variance: $\int \spec{u}\mathrm{d}f = \uu$, and  $\int \cspec{u}{v}\mathrm{d}f = \uv$. The notations $\spec{\ue}=(\spec{u}, \spec{v}, \spec{w})$ and $C\{\ue\} = (\cspec{u}{v}, \cspec{u}{w}, \cspec{v}{w} )$ denote the set of spectra and cross-spectra for each velocity component and pairs of components, respectively.
+All spectra, $\spec{x}(f)=|\fourier{x(t)}|^2$, and cross-spectra, $\cspec{x}{y}(f)=\mathrm{real}(\fourier{x(t)}\fourier{y(t)})$, are computed using NumPy fast Fourier transform routines \cite[]{Walt++2011}. Here, $\fourier{x(t)}$ denotes the fast Fourier transform of a signal $x(t)$. Time series', e.g. $x(t)$, are linearly detrended and Hanning windowed prior to computing $\fourier{x}$ to reduce spectral reddening.  
+
+Throughout the remainder of this work the dependence of $S$ and $C$ on $f$ is implied (e.g. $\spec{x}(f)$ is hereafter $\spec{x}$), and for other variables the dependence on $t$ is implied. Spectra and cross-spectra are normalized to preserve variance: $\int \spec{u}\mathrm{d}f = \uu$, and  $\int \cspec{u}{v}\mathrm{d}f = \uv$. The notations $\spec{\ue}=(\spec{u}, \spec{v}, \spec{w})$ and $C\{\ue\} = (\cspec{u}{v}, \cspec{u}{w}, \cspec{v}{w} )$ denote the set of spectra and cross-spectra for each velocity component and pairs of components, respectively.
 
 Turbulence dissipation rates are computed as,
 \begin{align}

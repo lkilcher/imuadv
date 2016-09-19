@@ -1,6 +1,58 @@
 
 \section{Introduction}
 
+Acoustic Doppler velocimeters (ADVs) have been used to make high-precision measurements of water velocity for over 20 years \citep[]{Kraus++1994,Lohrmann++1995}.  Since that time they have been deployed around the world to measure turbulence from a range of platforms, including: stationary structures on ocean- and lake-bottoms, in surface waters from a pole lowered from a ship's bow, in the deep ocean from autonomous underwater vehicles, and on moorings \cite[e.g.][]{Voulgaris+Trowbridge1998, Zhang++2001, Kim++2000, Goodman++2006, Lorke2007, Geyer++2008, Cartwright++2009, Fer+Paskyabi2014}. There have also been a range of platforms used to measure turbulence within the ocean using other sensors, such as shear probes, fast-response thermistors, and phase-shift acoustic current meters \citep[]{Doherty++1999, Lueck+Huang1999, Klymak++2003, Moum+Nash2009b, Alford2010}.
+
+\morehere{Need to talk about moorings!}
+
+Over the last ten years massive growth in the smart-phone, drone, and `Internet of Things' markets has driven innovation in micro-electrical-mechanical systems (MEMS). One component that has emerged from this sector is the inertial motion unit (IMU), also known as the `Magnetic, angular-rate, gravity' (MARG), or `attitude heading reference system' (AHRS) sensor. These sensors measure three axes of: the earth's magnetic field, angular rotation, and linear acceleration. These signals are then integrated using Kalman filters to estimate the orientation and velocity of the sensor \cite[]{Barshan+Whyte1995, Marins++2001, Bachmann++2003}\footnote{Within this literature, `IMU' is generally reserved for a MARG sensor without the magnetometer, but herein we group these sensors together and call them all `IMU'.}. 
+
+An important detail of these methods is that the integration step tends to amplify small low-frequency bias-errors in the accelerometer and angular-rate measurements. The Kalman filtering utilizes the magnetometer measurements of the earth's magnetic field to provide an independent reference vector in the earth's coordinate system, and the accelerometer measurements of gravity provide a second reference vector. These vectors are used to stabilize orientation estimates in the earth's reference frame that would otherwise drift wildly due to the bias-errors \cite[]{Haid+Breitenbach2004, Madgwick++2011}. This approach effectively stabilizes orientation estimates, but velocity estimates based on integration of the accelerometers is still subject to the low-frequency bias errors.
+
+In \morehere{2010 (when, exactly was this?)}, Nortek began offering a version of their Vector ADV with a Microstrain 3DM-GX3-25 AHRS sensor. Nortek incorporated the IMU sensor's signals into the Vector data stream so that the motion and orientation signals were tightly synchronized with the ADV's velocity measurements. This tight synchronization between the motion and velocity measurements provides a data-stream that can be utilized to quantify ADV motion in the earth's inertial reference frame, and remove that motion from the ADV's velocity measurements.
+
+ the ADV's This orientation, acceleration and angular-rate measurements from this IMU sensor were sampled from the 
+This work presents the details of 
+Details of utilizing accelerometers f Care must therefore be taken when estimating velocity or position from the accelerometers. Careful attention to these errors must be considered when interpreting the 
+
+These errors can be corrected by a stable estimate of velocity or position, or the velocity estimates derived from the IMU measurements must be interpreted with careful attention to the errors  On the ocean surface, GPS is increasingly being employed to provide  is a frequently employed to low-frequency measurement of sensor motion or position is needed to c
+
+that would be contaminated by  co correct for small biases in the angular stabilize the orientation estimates and correct for  provide an independent estimate of  stable estimate of the direction of the earth's magnetic field, are used to stabilize these errors by providing a low-frequencyso that the orientation measurements are stable and converge the provide  the are utilized to 
+
+ provide an independent   is that These methods utilize the accelerometer signal to estimate the direction of the earth's gravity (i.e. down), and the magnetometer provides an estimate of the  ,these methods utilize the rate sensors with the accelerometers and 
+
+IMUs have been used in the aerospace and aeronautical industries for several decades, but their cost has come down as their market has grown beyond these niche sectors \cite[]{Bevly2004}.
+
+Several works have utilized IMUs into oceanographic measurements for characterizing motion of the measurement platform
+
+% The massive growth in the smartphone and drone markets over the last 10 years, and the birth of the `Internet of Things', is helping to drive growth in .  , their has been a rapid explosion of decades inertial sensors have 
+% Inertial motion units (IMUs) are sensors that measure three axes of linear acceleration and three axes of angular rotation, thus providing an estimate of all six degrees of freedom of their motion. Because these sensors measure rates of rotation and velocity, they must be integrated to estimate orientation and velocity \cite[]{Barshan+Whyte1995}. During this integration step small bias-errors in the signals can grow dramatically to contaminate estimates of velocity and orientation.  Their is a large body of work devoted  wealth of accelerometer or rate  are also frequently equipped Additionally, several and are equipped with a micro-processor that  measure the 6-axis motion of 
+% have been used 
+
+Vertical micro-structure profilers, equipped with highly-sensitive shear probes, have been used throughout the world's oceans to measure turbulence velocity fluctuations. 
+
+
+
+\cite[]{Winkel++1996} has one of the first `multi-scale profilers' that quantified platform motion to estimate total velocity profile.
+
+\cite[]{Stahr+Sanford1999} used electromagnetic velocity measurements, with an ADCP that tracked the bottom to estimate the `mean offset'. 
+
+\cite[]{Hayes++1984} also used EM measurements(??), with calculations for body orientation changes.
+
+\cite{Lueck++2002} has a good review of turbulence measurements. 
+
+There has been some effort to characterize and quantify platform motion 
+
+\cite{Miller++2008} performed motion-correction of sonic anemometer data.
+
+Need to cite \cite[]{Paskyabi+Fer2013}: they use a StableMoor, with shear probes. They do have an IMU ``Gyrocube 3F'' built into their MicroRider, but they did not appear to perform motion correction.
+
+\cite[]{Lueck+Huang1999} measured turbulence from a large straemlined-buoy on mooring with shear probes. \cite[]{Klymak++2003} measured turbulence at Hawaiian ridge using towed streamlined body, with shear probes. \cite[]{Moum+Nash2009b}: measuring turbulence from moorings (temperature variance $\chi$-pods).
+
+\cite[]{Doherty++1999} `moored profiler' uses acoustic current meters (`phase shift'/travel-time, not Doppler). \citep[]{Nash++2004,Alford2010}.
+
+Any reason to cite \cite{Williams1996}'s velocity measurement review paper?
+
 \begin{itemize}
 \item Brief history of ADVs
 \item Discussion of ADV v. ADP measurement

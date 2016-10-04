@@ -1,0 +1,59 @@
+
+\begin{itemize}
+%\item Brief history of ADVs
+\item Discussion of ADV v. ADP measurement
+\item Emphasize noise issue and spatial smearing of ADPs.
+\item ADVs have been difficult to deploy at mid-depths
+%\item Availability of cheap+accurate IMUs (from smartphone tech) facilitates a new era of ADV measurement from moored platforms.
+%\item Reference to `Part 1'.
+%\item This work developed for MHK, but has wider applications.
+%\item section summary
+\end{itemize}
+
+
+Measurement of oceanic turbulence began in the 1950's with the Navy's interest in detecting submarine wakes \cite[]{Lueck++2002}. This effort led to the creation of horizontal micro-structure profilers that provided the earliest oceanic confirmation of Kolmogorov's theory of isotropic turbulence \cite[]{Kolmogorov1941a, Grant++1962, Stewart+Grant1999}. This, in turn, led to the creation of vertical micro-structure profilers, which are---to this day---the highest precision (lowest noise) oceanic turbulence measurement platform in use \cite[]{Moum++1995}.
+
+The primary drawback of micro-structure profilers is that their use tends to require significant ship-time and human effort. A need for long-term turbulence measurements has led to a range of alternatives to micro-structure profilers, including: moorings, on bottom landers, and 
+
+In the 1980s, acoustic Doppler profilers (ADPs) and acoustic Doppler velocimeters (ADVs) began to be introduced  for measuring water velocity and turbulence began to 
+
+
+
+% This work presents ADV turbulence measurements from a tidal channel in Puget Sound that were made from moored and ship-tethered platforms.  Herein we demonstrate a method for utilizing inertial motion sensors to correct the ADV velocity measurements for platform motion (i.e. remove platform motion from the velocity measurements). 
+
+ of the size needed for positioning ADVs at the hub-height of tidal energy devices.  are expensive to install and maintain. often seen as an expensive option While tower-based tidal-site hub-height turbulence have been made, these 
+
+have been used to were used to show the importance of  have been used to provide Several studies that utilized meteorological-towers  demonstrated Moored ADVs were identified as a relatively low-cost approach to measuring the turbulence at the scales of interest for tidal device engineering (i.e. length scales between the blade-cord length and the rotor diameter). However, the motion of these platforms is known to contaminate the measurements, and so the IMU-equipped ADV provides an opportunity to remove that motion from the measurements.
+
+Acoustic Doppler profilers (ADPs) provide adequate measurements of the mean flow, but the beam spread of these measurements means that they do not resolve the scales of interest. Acoustic Doppler velocimeters, on the other hand, provide sufficient accuracy, but most measurements using these sensors are from fixed platforms. 
+
+it is necessary to position a sufficiently precise velocity sensor, such as an ADV, at the hub-height of tidal energy turbine (i.e. $>5$ meters above the bottom). 
+Remote measurements of velocity with acoustic Doppler profilers (ADPs) , but the measurements from these tools are implicitly averaged over spatial scales (i.e. due to beam-spread) that are larger than the scales of interest for tidal energy device engineering (i.e. ). This presents the challenge of either positioning the ADV on a fixed structure, or of utilizing a moving structure such as a mooring or 
+
+
+Based on this, This limitation encourages the use of higher precision velocity sensors, such as an ADV. These sensors, however, must be positioned at the exact location  at the hub-height of the tidal energy device.  location of the 
+
+ADVs are There have been some  studies that utilize spatially fixed ADVs to measure 
+
+On the other to tidal energy devices have broad spatial  issues do not have the same level of accuracy as -low accurac estimates of instruments tidal energy measuring turbulence at the hub-heights of tidal energy devices
+
+showed that Earlier Acoustic approach substantially improves the accuracy and precision of moored 
+
+a level of accuracy in mor
+
+\cite[]{Doherty++1999} `moored profiler' uses acoustic current meters (`phase shift'/travel-time, not Doppler). \cite[]{Nash++2004, Alford2010}.
+
+\cite[]{Winkel++1996} has one of the first `multi-scale profilers' that quantified platform motion to estimate total velocity profile.
+
+\cite[]{Stahr+Sanford1999} used electromagnetic velocity measurements, with an ADCP that tracked the bottom to estimate the `mean offset'. 
+
+\cite[]{Hayes++1984} also used EM measurements(??), with calculations for body orientation changes.
+
+\cite{Miller++2008} performed motion-correction of sonic anemometer data.
+
+\cite{Lueck++2002} has a good review of turbulence measurements. 
+
+
+This work details a methodology for measuring hub height inflow turbulence using moored acoustic Doppler velocimiters (ADVs). Remote velocity measurements, from acoustic Doppler profilers, lack sufficient precision for device simulation, and rigid tower-mounted measurements are very expensive and technically challenging in the tidal environment. Moorings offer a low-cost, site-adaptable and robust deployment platform, and ADVs provide the precision needed for quantifying turbulence at scales important to tidal energy devices..
+
+The primary concern of this approach is that mooring motion will contaminate velocity measurements and reduce their accuracy. Here we demonstrate that  measurements of mooring motion from inertial sensors can be used to correct this motion contamination.  This makes mooring-based velocity measurements a sufficiently precise, low-cost and robust approach for measuring turbulent inflow at hydrokinetic turbine sites.

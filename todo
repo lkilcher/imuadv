@@ -1,5 +1,7 @@
 - Move SM bottom track incorporation into SM2015 data folder!!!
 
+- Improve methods section to discuss bias-drift?
+
 py/make_map.py
 - Make map of larger area?
 - Change font sizes?

@@ -1,3 +1,5 @@
+#!/usr/local/bin/python
+# -*- coding: utf-8 -*-
 from mpl_toolkits.basemap import Basemap as bm
 from scipy.signal import convolve2d as conv2
 import matplotlib.colors as mplc
@@ -5,7 +7,8 @@ from matplotlib import cm
 import numpy as np
 import ptools as pt
 from matplotlib import pyplot as plt
-
+from matplotlib.patches import ArrowStyle
+plt.ion()
 
 #
 # From the ./metadata.htm file
@@ -18,6 +21,12 @@ grid_center = [-120.833333, 47.]
 lat_1 = 47.5
 lat_2 = 48.733333
 ft_m = (0.3048 ** -1)  # /1.000002
+
+meas_points = {
+    'TTM-1': [-122.68581, 48.15285],
+    'TTM-2': [-122.68654, 48.15327],
+    'SM': [-122.68623, 48.15277],
+}
 
 # map_data=bm(projection=proj,lon_0=grid_center[0],lat_0=grid_center[1],llcrnrlon=grid_llcrnr[0],llcrnrlat=grid_llcrnr[1],urcrnrlon=grid_urcrnr[0],urcrnrlat=grid_urcrnr[1],lat_1=lat_1,lat_2=lat_2)
 map_data = bm(projection=proj,
@@ -84,8 +93,8 @@ center_xy = map_data(*center)
 # ilat=(llcrnr[1]<grid_lats) & (grid_lats<urcrnr[1])
 ix = np.nonzero((llcrnr_xy[0] < bdat['x']) & (bdat['x'] < urcrnr_xy[0]))[0]
 iy = np.nonzero((llcrnr_xy[1] < bdat['y']) & (bdat['y'] < urcrnr_xy[1]))[0]
-ix = slice(ix[0], ix[-1])
-iy = slice(iy[0], iy[-1])
+ix = slice(ix[0] - 20, ix[-1] + 20)
+iy = slice(iy[0] - 20, iy[-1] + 20)
 # lons=grid_lons[ilon]
 # lats=grid_lats[ilat]
 # Lons,Lats=np.meshgrid(lons,lats)
@@ -95,20 +104,22 @@ iy = slice(iy[0], iy[-1])
 x0, y0 = map_data(center[0], center[1])
 
 cmap = pt.truncate_colormap(plt.get_cmap('YlGnBu_r'), 0.0, 0.7)
-fig, ax = pt.newfig(308, 1, 1, figsize=2)
+fig, ax = pt.newfig(308, 1, 1, figsize=2.2)
 fig.clf()
-axrect = [.01, .01, .72, .97]
+axrect = [.01, .08, .72, .9]
 ax = plt.axes(axrect)
 
-# map.drawmapboundary(fill_color=[.7,1.,1.],zorder=-200)
-pcol = ax.pcolor(bdat['x'][ix] - x0, bdat['y'][iy] - y0, bdat['z'][iy, ix], cmap=cmap,
+decim = 5
+
+#map_data.drawmapboundary(fill_color='none',zorder=-200, ax=ax)
+pcol = ax.pcolor(bdat['x'][ix][::decim] - x0, bdat['y'][iy][::decim] - y0,
+                 bdat['z'][iy, ix][::decim, ::decim], cmap=cmap,
                  rasterized=True)
 pcol.set_clim([-200, 0])
 
 # cbar_ax = plt.axes([axrect[0] + axrect[2] + .03, .5, .04, .5])
 cmap = pt.truncate_colormap(plt.get_cmap('copper_r'), 0.0, 0.66)
 cmap.set_over(cmap(1.))
-decim = 5
 pcon = ax.contourf(bdat['x'][ix][::decim] - x0, bdat['y'][iy][::decim] - y0,
                    bdat['z'][iy, ix][::decim, ::decim], np.arange(0, 100, 10), cmap=cmap,
                    linewidth=1,
@@ -150,8 +161,60 @@ ax.set_aspect('equal', 'box')
 ax.set_xlim([-9100, 6100])
 ax.set_ylim([-8700, 5000])
 
-pt.drawmapscale(5, (0.1, 0.1), ax=ax)
+pt.drawmapscale(5, (0.1, 0.17), ax=ax)
 
+# bbox_props = dict(boxstyle='darrow,pad=0.3', fc='magenta', ec='none', lw=2)
+# t = ax.text(-800, -500, 'Tidal Flow',
+#             bbox=bbox_props, zorder=10,
+#             ha='center', va='center',
+#             rotation=pt.principal_angle,
+#             size='large')
+
+point = meas_points['TTM-1']
+
+xd, yd = map_data(*point)
+ax.plot(xd - x0, yd - y0, 'o', ms=6, zorder=50, mfc='r', mec='none')
+
+# I think this is not including declination.
+# arr = 800 * np.exp(1j * 162.0 * np.pi / 180)
+# http://www.ngdc.noaa.gov/geomag-web/
+declin = 16.3
+arr = 1800 * np.exp(1j * (162.0 - declin) * np.pi / 180)
+# ax.arrow(xd - x0, yd - y0, arr.real, arr.imag,
+#          head_width=4.0, linewidth=0.5,
+#          zorder=100)
+ax.annotate("", (xd - x0 + arr.real, yd - y0 + arr.imag), (xd - x0, yd - y0),
+            arrowprops=dict(arrowstyle=ArrowStyle('->', head_width=0.3, head_length=0.4),
+                            shrinkA=0, shrinkB=0, lw=1.5),
+            zorder=200,
+            )
+# ax.text(xd - x0 + arr.real, yd - y0 + arr.imag, '$u$', ha='right')
+arr2 = arr * 2. / 3 * np.exp(1j * np.pi / 2)
+# ax.arrow(xd - x0, yd - y0, arr.real, arr.imag,
+#          head_width=4.0, linewidth=0.5,
+#          zorder=100)
+ax.annotate("", (xd - x0 + arr2.real, yd - y0 + arr2.imag), (xd - x0, yd - y0),
+            arrowprops=dict(arrowstyle=ArrowStyle('->', head_width=0.2, head_length=0.3),
+                            shrinkA=0, shrinkB=0, lw=1.0),
+            zorder=200,
+            )
+
+lontmp = np.arange(llcrnr[0] - 0.05, urcrnr[0] + .05, 0.01)
+lattmp = np.arange(llcrnr[1] - 0.05, urcrnr[1] + .05, 0.01)
+
+for lat in [48.1666666]:
+    xd, yd = map_data(lontmp, lontmp * 0 + lat)
+    ax.plot(xd - x0, yd - y0, 'k:', lw=0.5)
+    ax.text(1.01, yd[-5] - y0, u"48\u00B010'N",
+            transform=ax.get_yaxis_transform(),
+            ha='left', va='center', clip_on=False)
+
+for lon in [-122.6666666]:
+    xd, yd = map_data(lattmp * 0 + lon, lattmp)
+    ax.plot(xd - x0, yd - y0, 'k:', lw=0.5)
+    ax.text(xd[5] - x0, -0.01, u"122\u00B040'W",
+            transform=ax.get_xaxis_transform(),
+            ha='center', va='top', clip_on=False)
 
 fig.savefig(pt.figdir + 'map04.png', dpi=300)
 fig.savefig(pt.figdir + 'map04.pdf')

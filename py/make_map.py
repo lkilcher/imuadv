@@ -14,6 +14,13 @@ proj = 'lcc'  # Lambert Conformal Conic
 grid_llcrnr = [-123.043722, 47.978454]
 grid_urcrnr = [-122.466557, 48.523023]
 grid_center = [-120.833333, 47.]
+
+meas_points = {
+    'TTM-1': [-122.68581, 48.15285],
+    'TTM-2': [-122.68654, 48.15327],
+    'SM': [-122.68623, 48.15277],
+}
+
 lat_1 = 47.5
 lat_2 = 48.733333
 ft_m = (0.3048 ** -1)  # /1.000002
@@ -120,10 +127,10 @@ lw = [.6] * len(dpths)
 lw[0] = 2
 ax.contour(xdat[ix] - x0, ydat[iy] - y0, dnow, dpths, colors=['k']
            * len(dpths), linestyles=['-'] * len(dpths), linewidths=lw)
-ax.text(200, 200, 'Admiralty\nHead',
-        multialignment='center', ha='center', size='large')
-ax.text(200, 80, '(Fort Casey\nState Park)',
-        size='medium', multialignment='center', ha='center')
+# ax.text(200, 200, 'Admiralty\nHead',
+#         multialignment='center', ha='center', size='large')
+# ax.text(200, 80, '(Fort Casey\nState Park)',
+#         size='medium', multialignment='center', ha='center')
 
 # bbox_props=dict(boxstyle='rarrow,pad=0.3',fc='cyan',ec='none',lw=2)
 # t=text(-800,-400,'Tidal
@@ -139,29 +146,43 @@ t = ax.text(-800, -500, 'Tidal Flow',
 ax.set_ylim([-660, 300])
 ax.set_xlim([-1000, 400])
 
-kws = {'T1b': dict(xytext=(-5, -5),
-                   ha='right',
-                   va='top'
-       ),
-       'T2b': dict(xytext=(5, 5),
-                   ha='left',
-                   va='bottom',
-       )
-       }
+# kws = {'T1b': dict(xytext=(-5, -5),
+#                    ha='right',
+#                    va='top'
+#        ),
+#        'T2b': dict(xytext=(5, 5),
+#                    ha='left',
+#                    va='bottom',
+#        )
+#        }
 
-for nm in ['T1b', 'T2b']:
-    ll = pt.latlons[nm][::-1]
+# for nm in ['T1b', 'T2b']:
+#     ll = pt.latlons[nm][::-1]
+#     xd, yd = map_data(*ll)
+#     ax.annotate('TTM ' + nm[1], (xd - x0, yd - y0),
+#                 textcoords='offset points', color='k',
+#                 bbox=dict(boxstyle='round,pad=0.2',
+#                           fc='yellow',
+#                           alpha=0.6),
+#                 zorder=40,
+#                 #arrowpros=dict(arrowstyle='->'
+#                 **kws[nm]
+#                 )
+#     ax.plot(xd - x0, yd - y0, 'y.', ms=20, zorder=50)
+
+for nm, ll in meas_points.iteritems():
     xd, yd = map_data(*ll)
-    ax.annotate('TTM ' + nm[1], (xd - x0, yd - y0),
+    ax.annotate(nm, (xd - x0, yd - y0), xytext=(4, 4),
                 textcoords='offset points', color='k',
                 bbox=dict(boxstyle='round,pad=0.2',
                           fc='yellow',
                           alpha=0.6),
                 zorder=40,
                 #arrowpros=dict(arrowstyle='->'
-                **kws[nm]
+                #**kws[nm]
                 )
     ax.plot(xd - x0, yd - y0, 'y.', ms=20, zorder=50)
 
+
 fig.savefig(pt.figdir + 'map03.png', dpi=300)
-fig.savefig(pt.figdir + 'map03.pdf')
+# fig.savefig(pt.figdir + 'map03.pdf')

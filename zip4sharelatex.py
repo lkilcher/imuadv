@@ -7,7 +7,7 @@ files = glob.glob('*.tex')
 files += glob.glob('fig/*')
 files += ['ametsoc.cls',
           'defs.sty',
-          'all.bib']
+          'thisbib.bib']
 
 for fl in files:
     z.write(fl)

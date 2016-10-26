@@ -7,7 +7,7 @@ import ttm.sm2015 as data_api
 import dolfyn.adv.api as avm
 
 flag = {}
-flag['save fig'] = True
+#flag['save fig'] = True
 #flag['bt_basic_time'] = True
 #flag['bt_filt_time'] = True
 #flag['nofilt spec'] = True
@@ -116,8 +116,9 @@ else:
     inds = within(np.abs(bindat_filt[dnow_name].U), 1.0, 1.5)
 
 
-#n_fft = binner.n_bin / 4
-n_fft = binner.n_bin
+#sub_windows = 4
+sub_windows = 1
+n_fft = binner.n_bin / sub_windows
 
 ubt = dnow.ubt
 #ubt = dnow.ubt2
@@ -192,7 +193,8 @@ if flag.get('show cohere', False):
                     'r', label='$w$',
                     lw=2, zorder=1)
 
-        ax.axhline(np.sqrt(6. / (4 * inds.sum())), linestyle=':', color='k')
+        #ax.axhline(6. / (sub_windows * 2 * inds.sum()), linestyle=':', color='k')
+        ax.axhline(1 - 0.05 ** (1. / (inds.sum() - 1)), linestyle=':', color='k')
         ax.legend(loc='upper left')
         ax.set_ylim([0, 1])
         ax.set_xlim([1e-3, 1])

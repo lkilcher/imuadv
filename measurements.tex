@@ -11,7 +11,7 @@
 
 This work focuses on measuring turbulence from ADVs that are deployed from nonstationary platforms and equipped with IMUs. The ADVs utilized for these measurements were equipped with Microstrain 3DM-GX3-25 IMU sensors that captured all six components of the ADV motion (three components of angular rotation and three components of linear acceleration), as well as the orientation of the ADV pressure case. The sampling of the motion sensor is tightly synchronized with the ADV measurements. The IMU measures its motion at 1 kHz and uses internal signal integration (Kalman filtering) to output the motion signals at the same sample rate as the ADV's velocity measurements. This reduces aliasing of the IMU's motion measurements above the ADV's sample rate \cite[]{3DM-GX3_coning_sculling}. Cable-head ADVs were used throughout this work to allow for flexibility in the positioning of the ADV head relative to its pressure case.
 
-All measurements used in this work were made in Admiralty Inlet, Washington, approximately 500 m west southwest of Admiralty Head in 60-m of water near latitude 48.153 north and longitude 122.687 west (Figure \ref{fig:map}). The site is approximately 6 km east of Port Townsend, and 1 km north of the Port Townsend to Coupeville ferry route.  Admiralty inlet is the largest waterway connecting Puget Sound to the Strait of Juan de Fuca, and it possesses a large semidiurnal tidal flow \cite[]{Thomson++2012, Polagye+Thomson2013}.  This work utilizes data from three distinct deployment platforms: the tidal turbulence mooring, a StableMoor buoy, and a simple sounding weight.  Additional details, photos, and schematic diagrams of all three mooring systems can be found in Part 1.
+All measurements used in this work were made in Admiralty Inlet, Washington, approximately 500 m west southwest of Admiralty Head in 60-m of water near 48\deg\ 9.18' N, 122\deg\ 41.22' W (Figure \ref{fig:map}). The site is approximately 6 km east of Port Townsend, and 1 km north of the Port Townsend to Coupeville ferry route.  Admiralty inlet is the largest waterway connecting Puget Sound to the Strait of Juan de Fuca, and it possesses a large semidiurnal tidal flow \cite[]{Thomson++2012, Polagye+Thomson2013}.  This work utilizes data from three distinct deployment platforms: the tidal turbulence mooring, a StableMoor buoy, and a simple sounding weight.  All data used in this analysis is available from the MHK data repository (http://mhkdr.openei.org; submission ids: 49, 50 and 51). Additional details, photos, and schematic diagrams of all three mooring systems can be found in Part 1.
 
 \subsection{Tidal Turbulence Mooring}
 
@@ -19,13 +19,13 @@ The tidal turbulence mooring (TTM) is a simple mooring system with a strongback 
 
 \subsubsection{June 2012 TTM deployment}
 
-The first TTM deployment was in June 2012 at 48.15285 north and 122.68581 west. The mooring was in the water from 17:30 on the 12th until 14:30 on the 14th (local; i.e., Pacific Daylight Time). Two Nortek ADVs were clamped to either side of the fin so that the axis of their cylindrical pressure cases were parallel with the leading edge of the strongback. The ADV heads were spaced 0.5 m apart vertically along the fin. Only one of these ADVs was equipped with an integrated IMU. This TTM also had an upward-looking acoustic Doppler profiler mounted on the mooring anchor.
+The first TTM deployment was in June 2012 from 17:30 on the 12th until 14:30 on the 14th (local; i.e., Pacific Daylight Time). Two Nortek ADVs were clamped to either side of the fin so that the axis of their cylindrical pressure cases were parallel with the leading edge of the strongback. The ADV heads were spaced 0.5 m apart vertically along the fin. Only one of these ADVs was equipped with an integrated IMU. This TTM also had an upward-looking acoustic Doppler profiler mounted on the mooring anchor.
 
 Periods of time during which this mooring interfered with a beam of the Doppler profiler were identified by inspecting the profiler's acoustic amplitude signal. Periods during which one beam of the profiler had $>5\%$ higher acoustic amplitude than the other beams were flagged as ``contaminated" and excluded from averaging.  Five-minute averages in which more than 50\% of the data were contaminated in this way were masked as invalid.
 
 \subsubsection{June 2014 TTM deployment}
 
-The second TTM deployment was in 2014 from 06:00 on June 17 to 05:00 on June 19 (local time). The mooring was positioned at 48.15327 north and 122.68654 west.  Two Nortek ADV-IMUs were mounted on this TTM, with their heads spaced 0.5 m apart along the fin. In this case, the pressure cases and ADV heads were inclined at an angle of 18$^\circ$ to the leading edge of the fin to account for mooring blowdown during strong currents (Figure \ref{fig:ttm:photo}). This change was made to reduce vibrational motion observed during the June 2012 deployment that was believed to be associated with the orientation of the pressure cases.
+The second TTM deployment was in 2014 from 06:00 on June 17 to 05:00 on June 19 (local time).  Two Nortek ADV-IMUs were mounted on this TTM, with their heads spaced 0.5 m apart along the fin. In this case, the pressure cases and ADV heads were inclined at an angle of 18$^\circ$ to the leading edge of the fin to account for mooring blowdown during strong currents (Figure \ref{fig:ttm:photo}). This change was made to reduce vibrational motion observed during the June 2012 deployment that was believed to be associated with the orientation of the pressure cases.
 
 \begin{figure}[t]
   \centering
@@ -45,9 +45,11 @@ The second TTM deployment was in 2014 from 06:00 on June 17 to 05:00 on June 19 
 
 The second deployment platform was a cylindrical, StableMoor, syntactic foam buoy (manufacturer: Deep Water Buoyancy) that was anchored to a clump weight that weighed 2,700 lbs (Figure \ref{fig:SM}). The buoy is 3.5 m long and 0.45 m in diameter with a tail ring that is 0.76 m in diameter. The StableMoor buoy weighs 295 kg in air, and has a buoyancy of 185 kg in water. 
 
+The StableMoor buoy was deployed with an ADV-IMU mounted at its nose from 11:21 on May 12 to 11:53 on May 13, 2015 (local time). The sample volume of the ADV is 10 cm forward of the nose and 20 cm above the center line of the StableMoor buoy (Figure \ref{fig:SM}). Based on \citeauthor{Wyngaard++1985}'s (1985) investigation of a similarly shaped slender body, the velocity measurements should have flow-distortion effects of less than 10\%. This configuration was designed to be the most stable platform for measuring turbulence from a moving platform. The StableMoor buoy was equipped with a 1,200-kHz RDI workhorse sentinel acoustic Doppler profiler that was oriented downward-looking to measure water velocity below the platform in twelve 1-m bins and measure buoy motion (``bottom tracking"), all at a 1-Hz sample rate. 
+
 The buoy was ballasted to pitch upward a few degrees in zero-flow to avoid ``flying downward." In the presence of an oncoming current, the tail fins help to orient it into the flow. The anchor for this buoy is similar to that of the TTM, including an acoustic release so the mooring and anchor can be recovered separately.
 
-The StableMoor platform has two primary advantages compared to the TTM. First, it is significantly more massive and hydrodynamically stable than the TTM, which reduces the frequency of motions of the platform. Second, the StableMoor platform is capable of supporting a bottom-tracking acoustic Doppler profiler, which provides an independent measure of the platform's translational motion. Disadvantages of the StableMoor include: its size, which adds to the challenge of deployment and recovery, and its cost, which is significantly more expensive than the TTM system.
+The StableMoor platform has two primary advantages compared to the TTM. First, it is significantly more massive and hydrodynamically stable than the TTM, which reduces the frequency of motions of the platform. Second, the StableMoor platform is capable of supporting a bottom-tracking acoustic Doppler profiler, which provides an independent measure of the platform's translational motion. Disadvantages of the StableMoor include: its size, which adds to the challenge of deployment and recovery, and its cost, which is significantly higher than the TTM system.
 
 \begin{figure}[t]
   \centering
@@ -57,8 +59,6 @@ The StableMoor platform has two primary advantages compared to the TTM. First, i
 }
   \label{fig:SM}
 \end{figure}
-
-The StableMoor buoy was deployed with an ADV-IMU mounted at its nose from 11:21 on May 12 to 11:53 on May 13, 2015 (local time). This deployment was at 48.15277 north and 122.68623 west. In this configuration, the sample volume of the ADV is 10 cm forward of the nose and 20 cm above the center line of the StableMoor buoy (Figure \ref{fig:SM}). Based on \citeauthor{Wyngaard++1985}'s (1985) investigation of a similarly shaped slender body, the velocity measurements should have flow-distortion effects of less than 10\%. This configuration was designed to be the most stable platform for measuring turbulence from a moving platform. The StableMoor buoy was equipped with a 1,200-kHz RDI workhorse sentinel acoustic Doppler profiler that was oriented downward-looking to measure water velocity below the platform in twelve 1-m bins and measure buoy motion (``bottom tracking"), all at a 1-Hz sample rate. 
 
 \subsection{Turbulence Torpedo}
 
@@ -74,12 +74,6 @@ The turbulence torpedo is a simple sounding weight with an ADV head mounted forw
 \subsection{Coordinate system and turbulence averaging}
 
 Unless stated otherwise, vector quantities in this work are in a fixed ``principal-axes" coordinate system that is aligned with the bidirectional tidal flow: positive $u$ is in the direction of ebb (310$^\circ$ True), positive $w$ is vertically upward, and $v$ is the cross-stream component in a right-handed coordinate system. The full velocity vector, $\vec{\tilde{u}} = (\tilde{u}, \tilde{v}, \tilde{w})$, is separated into a mean and turbulent component as $\vec{\tilde{u}} = \vec{\bar{u}} + \vec{u}$, where the over-bar denotes a 5-minute average. Turbulence kinetic energy, $\tke = \uu + \vv+\ww$, and Reynold's stresses, $\uv$, $\uw$, $\vw$, are computed by averaging over the 5-minute window.  Throughout this work, we use $\bar{U} = (\bar{u}^2+\bar{v}^2)^{1/2}$ to denote the mean horizontal velocity magnitude. 
-% * <sheri> 2016-10-20T00:00:00.000Z:
-%
-% Second to the last sentence in the above paragraph: I think "averaging over" should be "averaging during" - ?
-%
-% ^.
-
 
 All spectra, $\spec{x}(f)=|\fourier{x(t)}|^2$, and cross spectra, $\cspec{x}{y}(f)=\mathrm{real}(\fourier{x(t)}\fourier{y(t)})$, are computed using NumPy fast Fourier transform routines \cite[]{Walt++2011}. Here, $\fourier{x(t)}$ denotes the fast Fourier transform of a signal $x(t)$. Time series, e.g., $x(t)$, are linearly detrended and Hanning windowed prior to computing $\fourier{x}$ to reduce spectral reddening.  
 

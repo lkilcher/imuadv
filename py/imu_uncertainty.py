@@ -13,8 +13,8 @@ def spec_epsilon(epsilon, tke, k, alpha=0.5, ):
 
 
 flag = {}
-#flag['plot_spec'] = True
-#flag['plot_spec2'] = True
+flag['plot_spec'] = True
+flag['plot_spec2'] = True
 flag['plot_spec3'] = True
 
 binner = avm.TurbBinner(9600, 32, )
@@ -28,6 +28,11 @@ mcfilts = {'unfiltered': 0.0,
 
 if 'rd' not in vars():
     rd = btests.load('C')
+    rd.add_data('vel', rd.pop_data('_u'), 'main')
+    rd.add_data('corr', rd.pop_data('_corr'), 'main')
+    rd.add_data('amp', rd.pop_data('_amp'), 'main')
+    rd.props['rotate_vars'].remove('_u')
+    rd.props['rotate_vars'].add('vel')
     rd.props['body2head_rotmat'] = np.eye(3)
     rd.props['body2head_vec'] = np.array([1, 1, 1]) * np.sqrt(1. / 3)
 
@@ -45,8 +50,8 @@ if 'bindatmc' not in vars():
         avm.motion.correct_motion(mcdat, accel_filtfreq=filt_freq)
 
         bdmc = binner(mcdat)
-        bdmc.add_data('Spec_urot', binner.psd(mcdat.urot))
-        bdmc.add_data('Spec_uacc', binner.psd(mcdat.uacc))
+        bdmc.add_data('Spec_urot', binner.psd(mcdat.velrot))
+        bdmc.add_data('Spec_uacc', binner.psd(mcdat.velacc))
         bdmc.omega[-1] *= -1
         bindatmc[filt_tag] = bdmc
 
@@ -69,7 +74,7 @@ colors = ['r', 'g', 'b']
 
 if flag.get('plot_spec', False):
 
-    fig, axs = pt.newfig(2, 1, sharex=True,
+    fig, axs = pt.newfig(3, 2, 1, sharex=True,
                          gridspec_kw=dict(left=0.2, right=0.94, top=0.95))
 
     for idx in xrange(3):
@@ -89,7 +94,7 @@ if flag.get('plot_spec', False):
 
 if flag.get('plot_spec2', False):
 
-    fig, ax = pt.newfig(1, 1, sharex=True,
+    fig, ax = pt.newfig(2, 1, 1, sharex=True,
                         gridspec_kw=dict(left=0.2, right=0.94, top=0.95))
 
     bdmc = bindatmc['unfiltered']
@@ -148,6 +153,7 @@ if flag.get('plot_spec3', False):
     for tag in ['unfiltered', '30s', '10s', '5s']:
         bdmc = bindatmc[tag]
         tmp = bdmc.Spec_uacc[:, gd].max(0).mean(0) * 2 * np.pi
+        tmp2 = bdmc.Spec_uacc[:, gd].min(0).mean(0) * 2 * np.pi
         if tag == 'unfiltered':
             label = '$n_{acc}$'
         else:
@@ -156,6 +162,8 @@ if flag.get('plot_spec3', False):
         ax.loglog(bd.freq, tmp,
                   color=colors_now[tag], linestyle='-',
                   label=label)
+        ax.loglog(bd.freq, tmp2,
+                  color=colors_now[tag], linestyle='--' )
         print ('u_acc error level ({}): {:0.3f} cm/s'
                .format(tag, (np.trapz(tmp, bdmc.freq) ** 0.5) * 100))
     bdmc = bindatmc['30s']
@@ -173,4 +181,4 @@ if flag.get('plot_spec3', False):
     # axs[1].set_xlabel('$f\, \mathrm{[hz]}$', size='large')
 
     #fig.saxes.hide('xticklabels', fig.saxes.ax[-1, :])
-    fig.savefig(pt.figdir + 'stationary_noise03.pdf')
+    fig.savefig(pt.figdir + 'stationary_noise04.pdf')

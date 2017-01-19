@@ -4,7 +4,7 @@
 \begin{figure}[t]
   \centering
   \includegraphics{TimeFig02}
-  \caption{Time series of tidal velocity at Admiralty Head from TTM measurements (black), and an acoustic Doppler profiler (red). The profiler measurements---taken at the same depth as the ADV on the TTM---were contaminated by acoustic reflection from the strongback fin when it was inline with one of the profiler's beams. Note that the vertical scale on the three axes vary by more than an order of magnitude; the small ticks in A and B are equivalent to the ticks in C.}
+  \caption{Time series of tidal velocity at Admiralty Head from ADV-IMU measurements (black), and an acoustic Doppler profiler on the anchor (red). The profiler measurements---taken at the same depth as the ADV on the TTM---were contaminated by acoustic reflection from the strongback fin when it was inline with one of the profiler's beams. Note that the vertical scale on the three axes vary by more than an order of magnitude; the small ticks in A and B are equivalent to the ticks in C.}
   \label{fig:vel_time}
 \end{figure}
 
@@ -38,7 +38,7 @@ In addition to the primary benefit of correcting for mooring motion, the IMU mea
 
 In the present case, for the $u$ and $w$ spectra, this criteria only excludes a narrow range of frequencies at the 0.15-Hz motion peak for some cases. This criteria is more restrictive of the $v$-component spectra at high frequencies for $\bar U > 1.0$ m/s, but this may be acceptable because the amplitude of $\spec{v}$ at these frequencies---i.e., in the isotropic inertial subrange---should be equal to that of $\spec{u}$ and $\spec{w}$ \cite[]{Kolmogorov1941c}.
 
-Agreement of the $v$-component spectral amplitude with that of $u$ and $w$ at frequencies $>0.3$ Hz indicates that motion correction is effective at those frequencies even when $\spec{\uhead}/\spec{\ue} \gtrsim 3$. This outcome suggests that our screening threshold is excessively conservative at those frequencies, and that a more precise screening threshold may be frequency dependent. For example, it might take into account the $~f^3$ character of the noise in $\spec{\uacc}$ (Figure \ref{fig:stationary_noise}). For the purpose of this work, the $\spec{\uhead}/\spec{\ue} < 3$ threshold for spectral fits is sufficient, and detailed characterization of the IMU's motion- and frequency-dependent noise level is left for future work.
+Agreement of the $v$-component spectral amplitude with that of $u$ and $w$ at frequencies $>0.3$ Hz indicates that motion correction is effective at those frequencies even when $\spec{\uhead}/\spec{\ue} \gtrsim 3$. This outcome suggests that our screening threshold is excessively conservative at those frequencies, and that a more precise screening threshold may be frequency dependent. For example, it might take into account the $~f^3$ character of the noise in $\spec{\uacc}$ (Figure \ref{fig:stnoise}). For the purpose of this work, the $\spec{\uhead}/\spec{\ue} < 3$ threshold for spectral fits is sufficient, and detailed characterization of the IMU's motion- and frequency-dependent noise level is left for future work.
 
 \subsection{StableMoor Spectra}
 

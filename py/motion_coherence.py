@@ -54,7 +54,7 @@ if 'dat' not in vars():
 
         # Calculate 'rotational' motion of ADP head.
         motcalc = avm.motion.CalcMotion(datmc)
-        ur_adp = motcalc.calc_urot(np.array([-1, 0, 0]), to_earth=False)
+        ur_adp = motcalc.calc_velrot(np.array([-1, 0, 0]), to_earth=False)
 
         datmc.add_data('ubt', bt['BT_INST_interp'], 'orient')
         datmc.add_data('ubt2', bt['BT_INST_interp'] + ur_adp, 'orient')
@@ -67,7 +67,7 @@ if 'dat' not in vars():
             datmc.ubt = sig.filtfilt(filt[0], filt[1], datmc.ubt)
             datmc.ubt2 = sig.filtfilt(filt[0], filt[1], datmc.ubt2)
         if filt_freq > 0:
-            datmc._u += datmc[bt_var]  # Add the bt to the vel
+            datmc.vel += datmc[bt_var]  # Add the bt to the vel
         else:
             # The principal angle for 'unfilt' is garbage:
             datmc.props['principal_angle'] = dat_filt['5s'].props['principal_angle']
@@ -76,20 +76,20 @@ if 'dat' not in vars():
 
         datnow = datmc
         datbd = binner(datnow)
-        datbd.add_data('Spec_uraw', binner.psd(datnow.uraw), 'Spec')
-        datbd.add_data('Spec_uacc', binner.psd(datnow.uacc), 'Spec')
-        datbd.add_data('Spec_urot', binner.psd(datnow.urot), 'Spec')
+        datbd.add_data('Spec_uraw', binner.psd(datnow.velraw), 'Spec')
+        datbd.add_data('Spec_uacc', binner.psd(datnow.velacc), 'Spec')
+        datbd.add_data('Spec_urot', binner.psd(datnow.velrot), 'Spec')
         datbd.add_data('Spec_ubt', binner.psd(datnow.ubt), 'Spec')
         if filt_freq > 0:
             datbd.add_data('Spec_umot',
-                           binner.psd(datnow.uacc +
-                                      datnow.urot +
+                           binner.psd(datnow.velacc +
+                                      datnow.velrot +
                                       datnow[bt_var]),
                            'Spec')
         else:
             datbd.add_data('Spec_umot',
-                           binner.psd(datnow.uacc +
-                                      datnow.urot),
+                           binner.psd(datnow.velacc +
+                                      datnow.velrot),
                            'Spec')
         bindat_filt[filt_tag] = datbd
 
@@ -106,7 +106,7 @@ def within(dat, minval, maxval):
 dnow_name = 'unfilt'
 dnow_name = '5m'
 dnow = dat_filt[dnow_name]
-dnow.umot = dnow.urot + dnow.uacc
+dnow.velmot = dnow.velrot + dnow.velacc
 if dnow_name != 'unfilt':
     dnow.ubt = dat_filt['unfilt'].ubt
     dnow.ubt2 = dat_filt['unfilt'].ubt2
@@ -126,15 +126,15 @@ ubt = dnow.ubt
 
 if flag.get('show cohere', False):
 
-    cpsd = binner.cpsd(dnow.umot, ubt, n_fft=n_fft)
+    cpsd = binner.cpsd(dnow.velmot, ubt, n_fft=n_fft)
     sp_bt = np.abs(binner.cpsd(ubt, ubt, n_fft=n_fft))
-    sp_mot = np.abs(binner.cpsd(dnow.umot, dnow.umot, n_fft=n_fft))
+    sp_mot = np.abs(binner.cpsd(dnow.velmot, dnow.velmot, n_fft=n_fft))
 
-    cpsdr = binner.cpsd(dnow.urot, ubt, n_fft=n_fft)
-    sp_rot = np.abs(binner.cpsd(dnow.urot, dnow.urot, n_fft=n_fft))
+    cpsdr = binner.cpsd(dnow.velrot, ubt, n_fft=n_fft)
+    sp_rot = np.abs(binner.cpsd(dnow.velrot, dnow.velrot, n_fft=n_fft))
 
-    cpsda = binner.cpsd(dnow.uacc, ubt, n_fft=n_fft)
-    sp_acc = binner.cpsd(dnow.uacc, dnow.uacc, n_fft=n_fft)
+    cpsda = binner.cpsd(dnow.velacc, ubt, n_fft=n_fft)
+    sp_acc = binner.cpsd(dnow.velacc, dnow.velacc, n_fft=n_fft)
     cohfreq = binner.calc_omega() / pii
 
     # coh = ((np.abs(cpsd[:, inds]) ** 2).mean(1) /
@@ -194,7 +194,8 @@ if flag.get('show cohere', False):
                     lw=2, zorder=1)
 
         #ax.axhline(6. / (sub_windows * 2 * inds.sum()), linestyle=':', color='k')
-        ax.axhline(1 - 0.05 ** (1. / (inds.sum() - 1)), linestyle=':', color='k')
+        ax.axhline(1 - 0.05 ** (1. / (inds.sum() - 1)), linestyle='--', color='k', linewidth=1)
+        ax.axvline(0.0033333, color='k', linestyle=':', linewidth=1)
         ax.legend(loc='upper left')
         ax.set_ylim([0, 1])
         ax.set_xlim([1e-3, 1])
@@ -206,9 +207,9 @@ if flag.get('show cohere', False):
 
 if flag.get('phase', False):
 
-    ph = binner.phase_angle(dnow.umot, ubt, n_fft=n_fft)[:, inds].mean(1)
-    phr = binner.phase_angle(dnow.urot, ubt, n_fft=n_fft)[:, inds].mean(1)
-    pha = binner.phase_angle(dnow.uacc, ubt, n_fft=n_fft)[:, inds].mean(1)
+    ph = binner.phase_angle(dnow.velmot, ubt, n_fft=n_fft)[:, inds].mean(1)
+    phr = binner.phase_angle(dnow.velrot, ubt, n_fft=n_fft)[:, inds].mean(1)
+    pha = binner.phase_angle(dnow.velacc, ubt, n_fft=n_fft)[:, inds].mean(1)
 
     fig = plt.newfig(301, 3, 1, figsize=8,
                      sharex=True, sharey=True,

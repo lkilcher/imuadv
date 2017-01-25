@@ -1,3 +1,5 @@
+- Fix figure 2 to use kg instead of lbs
+
 - Move SM bottom track incorporation into SM2015 data folder!!!
 
 - Improve methods section to discuss bias-drift?

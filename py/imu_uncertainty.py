@@ -3,6 +3,7 @@ from dolfyn.adv import api as avm
 import nortek_vector.bench_tests as btests
 import ptools as pt
 import numpy as np
+import ttm.sm2015 as sm15
 
 
 def spec_epsilon(epsilon, tke, k, alpha=0.5, ):
@@ -13,9 +14,10 @@ def spec_epsilon(epsilon, tke, k, alpha=0.5, ):
 
 
 flag = {}
-flag['plot_spec'] = True
-flag['plot_spec2'] = True
+#flag['plot_spec'] = True
+#flag['plot_spec2'] = True
 flag['plot_spec3'] = True
+#flag['sway example'] = True
 
 binner = avm.TurbBinner(9600, 32, )
 
@@ -26,13 +28,12 @@ mcfilts = {'unfiltered': 0.0,
            '10s': 1. / 10,
            '5s': 1. / 5, }
 
+if 'dmot' not in vars():
+    dmot = avm.load(sm15.package_root + 'ADVs/TTM_NREL03_May2015_pax_b5m_VELMOOR.h5')
+
+
 if 'rd' not in vars():
     rd = btests.load('C')
-    rd.add_data('vel', rd.pop_data('_u'), 'main')
-    rd.add_data('corr', rd.pop_data('_corr'), 'main')
-    rd.add_data('amp', rd.pop_data('_amp'), 'main')
-    rd.props['rotate_vars'].remove('_u')
-    rd.props['rotate_vars'].add('vel')
     rd.props['body2head_rotmat'] = np.eye(3)
     rd.props['body2head_vec'] = np.array([1, 1, 1]) * np.sqrt(1. / 3)
 
@@ -137,8 +138,15 @@ if flag.get('plot_spec3', False):
     #         line_low,
     #         'k--', zorder=-5)
     ax.fill_between(line_f, line_high, line_low, facecolor='0.8',
-                    edgecolor='k',
+                    edgecolor='none',
                     linewidth=0.5, zorder=-8, linestyle='--')
+    # lmoor = 11
+    # theta = 20 * np.pi / 180
+    # line_bar = (2 * np.pi * line_f * lmoor * theta) ** 2
+    # ax.loglog(line_f, line_bar, '-.', color='0.2')
+    # theta = 5 * np.pi / 180
+    # line_bar = (2 * np.pi * line_f * lmoor * theta) ** 2
+    # ax.loglog(line_f, line_bar, '-.', color='0.4')
 
     colors_now = {'unfiltered': 'k',
                   '30s': 'm',
@@ -150,14 +158,22 @@ if flag.get('plot_spec3', False):
     print ''
     print ('u_rot error level: {:0.3f} cm/s'
            .format((np.trapz(tmp, bdmc.freq) ** 0.5) * 100))
-    for tag in ['unfiltered', '30s', '10s', '5s']:
+    for tag in ['unfiltered', '30s', '5s']:
         bdmc = bindatmc[tag]
         tmp = bdmc.Spec_uacc[:, gd].max(0).mean(0) * 2 * np.pi
         tmp2 = bdmc.Spec_uacc[:, gd].min(0).mean(0) * 2 * np.pi
         if tag == 'unfiltered':
             label = '$n_{acc}$'
+            mot = dmot.Spec_velmoor_nofilt[0].mean(0)
+            inds = mot < tmp[:len(mot)]
+            ax.loglog(dmot.freq[inds], mot[inds], color='b',
+                      lw=1, ls='-', )
+            mot2 = dmot.Spec_velmoor_nofilt[2].mean(0)
+            inds2 = mot2 < tmp2[:len(mot2)]
+            ax.loglog(dmot.freq[inds2], mot2[inds2], color='b',
+                      lw=1, ls='--')
         else:
-            label = '$n_{acc}' + '({})$'.format(tag)
+            label = '$n_{acc}' + '(\mathrm{%s})$' % tag
             ax.axvline(mcfilts[tag], color=colors_now[tag], linestyle=':')
         ax.loglog(bd.freq, tmp,
                   color=colors_now[tag], linestyle='-',
@@ -166,6 +182,8 @@ if flag.get('plot_spec3', False):
                   color=colors_now[tag], linestyle='--' )
         print ('u_acc error level ({}): {:0.3f} cm/s'
                .format(tag, (np.trapz(tmp, bdmc.freq) ** 0.5) * 100))
+    ax.loglog(np.NaN, np.NaN, color='b',
+              lw=1, ls='-', label='$u_{\mathrm{low}}\mathrm{(TTM)}$')
     bdmc = bindatmc['30s']
 
     #axs[1].set_xlim([1e-3, 20])
@@ -174,7 +192,8 @@ if flag.get('plot_spec3', False):
     ax.legend(prop=dict(size='small'))
     ax.set_xlabel('$f\ [\mathrm{hz}]$')
     ax.set_ylabel('$\mathrm{[m^2s^{-2}/hz]}$')
-    ax.axhline(2e-4, color='k', linestyle=':')
+    ax.axhline(2e-4, color='k', linestyle='-.')
+    ax.axhline(2e-5, color='k', linestyle=':')
     #axs[0].set_title('Spectra: Bench Test %s' % tag)
     # axs[0].set_ylabel('$u_{acc}\, \mathrm{[m^2/s^{2}/hz]}$', size='large')
     # axs[1].set_ylabel('$u_{rot}\,\mathrm{[m^2/s^2/hz]}$', size='large')
@@ -182,3 +201,39 @@ if flag.get('plot_spec3', False):
 
     #fig.saxes.hide('xticklabels', fig.saxes.ax[-1, :])
     fig.savefig(pt.figdir + 'stationary_noise04.pdf')
+
+
+if flag.get('sway example', False):
+
+    t = np.arange(0, 50. * 60, 1. / (64))
+    lmoor = 11
+
+    freqs = [
+        1e-2,
+        2e-2, 1e-1, 3e-1, 3e-2,
+        5e-1, 9e-1, 8e-1, 2e-2,
+        1, 10, 3, 6, 1.3
+    ]
+
+    x = np.zeros_like(t)
+    for f in freqs:
+        x += np.cos(2 * np.pi * f * t +
+                    2 * np.pi * np.random.rand(1))
+    theta = 20 * np.pi / 180
+    x *= lmoor * theta / x.max()
+
+    fig, ax = pt.newfig(201, 1, 1, figsize=(8, 8))
+    ax.plot(t, x)
+
+    specx = binner.psd(x)
+
+    u = np.diff(x) / np.diff(t)
+
+    specu = binner.psd(u)
+    freq = binner.calc_omega() / (2 * np.pi)
+    fig, ax = pt.newfig(202, 1, 1, figsize=(5, 5))
+    ax.loglog(freq, specu.mean(0))
+
+    theta = 20 * np.pi / 180
+    line_bar = (2 * np.pi * line_f * lmoor * theta) ** 2
+    ax.loglog(line_f, line_bar, 'r-.', color='0.2')

@@ -1,5 +1,7 @@
 - Fix figure 2 to use kg instead of lbs
 
+- Remove \newcommand definitions in parent file
+
 - Move SM bottom track incorporation into SM2015 data folder!!!
 
 - Improve methods section to discuss bias-drift?

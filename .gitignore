@@ -20,3 +20,6 @@ py/tmpdat
 *.stats
 
 Kilcher_etal_IMU-ADV.zip
+
+diff/diff_*
+!diff/diff_*.pdf

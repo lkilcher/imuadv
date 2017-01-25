@@ -1,0 +1,89 @@
+%% amssamp1.tex is nearly identical to amssamp2.tex, except
+%% that amssamp2.tex uses the [twocol] option to produce
+%% two-column text.
+
+%\documentclass{ametsoc}
+\documentclass{ametsoc}
+\journal{jtech}
+
+%\usepackage{amsmath}
+\usepackage[draft]{hyperref}
+\usepackage{color}
+
+\usepackage{graphicx}
+\graphicspath{{./fig/}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Citations should be of the form ``author year''  not ``author, year''
+\bibpunct{(}{)}{;}{a}{}{,}
+
+\title{Turbulence Measurements from Compliant Moorings - Part II: Motion Correction}
+
+\author{Levi F. Kilcher\correspondingauthor{Levi Kilcher, National Renewable Energy Laboratory, 15013 Denver West Pkwy, Golden, Colorado, USA}}
+
+\affiliation{National Renewable Energy Laboratory, Golden, Colorado, USA}
+\email{Levi.Kilcher@nrel.gov}
+
+\extraauthor{Jim Thomson}
+\extraaffil{Applied Physics Laboratory, University of Washington, Seattle, Washington, USA}
+
+\extraauthor{Samuel Harding}
+\extraaffil{Pacific Northwest National Laboratory, Richland, Washington, USA}
+
+\extraauthor{Sven Nylund}
+\extraaffil{Nortek AS, Norway}
+
+\graphicspath{{./fig/}}
+\newlength{\onewidth}
+\setlength{\onewidth}{3.2in}
+
+\newcommand{\note}[1]{\textcolor{blue}{#1}}
+\newcommand{\citeneeded}[1]{\textcolor{red}{(NEED CITATION for: #1)}}
+\usepackage{defs}
+
+\abstract{
+Acoustic Doppler velocimeters (ADVs) are a valuable tool for making high-precision measurements of turbulence, and moorings are a convenient and ubiquitous platform for making many kinds of measurements in the ocean. However---because of concerns that mooring motion can contaminate turbulence measurements and acoustic Doppler profilers are relatively easy to deploy---ADVs are not frequently deployed from moorings.  This work demonstrates that inertial motion measurements can be used to reduce motion-contamination from moored ADV velocity measurements. Three distinct mooring platforms were deployed in a tidal channel with inertial-motion-sensor-equipped ADVs. In each case, the motion correction based on the inertial measurements dramatically reduced contamination from mooring motion. The spectra from these measurements have a shape that is consistent with other measurements in tidal channels, and have a $f^{-5/3}$ slope at high frequencies---consistent with Kolmogorov's theory of isotropic turbulence. Motion correction also improves estimates of cross-spectra and Reynold's stresses. Comparison of turbulence dissipation with flow speed and turbulence production indicates a bottom boundary layer production-dissipation balance during ebb and flood that is consistent with the strong tidal forcing at the site. These results indicate that inertial-motion-sensor-equipped ADVs are a valuable new tool for measuring turbulence from moorings.
+}
+
+\begin{document}
+
+\maketitle
+
+\input{intro}
+
+\input{measurements}
+
+\input{methods}
+
+\input{results}
+
+\input{discussion}
+
+\input{conclusion}
+
+\acknowledgments
+
+Many thanks to Joe Talbert, Alex DeKlerk, Captain Andy Reay-Ellers,  Jennifer Rinker, Maricarmen Guerra, and Eric Nelson in assisting with data collection. The authors are also grateful to James VanZwieten, Matthew Egeland and Marshall Richmond for discussion on the details of this work.
+
+This work was supported by the U.S. Department of Energy under Contract No. DE-AC36-08GO28308 with the National Renewable Energy Laboratory. Funding for the work was provided by the DOE Office of Energy Efficiency and Renewable Energy, Wind and Water Power Technologies Office. 
+
+The U.S. Government retains and the publisher, by accepting the article for publication, acknowledges that the U.S. Government retains a nonexclusive, paid-up, irrevocable, worldwide license to publish or reproduce the published form of this work, or allow others to do so, for U.S. Government purposes.
+
+\clearpage %REMOVE_FOR_SUBMIT
+
+%%%%%%%%%%%%%%%%%
+%APPENDIXES
+%%%%%%%%%%%%%%%%%
+\appendix
+
+\input{appendix_SMcoh}
+
+%%%%%%%%%%%%%%%%%
+%REFERENCES
+%%%%%%%%%%%%%%%%%
+
+\bibliographystyle{ametsoc2014}
+\bibliography{thisbib}
+
+
+\end{document}

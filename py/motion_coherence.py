@@ -1,6 +1,6 @@
 import numpy as np
 import ptools as pt
-from scipy.io import loadmat
+from scipy.io import loadmat, savemat
 import scipy.signal as sig
 import matplotlib.pyplot as plt
 import ttm.sm2015 as data_api
@@ -201,8 +201,11 @@ if flag.get('show cohere', False):
         ax.set_xlim([1e-3, 1])
         ax.set_xlabel('$f\ \mathrm{[Hz]}$')
         ax.set_title('Coherence between IMU motion\nand Doppler profiler bottom track')
+
         if flag.get('save fig', False):
             fig.savefig(pt.figdir + 'BT_IMU_Coherence02.pdf')
+        savemat('tmpdat/IMU-BT_coherence_data.mat', dict(freq=cohfreq,
+                                                         coh=coh))
 
 
 if flag.get('phase', False):

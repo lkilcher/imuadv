@@ -9,6 +9,8 @@
 *.out
 *.pyc
 
+.#*
+
 ams/
 auto/
 tmp/

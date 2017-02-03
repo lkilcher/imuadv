@@ -349,7 +349,7 @@ def boot(x, m=500, alpha=0.05, axis=None):
     """
     if axis is not None:
         outshape = np.array(x.shape)
-        outshape[axis] = 1
+        outshape[axis] = 3
         out = np.empty(outshape, dtype=x.dtype)
         for slc in slice1d_along_axis(x.shape, axis):
             out[slc] = boot(x[slc], m=m, alpha=alpha)

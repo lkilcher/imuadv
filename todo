@@ -1,4 +1,8 @@
-- Fix figure 2 to use kg instead of lbs
+- Use 'SMB' for StableMoor buoy, add '^TM'
+
+- Ref Maricarmen's paper!
+
+- Add ref to appendix of Harding++2017 on how to sync BT and IMU measurements.
 
 - Remove \newcommand definitions in parent file
 
@@ -7,6 +11,8 @@
 - Move SM bottom track incorporation into SM2015 data folder!!!
 
 - Improve methods section to discuss bias-drift?
+
+- Space-out panels (so y-labels don't overlap, eg Fig 8)
 
 py/make_map.py
 - Make map of larger area?

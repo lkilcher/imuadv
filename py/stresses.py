@@ -9,9 +9,9 @@ plt = pt.plt
 flag = {}
 # flag['amp/phase'] = True
 # flag['real/imag'] = True
-flag['multi-real'] = True
-flag['save fig'] = True
-#flag['multi-ogive'] = True
+#flag['multi-real'] = True
+#flag['save fig'] = True
+flag['multi-ogive'] = True
 
 binners = dict(ttm=avm.TurbBinner(9600, 32),
                sm=avm.TurbBinner(4800, 16))
@@ -22,11 +22,10 @@ if 'bdat' not in vars():
     bdat['ttm'] = j14.load('ttm02b-top', 'pax', bin=True)
     bdat['sm'] = smdat.load('SMN-5s', bindat=True)
 pt.twocol()
-
+pairs = [(0, 1), (0, 2), (1, 2)]
 
 for idat, dat_nm in enumerate(['ttm', 'sm']):
     bd = bdat[dat_nm]
-
     if flag.get('amp/phase'):
 
         fig, axs = pt.newfig(1000 * idat + 101,
@@ -217,24 +216,26 @@ for idat, dat_nm in enumerate(['ttm', 'sm']):
             axs[0, icol].set_title(r"$%0.1f < \bar{u} < %0.1f$" % vr,
                                    fontsize='medium')
             for irow, ax in enumerate(axcol):
-                dtmp = cumtrapz(bd.Cspec_u[irow][inds].mean(0) * pii, f, initial=0)
                 ax.text(.9, .1,
-                        r"%2.2g" % (np.trapz(bd.Cspec_u[irow][inds].mean(0) * pii, f) * 10000, ),
+                        r"%2.2g" % (np.trapz(bd.Cspec_u[irow][inds].real.mean(0) *
+                                             pii, f) * 10000, ),
                         ha='right', va='bottom',
                         transform=ax.transAxes)
                 # r"$\overline{%s'%s'}=$%0.0e" % (pt.vel_comps[pairs[irow][0]],
                 #                                 pt.vel_comps[pairs[irow][1]],
                 #                                 np.trapz(dtmp, f), ),
-                ax.semilogx(f, dtmp.real, 'b-', label=pt.latex['ue'])
-                dtmp = cumtrapz(bd.Cspec_umot[irow][inds].mean(0) * pii, f, initial=0)
-                ax.semilogx(f, dtmp.real, 'r-', label=pt.latex['uhead'], zorder=-2)
-                dtmp = cumtrapz(bd.Cspec_uraw[irow][inds].mean(0) * pii, f, initial=0)
-                ax.semilogx(f, dtmp.real, 'k-', zorder=-5, label=pt.latex['umeas'])
+                dtmp = cumtrapz(bd.Cspec_u[irow][inds] * pii, f, initial=0).real
+                ax.semilogx(f, dtmp.mean(0), 'b-', label=pt.latex['ue'])
+                ax.semilogx(f, dtmp.T, '-', color='0.8', zorder=-10)
+                dtmp = cumtrapz(bd.Cspec_umot[irow][inds] * pii, f, initial=0).real
+                ax.semilogx(f, dtmp.mean(0), 'r-', label=pt.latex['uhead'], zorder=-2)
+                dtmp = cumtrapz(bd.Cspec_uraw[irow][inds] * pii, f, initial=0).real
+                ax.semilogx(f, dtmp.mean(0), 'k-', zorder=-5, label=pt.latex['umeas'])
                 ax.axhline(0, color='k', linestyle=':', zorder=-5, lw=1)
 
         axs[0, -1].legend(loc='upper left', bbox_to_anchor=[1.1, 1])
 
-        # axs[0, 0].set_ylim([-0.2, 0.2])
+        axs[0, 0].set_ylim([-0.02, 0.02])
         # axs[0, 1].set_ylim([-np.pi, np.pi])
         axs[0, 0].set_xlim(1e-3, 5)
         for icol in range(axs.shape[1]):
@@ -246,6 +247,7 @@ for idat, dat_nm in enumerate(['ttm', 'sm']):
                                                     pt.vel_comps[pairs[irow][1]]),
                                ha='left', va='bottom',
                                transform=axs[irow, -1].transAxes)
-
+            
         if flag.get('save fig'):
             fig.savefig(pt.figdir + 'StressSpec_{}_04.pdf'.format(dat_nm.upper()))
+

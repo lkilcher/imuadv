@@ -154,7 +154,7 @@ if flag.get('plot_spec3', False):
                   '5s': 'g', }
     tmp = bdmc.Spec_urot[:, gd].max(0).mean(0) * 2 * np.pi
     ax.loglog(bd.freq, tmp,
-              color='y', linestyle='-', label='$n_{rot}$')
+              color='y', linestyle='-', label='$S\{n_{rot}\}$')
     print ''
     print ('u_rot error level: {:0.3f} cm/s'
            .format((np.trapz(tmp, bdmc.freq) ** 0.5) * 100))
@@ -163,7 +163,7 @@ if flag.get('plot_spec3', False):
         tmp = bdmc.Spec_uacc[:, gd].max(0).mean(0) * 2 * np.pi
         tmp2 = bdmc.Spec_uacc[:, gd].min(0).mean(0) * 2 * np.pi
         if tag == 'unfiltered':
-            label = '$n_{acc}$'
+            label = '$S\{n_{acc}\}$'
             mot = dmot.Spec_velmoor_nofilt[0].mean(0)
             inds = mot < tmp[:len(mot)]
             ax.loglog(dmot.freq[inds], mot[inds], color='b',
@@ -173,7 +173,7 @@ if flag.get('plot_spec3', False):
             ax.loglog(dmot.freq[inds2], mot2[inds2], color='b',
                       lw=1, ls='--')
         else:
-            label = '$n_{acc}' + '(\mathrm{%s})$' % tag
+            label = '$S\{n_{acc}' + '(\mathrm{%s})\}$' % tag
             ax.axvline(mcfilts[tag], color=colors_now[tag], linestyle=':')
         ax.loglog(bd.freq, tmp,
                   color=colors_now[tag], linestyle='-',
@@ -189,7 +189,8 @@ if flag.get('plot_spec3', False):
     #axs[1].set_xlim([1e-3, 20])
     ax.set_ylim([1e-7, 1e1])
     ax.set_xlim([1e-3, 1e1])
-    ax.legend(prop=dict(size='small'))
+    ax.legend(prop=dict(size='small'),
+              handlelength=1.4, labelspacing=0.4, handletextpad=0.2)
     ax.set_xlabel('$f\ [\mathrm{hz}]$')
     ax.set_ylabel('$\mathrm{[m^2s^{-2}/hz]}$')
     ax.axhline(2e-4, color='k', linestyle='-.')

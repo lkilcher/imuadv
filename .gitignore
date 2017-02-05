@@ -10,6 +10,7 @@
 *.pyc
 
 .#*
+\#*#
 
 ams/
 auto/
@@ -25,3 +26,5 @@ Kilcher_etal_IMU-ADV.zip
 
 diff/diff_*
 !diff/diff_*.pdf
+
+*flymake*

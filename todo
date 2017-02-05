@@ -1,3 +1,5 @@
+- ASK Sven how to calculate noise levels?
+
 - Use 'SMB' for StableMoor buoy, add '^TM'
 
 - Ref Maricarmen's paper!
@@ -13,6 +15,7 @@
 - Improve methods section to discuss bias-drift?
 
 - Space-out panels (so y-labels don't overlap, eg Fig 8)
+
 
 py/make_map.py
 - Make map of larger area?

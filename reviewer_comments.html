@@ -19,7 +19,7 @@ Thank you for the positive feedback and support!
 
 > Line 186: It would be helpful if you could add a little more detail about how you normalized your spectra and cross spectra to preserve variance.
 
-**Not sure how to respond here; the equations are there.**
+**Not sure how to respond here; the equations are there. Am I missing something here? Should I use a summation rather than an integral?**
 
 > Line 197: I believe that you should say "add" instead of "subtract" when discussing the motion compensation approach that you utilized.
 
@@ -31,7 +31,8 @@ We apologize for the confusion on figure numbering. All figure numbers have been
 
 > Figure 6: Is your presented measured acceleration based velocity spectra for the horizontal directions or the vertical direction? The magnitudes of these should be different and therefore I would suggest presenting both of these in this figure. Also, is your ADV Doppler noise calculated for a flow parallel or perpendicular to the head? Since these are different I would suggest presenting both of them in this figure. Also, a couple sentences in the text about how this was calculated would be helpful.
 
-Thanks for catching this. We have added the vertical component noise spectra, and the vertical component ADV noise levels. **NEED TO SAY MORE HERE - about how we calculated things, and that we added the 'rigid-pole' model of the TTM**
+Thanks for catching this. We've made significant revisions to section 3 to clarify many of these details. We've added the vertical component noise spectra, and the vertical component ADV noise levels to figure 6. We've also added much more discussion on the details of filter selection, and IMU noise-levels. Most notably, this includes a brief discussion of acoustic Doppler profiler bottom-track measurements from the StableMoor, and a discussion of a 'rigid pole' model for estimating low-frequency TTM motion.
+**Sven: is there a formula for calculating Doppler noise levels?**
 
 > Line 316: Your figure number should be corrected as you do not have a figure listed as (Figure A1).  Should this be Figure 6?
 
@@ -75,15 +76,15 @@ We apologize for the confusion on figure numbering. All figure numbers have been
 
 > (page 12, line 236-237): Can you give more detail for the basis of setting the cutoff frequencies to 0.033Hz and 0.2Hz for the two deployment configurations? This seems to be an important caveat of the motion-correction methodology that is platform-specific, so including more detail would be useful for future studies employing similar techniques. What is the sensitivity of turbulence estimates to the selection of cutoff frequencies? Did you try calculating results using different cutoff frequencies - how did they compare?
 
-**This is nearly complete in the revision of the methods section. NEED TO WRITE RESPONSE.**
+**Should I include [this](https://www.dropbox.com/s/riprfxsbw9r41mh/SpecFig04_filtering.pdf?dl=0) 'influence of filters' figure? Should I just present one column, or one panel of this figure to demonstrate the effect? Currently I'm saying I'll include that figure in 'supplemental material', but maybe a simplified version should just be in the document?**
 
 > (Figure 11): There is significant spread in these cospectral plots that makes characterizing the quality of stress measurements difficult. It would be more informative to present variance-preserving cospectra. A comparison of observed curves to a generalized semi-empirical model for turbulent cospectra (e.g. Kaimal et al 1972) could provide further information regarding the accuracy of moored cospectral flux estimates that have been motion-corrected.
 
-**I'm not really sure what he's asking for here. I am already plotting variance preserving spectra. Kaimal 1972 plots cospectra on a log-scale and multiplies by *f*. I hesitate to use a log-scale because we have negative and postive values. I'm thinking I should use Ogive curves instead of cospectral plots. This could complicate the picture though. Thoughts?**
+**I'm not really sure what he's asking for here. I am already plotting variance preserving spectra. Kaimal 1972 plots cospectra on a log-scale and multiplies by *f*. I hesitate to use a log-scale because we have negative and positive values. I'm thinking I should use Ogive curves instead of cospectral plots. This could complicate the picture though. Thoughts?**
 
 > (page 20, line 416-421): The authors discuss a production-dissipation balance in the TKE budget that is indicative of a bottom boundary layer, but the complex topography of the site and depth of the measurements warrants more discussion regarding other processes that could play a significant role in the observed TKE budget. What are typical stratification conditions at the site?
 
-**This should be pretty straight-forward. I just haven't gotten to it yet.**
+**Jim: What is the stratification at this site? Should I just say that Buoyancy Flux is probably small because tidal forcing has already mixed all of the stratification away, or do we expect this to be a site that is *driving* this mixing?**
 
 > (Figure 14): There appear to be significant asymmetries between turbulent dissipation measured during flood and ebb shown in Figure 14 - can you separate the balance shown in Figure 13 and comment on flood/ebb asymmetries? How does it relate to times when production does not equal dissipation?
 
@@ -129,7 +130,7 @@ Thanks for this. These headings are redundant. We've removed them.
 
 > (page 11, line 219-221): Did you measure this low-frequency translational motion during the experiment? You say that it is important, but it is not clear how you addressed it based on this statement. This paragraph in general is a little difficult to follow, consider refining it before publication.
 
-**This is nearly complete in the revision of the methods section. NEED TO WRITE RESPONSE.**
+The paragraph has been revised for clarity. We've completely rewritten this section to clarify the cases where we measured u\_low (on the StableMoor), when we estimate it from other sensors (the TTM), and when we didn't investigate it in detail (the torpedo). Also, we now refer to the appendix of Part I, which presents a detailed comparison of u\_low measured on the StableMoor to IMU derived translational motion.
 
 > (Figure 15): Should Figure 15 be listed as Figure A1? There is also no mention of this figure in the manuscript.
 

@@ -5,7 +5,7 @@ import numpy as np
 import gis
 
 flg = {}
-flg['turb time01'] = True
+#flg['turb time01'] = True
 #flg['turb time02'] = True
 flg['epsVprod01'] = True
 #flg['epsVprod02'] = True
@@ -177,20 +177,42 @@ if flg.get('epsVprod01'):
         umag = np.abs(dnow0.u)
         iumag = np.abs(dnow0.u) > 1.0
         inds = (prod > 0)
+        iupos = dnow0.u > 0
 
         logbins = np.logspace(-6, -2, 13)
 
-        axs.loglog(eps[inds & iumag], prod[inds & iumag], 'o',
-                   label='$P_{uz}>0\ \mathrm{(N = %d)}$' % (inds & iumag).sum(),
-                   mfc='k', mec='none', ms=3,
-                   zorder=2)
-        axs.loglog(eps[~inds & iumag], -prod[~inds & iumag], 'o',
-                   label='$P_{uz}<0\ \mathrm{(N = %d)}$' % (~inds & iumag).sum(),
-                   mfc='none', mec='k', ms=2.5,
+        alpha = 0.7
+        axs.loglog(eps[inds & iumag & ~iupos], prod[inds & iumag & ~iupos],
+                   'o',
+                   label='$P_{uz}>0, u < -1\ \mathrm{(N = %d)}$' %
+                   (inds & iumag & ~iupos).sum(),
+                   mfc='r', mec='none', ms=3,
+                   alpha=alpha,
+                   zorder=2,)
+        axs.loglog(eps[~inds & iumag & ~iupos], -prod[~inds & iumag & ~iupos],
+                   'o',
+                   label='$P_{uz}<0, u < -1\ \mathrm{(N = %d)}$' %
+                   (~inds & iumag & ~iupos).sum(),
+                   mfc='none', mec='r', ms=2.5,
+                   alpha=alpha,
                    zorder=-2)
-        axs.legend(loc='upper left', numpoints=1, handlelength=1,
-                   handletextpad=0.2,
-                   prop=dict(size='medium'))
+        axs.loglog(eps[inds & iumag & iupos], prod[inds & iumag & iupos],
+                   'o',
+                   label='$P_{uz}>0\ \mathrm{(N = %d)}$' %
+                   (inds & iumag & iupos).sum(),
+                   mfc='b', mec='none', ms=3,
+                   alpha=alpha,
+                   zorder=2)
+        axs.loglog(eps[~inds & iumag & iupos], -prod[~inds & iumag & iupos],
+                   'o',
+                   label='$P_{uz}<0\ \mathrm{(N = %d)}$' %
+                   (~inds & iumag & iupos).sum(),
+                   mfc='none', mec='b', ms=2.5,
+                   alpha=alpha,
+                   zorder=-2)
+        # axs.legend(loc='upper left', numpoints=1, handlelength=1,
+        #            handletextpad=0.2,
+        #            prop=dict(size='medium'))
 
         # for rng in zip(logbins[:-1], logbins[1:]):
         #     inds = (rng[0] < eps) & (eps < rng[1])
@@ -205,7 +227,7 @@ if flg.get('epsVprod01'):
         axs.set_ylabel('$P_{uz}\ \mathrm{[W/kg]}$')
 
     if flg.get('save figs'):
-        fig.savefig(pt.figdir + 'EpsVProd01.pdf')
+        fig.savefig(pt.figdir + 'EpsVProd01a.pdf')
 
 if flg.get('epsVprod02'):
 

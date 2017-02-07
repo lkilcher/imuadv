@@ -66,10 +66,15 @@ class label(object):
     def cspec(self, ):
         return label(prfx=r'C\{', sufx=self.sufx + r'\}', comp=self.comp)
 
+    @property
+    def cspec_vp(self, ):
+        return label(prfx=r'f \cdot C\{', sufx=self.sufx + r'\}', comp=self.comp)
+
 
 latex = dict(umeas=label(sufx=r'_\mathrm{m}'),
              ue=label(),
-             uhead=label(sufx=r'_\mathrm{h}'))
+             uhead=label(sufx=r'_\mathrm{h}'),
+)
 
 
 def calcFigSize(n, ax=[1, 0], frm=[.5, .5], norm=False):

@@ -68,7 +68,6 @@ Thank you, we've made the suggested correction.
 Thank you for the positive feedback and support!
 
 > #### Major Comments:
-
 > (Figure 6): Is Figure 6 incorrectly listed as Figure A1 in the manuscript?  It appears to be demonstrating the effects of high-pass filtering on the signal-noise ratio of the IMU data, but since there is no mention of Figure 6 in the manuscript it is difficult to ascertain where it fits and what it is contributing to the paper.
 
 We apologize for the confusion on figure numbering. All figure numbers have been corrected and all figures are referenced within the text.
@@ -79,17 +78,17 @@ We apologize for the confusion on figure numbering. All figure numbers have been
 
 > (Figure 11): There is significant spread in these cospectral plots that makes characterizing the quality of stress measurements difficult. It would be more informative to present variance-preserving cospectra. A comparison of observed curves to a generalized semi-empirical model for turbulent cospectra (e.g. Kaimal et al 1972) could provide further information regarding the accuracy of moored cospectral flux estimates that have been motion-corrected.
 
-**I'm not really sure what he's asking for here. I am already plotting variance preserving spectra. Kaimal 1972 plots cospectra on a log-scale and multiplies by *f*. I hesitate to use a log-scale because we have negative and positive values. I'm thinking I should use Ogive curves instead of cospectral plots. This could complicate the picture though. Thoughts?**
+Thanks for this recommendation! We've now plotted co-spectra in a variance preserving form ($f \cdot C \lbrace x,y \rbrace $ vs. $\log (f)$). **Still need to: include semi-empirical curves, and finish discussion of the cospectra.**
 
 > (page 20, line 416-421): The authors discuss a production-dissipation balance in the TKE budget that is indicative of a bottom boundary layer, but the complex topography of the site and depth of the measurements warrants more discussion regarding other processes that could play a significant role in the observed TKE budget. What are typical stratification conditions at the site?
 
-**Jim: What is the stratification at this site? Should I just say that Buoyancy Flux is probably small because tidal forcing has already mixed all of the stratification away, or do we expect this to be a site that is *driving* this mixing?**
+**Jim: What is the stratification at this site? Should I estimate Buoyancy Flux from a 'historic' buoyancy profile? Or, just say that Buoyancy Flux is probably small because tidal forcing has already mixed all of the stratification away? Is there any reason to believe this might be a site that is *driving* tidal mixing?**
 
 > (Figure 14): There appear to be significant asymmetries between turbulent dissipation measured during flood and ebb shown in Figure 14 - can you separate the balance shown in Figure 13 and comment on flood/ebb asymmetries? How does it relate to times when production does not equal dissipation?
 
-**Still need to look at this. Not quite sure how to respond.**
+**I created [this figure](https://www.dropbox.com/s/6rdg6z006jje277/EpsVProd01a.pdf?dl=0) that separates ebb (blue) and flood (red). The open circles are when $P_{uz}$ is negative (out of balance with dissipation). I'm not really sure this tells a different story than the one I'm already telling. Should I add this figure, or keep the one that is currently in the document?**
 
-> **Minor Comments:**
+> #### Minor Comments:
 
 > (page 2, line 17): "However - because of"  - should this be a comma?
 
@@ -136,6 +135,10 @@ The paragraph has been revised for clarity. We've completely rewritten this sect
 We apologize for the confusion on figure numbering. All figure numbers have been corrected.
 
 </xmp>
-<!-- <script src="file:///Users/lkilcher/Dropbox/github/strapdown/v/0.2/strapdown.js"></script> -->
+<script src="file:///Users/lkilcher/github/strapdown/v/0.2/strapdown.js"></script>
+<!-- 
 <script src="http://rawgit.com/lkilcher/strapdown/gh-pages/v/0.2/strapdown.js"></script>
+-->
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$']], displayMath: [['$$', '$$']], processEscapes: true } });</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&amp;locale=fr"></script>
 </html>

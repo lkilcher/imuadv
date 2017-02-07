@@ -220,43 +220,58 @@ for idat, dat_nm in enumerate(['ttm', 'sm']):
                 # r"$\overline{%s'%s'}=$%0.0e" % (pt.vel_comps[pairs[irow][0]],
                 #                                 pt.vel_comps[pairs[irow][1]],
                 #                                 np.trapz(dtmp, f), ),
-                dtmp = bd.Cspec_u[irow][inds].real * pii * f
+                dtmp = bd.Cspec_u[irow][inds].real * pii * f * 1000
                 # rng = np.empty((2, dtmp.shape[1]))
                 # for ifrq in range(dtmp.shape[1]):
                 #     rng[0, ifrq], mid, rng[1, ifrq] = pt.boot(dtmp[:, ifrq])
-                ax.semilogx(f, dtmp.mean(0), 'b-', label=pt.latex['ue'].cspec)
+                ax.semilogx(f, dtmp.mean(0), 'b-',
+                            label=pt.latex['ue'].cspec_vp)
                 rng = (dtmp.std(0)[None, :] * np.array([[-1], [1]]) + dtmp.mean(0))
                 ax.fill_between(f, rng[0], rng[1], zorder=-12,
                                 facecolor=[0, 0, 1, 0.3], edgecolor='none')
                 # ax.semilogx(f, dtmp.T * pii, '-', color='0.7', zorder=-10)
-                ax.text(.9, .1,
-                        r"%2.2g" % (np.trapz(dtmp.mean(0), f) * 10000, ),
+                ax.text(.94, .06,
+                        r"%2.1f" % (np.trapz(dtmp.mean(0) / f, f), ),
                         ha='right', va='bottom',
                         transform=ax.transAxes)
-                dtmp = bd.Cspec_umot[irow][inds].real * pii * f
-                ax.semilogx(f, dtmp.mean(0), 'r-', label=pt.latex['uhead'].cspec, zorder=-2)
-                dtmp = bd.Cspec_uraw[irow][inds].real * pii * f
-                ax.semilogx(f, dtmp.mean(0), 'k-', zorder=-5, label=pt.latex['umeas'].cspec)
+                dtmp = bd.Cspec_umot[irow][inds].real * pii * f * 1000
+                ax.semilogx(f, dtmp.mean(0), 'r-',
+                            label=pt.latex['uhead'].cspec_vp, zorder=-2)
+                dtmp = bd.Cspec_uraw[irow][inds].real * pii * f * 1000
+                ax.semilogx(f, dtmp.mean(0), 'k-', zorder=-5,
+                            label=pt.latex['umeas'].cspec_vp)
                 ax.axhline(0, color='k', linestyle=':', zorder=-5, lw=1)
 
-        axs[0, -1].legend(loc='upper left', bbox_to_anchor=[1.1, 1],
-                          handletextpad=0.2, handlelength=2)
+        axs[0, -1].legend(loc='upper left', bbox_to_anchor=[1.05, 1],
+                          handletextpad=0.2, handlelength=1.4)
 
-        axs[0, 0].set_ylim([-0.005, 0.005])
+        axs[0, 0].set_ylim([-5, 5])
         # axs[0, 1].set_ylim([-np.pi, np.pi])
         axs[0, 0].set_xlim(1e-3, 5)
         for icol in range(axs.shape[1]):
             axs[-1, icol].set_xlabel(r'$f\ \mathrm{[Hz]}$')
         for irow in range(axs.shape[0]):
-            axs[irow, 0].set_ylabel('$[\mathrm{m^2s^{-2}}]$')
-            axs[irow, -1].text(1.03, 0.03,
-                               r'$C\{%s,%s\}$' % (pt.vel_comps[pairs[irow][0]],
-                                                  pt.vel_comps[pairs[irow][1]]),
-                               ha='left', va='bottom',
-                               transform=axs[irow, -1].transAxes)
+            # axs[irow, 0].set_ylabel('$f \cdot C\{%s,%s\} '
+            #                         '[10^{-3}\mathrm{m^2s^{-2}}]$' %
+            #                         (pt.vel_comps[pairs[irow][0]],
+            #                          pt.vel_comps[pairs[irow][1]]))
+            axs[irow, 0].set_ylabel('$[10^{-3}\mathrm{m^2s^{-2}}]$')
+            # axs[irow, -1].text(1.06, 0.03,
+            #                    r'$f \cdot C\{%s,%s\}$' % (
+            #                        pt.vel_comps[pairs[irow][0]],
+            #                        pt.vel_comps[pairs[irow][1]]),
+            #                    ha='left', va='bottom',
+            #                    transform=axs[irow, -1].transAxes)
+            axs[irow, 0].text(.06, .9,
+                              r'$f \cdot C\{%s,%s\}$' % (
+                                  pt.vel_comps[pairs[irow][0]],
+                                  pt.vel_comps[pairs[irow][1]]),
+                              ha='left', va='top',
+                              transform=axs[irow, 0].transAxes)
 
         if flag.get('save fig'):
-            fig.savefig(pt.figdir + 'StressSpec_{}_03vp.pdf'.format(dat_nm.upper()))
+            fig.savefig(pt.figdir + 'StressSpec_{}_03vp.pdf'
+                        .format(dat_nm.upper()))
 
     if flag.get('multi-ogive'):
 

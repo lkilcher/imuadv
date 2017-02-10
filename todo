@@ -1,22 +1,12 @@
-- ASK Sven how to calculate noise levels?
-
 - Kaimal curves on Stress-specs?
 
 - Finish discussion of cross-spectra.
 
 - Use 'SMB' for StableMoor buoy, add '^TM'
 
-- Ref Maricarmen's paper!
-
-- Add ref to appendix of Harding++2017 on how to sync BT and IMU measurements.
-
-- Remove \newcommand definitions in parent file
-
 - citations for software (in acknowledgements?)
 
 - Move SM bottom track incorporation into SM2015 data folder!!!
-
-- Improve methods section to discuss bias-drift?
 
 - Space-out panels (so y-labels don't overlap, eg Fig 8)
 
@@ -24,22 +14,11 @@
 py/make_map.py
 - Make map of larger area?
 - Change font sizes?
-- Indicate direction of principal axes.
 - Add tidal-flow arrow.
-
-fig/TTM_Image01
-- Add l* vec?
-
-fig/SM_NoseMode01
-- Add l* vec
 
 fig/ttm04b
 - Increase font sizes?
 - Add pop-up buoy?
-
-py/motion_coherence.py:
-- Confirm how to calculate uncertainty of angles (for phase-shift
-  plot, if we're going to use it).
 
 fig/TimeFig01
 ? Compare to 'old-style' ADV measurements?

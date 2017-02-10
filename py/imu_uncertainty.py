@@ -118,7 +118,8 @@ if flag.get('plot_spec2', False):
 if flag.get('plot_spec3', False):
 
     fig, ax = pt.newfig(1, 1, sharex=True, figsize=3,
-                        gridspec_kw=dict(left=0.2, right=0.94, top=0.95, bottom=0.15))
+                        gridspec_kw=dict(left=0.2, right=0.94,
+                                         top=0.95, bottom=0.15))
 
     line_f = np.logspace(-3, 2, 50)
     epsilon, tke, U = (5e-4, 0.03, 1.0, )
@@ -154,7 +155,7 @@ if flag.get('plot_spec3', False):
                   '5s': 'g', }
     tmp = bdmc.Spec_urot[:, gd].max(0).mean(0) * 2 * np.pi
     ax.loglog(bd.freq, tmp,
-              color='y', linestyle='-', label='$S\{n_{rot}\}$')
+              color='y', linestyle='-', label=r'$S\{\vec{n}_{\omega}\}$')
     print ''
     print ('u_rot error level: {:0.3f} cm/s'
            .format((np.trapz(tmp, bdmc.freq) ** 0.5) * 100))
@@ -163,7 +164,7 @@ if flag.get('plot_spec3', False):
         tmp = bdmc.Spec_uacc[:, gd].max(0).mean(0) * 2 * np.pi
         tmp2 = bdmc.Spec_uacc[:, gd].min(0).mean(0) * 2 * np.pi
         if tag == 'unfiltered':
-            label = '$S\{n_{acc}\}$'
+            label = r'$S\{\vec{n}_{a}\}$'
             mot = dmot.Spec_velmoor_nofilt[0].mean(0)
             inds = mot < tmp[:len(mot)]
             ax.loglog(dmot.freq[inds], mot[inds], color='b',
@@ -173,17 +174,17 @@ if flag.get('plot_spec3', False):
             ax.loglog(dmot.freq[inds2], mot2[inds2], color='b',
                       lw=1, ls='--')
         else:
-            label = '$S\{n_{acc}' + '(\mathrm{%s})\}$' % tag
+            label = r'$S\{\vec{n}_{a}' + '(\mathrm{%s})\}$' % tag
             ax.axvline(mcfilts[tag], color=colors_now[tag], linestyle=':')
         ax.loglog(bd.freq, tmp,
                   color=colors_now[tag], linestyle='-',
                   label=label)
         ax.loglog(bd.freq, tmp2,
-                  color=colors_now[tag], linestyle='--' )
+                  color=colors_now[tag], linestyle='--')
         print ('u_acc error level ({}): {:0.3f} cm/s'
                .format(tag, (np.trapz(tmp, bdmc.freq) ** 0.5) * 100))
     ax.loglog(np.NaN, np.NaN, color='b',
-              lw=1, ls='-', label='$u_{\mathrm{low}}\mathrm{(TTM)}$')
+              lw=1, ls='-', label=r'$S\{\vec{u}_{\textnormal{low}}\}$')
     bdmc = bindatmc['30s']
 
     #axs[1].set_xlim([1e-3, 20])

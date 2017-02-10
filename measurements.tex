@@ -75,7 +75,7 @@ Unless stated otherwise, vector quantities in this work are in a fixed ``princip
 
 All spectra, $\spec{x}(f)=|\fourier{x(t)}|^2$, and cross spectra, $\cspec{x}{y}(f)=\mathrm{real}(\fourier{x(t)}\fourier{y(t)})$, are computed using NumPy fast Fourier transform routines \cite[]{Walt++2011}. Here, $\fourier{x(t)}$ denotes the fast Fourier transform of a signal $x(t)$. Time series, e.g., $x(t)$, are linearly detrended and Hanning windowed prior to computing $\fourier{x}$ to reduce spectral reddening.  
 
-Throughout the remainder of this work, the dependence of $S$ and $C$ on $f$ is implied (e.g., $\spec{x}(f)$ is hereafter $\spec{x}$), and for other variables the dependence on $t$ is implied. Spectra and cross spectra are normalized to preserve variance: $\int \spec{u}\mathrm{d}f = \uu$, and  $\int \cspec{u}{v}\mathrm{d}f = \uv$. The notations $\spec{\ue}=(\spec{u}, \spec{v}, \spec{w})$, and $C\{\ue\} = (\cspec{u}{v}, \cspec{u}{w}, \cspec{v}{w} )$ denote the set of spectra and cross spectra for each velocity component and pairs of components, respectively.
+Throughout the remainder of this work, the dependence of $S$ and $C$ on $f$ is implied (e.g., $\spec{x}(f)$ is hereafter $\spec{x}$), and for other variables the dependence on $t$ is implied. Spectra and cross spectra are normalized to preserve variance; e.g., $\int \spec{u}\mathrm{d}f = \uu$, and  $\int \cspec{u}{v}\mathrm{d}f = \uv$. The notations $\spec{\ue}=(\spec{u}, \spec{v}, \spec{w})$, and $C\{\ue\} = (\cspec{u}{v}, \cspec{u}{w}, \cspec{v}{w} )$ denote the set of spectra and cross spectra for each velocity component and pairs of components, respectively.
 
 Turbulence dissipation rates are computed as:
 \begin{align}

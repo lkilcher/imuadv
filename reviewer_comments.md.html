@@ -19,11 +19,11 @@ Thank you for the positive feedback and support!
 
 > Line 186: It would be helpful if you could add a little more detail about how you normalized your spectra and cross spectra to preserve variance.
 
-**Not sure how to respond here; the equations are there. Am I missing something here? Should I use a summation rather than an integral?**
+The spectra and cross-spectra are normalized to preserve variance. That is, the Fourier transforms are scaled (multiplied by a scalar constant) so that the integral of the spectra is equal to the variance, or co-variance, of the signal(s) of interest.
 
 > Line 197: I believe that you should say "add" instead of "subtract" when discussing the motion compensation approach that you utilized.
 
-We've replaced the word 'subtract' with the word 'remove', so the sentence now reads, "The essential approach of motion correction is to measure velocity on a moving platform and make an independent measurement of the platform motion, then remove the motion from the velocity measurements."
+Thanks for this! We've replaced the word 'subtract' with the word 'remove', so the sentence now reads, "The essential approach of motion correction is to measure velocity on a moving platform and make an independent measurement of the platform motion, then remove the motion from the velocity measurements."
 
 > Your paper would read better if you reference all of your figures from within the text. I believe that at very least Figures 2-6 and 15 are not referenced from the text.
 
@@ -31,8 +31,7 @@ We apologize for the confusion on figure numbering. All figure numbers have been
 
 > Figure 6: Is your presented measured acceleration based velocity spectra for the horizontal directions or the vertical direction? The magnitudes of these should be different and therefore I would suggest presenting both of these in this figure. Also, is your ADV Doppler noise calculated for a flow parallel or perpendicular to the head? Since these are different I would suggest presenting both of them in this figure. Also, a couple sentences in the text about how this was calculated would be helpful.
 
-Thanks for catching this. We've made significant revisions to section 3 to clarify many of these details. We've added the vertical component noise spectra, and the vertical component ADV noise levels to figure 6. We've also added much more discussion on the details of filter selection, and IMU noise-levels. Most notably, this includes a brief discussion of acoustic Doppler profiler bottom-track measurements from the StableMoor, and a discussion of a 'rigid pole' model for estimating low-frequency TTM motion.
-**Sven: is there a formula for calculating Doppler noise levels?**
+Thanks for catching this! We've made significant revisions to section 3 to clarify many of these details. We've added the vertical component noise spectra, and the vertical component ADV noise levels to figure 6. We've also added much more discussion on the details of filter selection, and IMU noise-levels. Most notably, this includes a brief discussion of acoustic Doppler profiler bottom-track measurements from the StableMoor, and a discussion of a 'rigid pole' model for estimating low-frequency TTM motion.
 
 > Line 316: Your figure number should be corrected as you do not have a figure listed as (Figure A1).  Should this be Figure 6?
 
@@ -74,7 +73,7 @@ We apologize for the confusion on figure numbering. All figure numbers have been
 
 > (page 12, line 236-237): Can you give more detail for the basis of setting the cutoff frequencies to 0.033Hz and 0.2Hz for the two deployment configurations? This seems to be an important caveat of the motion-correction methodology that is platform-specific, so including more detail would be useful for future studies employing similar techniques. What is the sensitivity of turbulence estimates to the selection of cutoff frequencies? Did you try calculating results using different cutoff frequencies - how did they compare?
 
-**Should I include [this](https://www.dropbox.com/s/riprfxsbw9r41mh/SpecFig04_filtering.pdf?dl=0) 'influence of filters' figure? Should I just present one column, or one panel of this figure to demonstrate the effect? Currently I'm saying I'll include that figure in 'supplemental material', but maybe a simplified version should just be in the document?**
+Thank you for this suggestion. We've added a figure that compares different filter frequencies, and a discussion that details the reasoning behind the filter selections that we made.
 
 > (Figure 11): There is significant spread in these cospectral plots that makes characterizing the quality of stress measurements difficult. It would be more informative to present variance-preserving cospectra. A comparison of observed curves to a generalized semi-empirical model for turbulent cospectra (e.g. Kaimal et al 1972) could provide further information regarding the accuracy of moored cospectral flux estimates that have been motion-corrected.
 
@@ -82,11 +81,20 @@ Thanks for this recommendation! We've now plotted co-spectra in a variance prese
 
 > (page 20, line 416-421): The authors discuss a production-dissipation balance in the TKE budget that is indicative of a bottom boundary layer, but the complex topography of the site and depth of the measurements warrants more discussion regarding other processes that could play a significant role in the observed TKE budget. What are typical stratification conditions at the site?
 
-**Jim: What is the stratification at this site? Should I estimate Buoyancy Flux from a 'historic' buoyancy profile? Or, just say that Buoyancy Flux is probably small because tidal forcing has already mixed all of the stratification away? Is there any reason to believe this might be a site that is *driving* tidal mixing?**
+Unfortunately, we did not measure the stratification during these measurement periods. However, prior research (Geyer and Cannon, 1982) suggests that stratification in Puget Sound is typically weak during the moderate and large tidal amplitudes of these measurements due to the strong tidal mixing that occurs there. We've expanded the discussion of the tke equation, and indicated that a more complete analysis is left for future work.
+
+<!--
+$$
+    \frac{\partial \overline{u_i u_i u_j}}{\partial x_i} = 
+    \frac{\partial \overline{uuu}}{\partial x} + \frac{\partial \overline{uuv}}{\partial y} + \frac{\partial \overline{uuw}}{\partial z} +
+    \frac{\partial \overline{vvu}}{\partial x} + \frac{\partial \overline{vvv}}{\partial y} + \frac{\partial \overline{vvw}}{\partial z} +
+    \frac{\partial \overline{wwu}}{\partial x} + \frac{\partial \overline{wwv}}{\partial y} + \frac{\partial \overline{www}}{\partial z}
+$$
+-->
 
 > (Figure 14): There appear to be significant asymmetries between turbulent dissipation measured during flood and ebb shown in Figure 14 - can you separate the balance shown in Figure 13 and comment on flood/ebb asymmetries? How does it relate to times when production does not equal dissipation?
 
-**I created [this figure](https://www.dropbox.com/s/6rdg6z006jje277/EpsVProd01a.pdf?dl=0) that separates ebb (blue) and flood (red). The open circles are when $P_{uz}$ is negative (out of balance with dissipation). I'm not really sure this tells a different story than the one I'm already telling. Should I add this figure, or keep the one that is currently in the document?**
+**I created [this figure](https://www.dropbox.com/s/6rdg6z006jje277/EpsVProd01a.pdf?dl=0) that separates ebb (blue) and flood (red). The open circles are when $P_{uz}$ is negative (out of balance with dissipation). I'm not really sure this tells a different story than the one I'm already telling. Should I add this figure, or keep the version that is currently in the document (Figure 13)?**
 
 > #### Minor Comments:
 

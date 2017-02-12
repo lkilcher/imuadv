@@ -23,6 +23,7 @@ if 'bdat' not in vars():
     bdat = {}
     bdat['ttm'] = j14.load('ttm02b-top', 'pax', bin=True)
     bdat['sm'] = smdat.load('SMN-5s', bindat=True)
+    bdat['ttt'] = avm.load('/Users/lkilcher/data/pnnl/TTT_Vector_Feb2011_pax_b5m.h5')
     for nnm, onm in [('Cspec_vel', 'Cspec_u'),
                      ('Cspec_velrot', 'Cspec_urot'),
                      ('Cspec_velraw', 'Cspec_uraw'),
@@ -38,7 +39,8 @@ pairs = [(0, 1), (0, 2), (1, 2)]
 
 do_data = [
     'ttm',
-    # 'sm', 
+    # 'sm',
+    #'ttt',
 ]
 
 for idat, dat_nm in enumerate(do_data):
@@ -304,6 +306,7 @@ for idat, dat_nm in enumerate(do_data):
         case = 'ebb'
         case = 'flood'
         case = 'both'
+        add_ttt = False
         if case == 'ebb':
             inds = bd.u > 1
             ttl = r'Ebb ($\bar{u} > 1\,\mathrm{ms^{-1}}$)'
@@ -316,47 +319,69 @@ for idat, dat_nm in enumerate(do_data):
         else:
             raise Exception("Invalid case.")
 
+        def ndcs(dat, inds, z):
+            Uhor = np.abs(dat.U[inds])[:, None]
+            fstar = dat.freq * z / Uhor
+            ustar2 = np.sqrt(dat.upwp_[inds] ** 2 +
+                             dat.vpwp_[inds] ** 2)[:, None]
+            Cdata = (-np.sign(dat.u[inds][:, None]) *
+                     dat['Cspec_vel'][1][inds].real *
+                     Uhor / (ustar2 * z))
+            return Cdata, fstar
+
+        def bin_cospec(Cdin, fsin, fstar_bins):
+            df = fstar_bins[1] - fstar_bins[0]
+            assert (df - np.diff(fstar_bins) < 1e-6).all()
+            Cs = np.empty_like(fstar_bins)
+            for idx, fb in enumerate(fstar_bins):
+                itmp = (fb - (df / 2) < fsin) & (fsin < fb + (df / 2))
+                Cs[idx] = Cdin[itmp].mean()
+            return Cs
+
         m73f = np.array([1e-3, 10])
         m73a = 0.1 * m73f ** (-7. / 3)
         df = 2e-2
         fstar_bins = np.arange(df, 10, df)
-        f = bd.freq
-        Cs = np.empty_like(fstar_bins)
-        Cs2 = np.empty_like(fstar_bins)
-        kaimal = 14 / (1 + 9.6 * fstar_bins) ** (2.4)
-        Uhor = np.abs(bd.U[inds])
-        fstar = f * z / Uhor[:, None]
-        ustar2 = np.sqrt(bd.upwp_[inds]**2 + bd.vpwp_[inds]**2)
-        Cdata = (-np.sign(bd['u'][inds][:, None]) *
-                 bd['Cspec_vel'][1][inds].real *
-                 Uhor[:, None] / (ustar2[:, None] * z))
-        Cdata2 = Cdata * fstar
-        for idx, fb in enumerate(fstar_bins):
-            itmp = (fb - (df / 2) < fstar) & (fstar < fb + (df / 2))
-            Cs[idx] = Cdata[itmp].mean()
-            Cs2[idx] = Cdata2[itmp].mean()
+        Cdata, fstar = ndcs(bd, inds, z)
+        Cs = bin_cospec(Cdata, fstar, fstar_bins)
+        Cs2 = Cs * fstar_bins
+        if add_ttt:
+            z_ttt = 3
+            #z_ttt = 10  # This gives better agreement, but why?
+            # Is this b/c of shear?
+            tmp = bdat['ttt']
+            tmp_inds = np.abs(bdat['ttt'].u) > 1
+            Cdttt, fsttt = ndcs(tmp, tmp_inds, z_ttt)
+            Cs_ttt = bin_cospec(Cdttt, fsttt, fstar_bins)
+            Cs2_ttt = Cs_ttt * fstar_bins
 
-        newfig_kws = dict(figsize=3,
-                          sharex=True, sharey=True,
+        newfig_kws = dict(figsize=5,
+                          sharex=True, sharey=False,
                           right=0.95, left=0.2,
-                          bottom=0.15, top=0.9)
+                          bottom=0.09, top=0.94,
+                          hspace=0.13)
         pt_kws = dict(color='0.4', ms=3,
-                      zorder=-5, alpha=0.3,
+                      zorder=-20, alpha=0.3,
                       rasterized=True, mec='none')
 
         with pt.style['onecol']():
 
-            fig, ax = pt.newfig(1000 * idat + 203,
-                                1, 1, **newfig_kws)
+            fig, axs = pt.newfig(1000 * idat + 203,
+                                 2, 1, **newfig_kws)
 
+            ax = axs[1]
             ax.loglog(fstar_bins, Cs, 'b-', lw=2,
                       label='Avg.')
+            ax.loglog(fstar.flatten(), Cdata.flatten(),
+                      '.', label='single',
+                      **pt_kws)
+            if add_ttt:
+                ax.loglog(fstar_bins, Cs_ttt, 'm-', lw=1,
+                          label='TTT', zorder=-10)
             ax.loglog(m73f, m73a, 'r--', lw=2,
                       label='$\hat{f}^{-7/3}$')
             ax.loglog(fstar_bins, kaimal, 'k-', lw=2, zorder=-2,
                       label='Kaimal')
-            ax.loglog(fstar.flatten(), Cdata.flatten(),
-                      '.', label='single', **pt_kws)
             ax.set_xlim([1e-2, 10])
             ax.set_ylim([1e-4, 10])
             # z = 10
@@ -364,40 +389,26 @@ for idat, dat_nm in enumerate(do_data):
             ax.set_xlabel('$\hat{f}$')
             ax.legend(loc='lower left',
                       prop=dict(size='small'), numpoints=1)
-            ax.set_title(ttl)
+            # ax.set_title(ttl)
 
-            fig.savefig(pt.figdir + 'CoSpecND_Log01-{}.pdf'.format(case),
-                        dpi=200)
-
-            fig, ax = pt.newfig(1000 * idat + 213,
-                                1, 1, **newfig_kws)
-
+            ax = axs[0]
+            ax.semilogx(fstar_bins, Cs2, 'b-', lw=2,
+                        label='Avg.')
+            ax.semilogx(fstar.flatten(),
+                        fstar.flatten() * Cdata.flatten(),
+                        '.', label='single', **pt_kws)
             ax.semilogx(fstar_bins, fstar_bins * kaimal, 'k-',
                         label='Kaimal',
                         lw=2, zorder=-2)
-            ax.semilogx(fstar_bins, Cs2, 'b-', lw=2,
-                        label='Avg.')
-            #ax.plot(m73f, m73a, 'r--', lw=2)
-            ax.semilogx(fstar.flatten(), fstar.flatten() * Cdata.flatten(),
-                        '.', label='single', **pt_kws)
             ax.set_xlim([1e-2, 10])
             ax.set_ylim([-1, 1])
             ax.set_ylabel('$\hat{f}\cdot \hat{C}\{u,w\}$')
-            ax.set_xlabel('$\hat{f}$')
-            ax.legend(loc='lower left',
-                      prop=dict(size='small'), numpoints=1)
             ax.set_title(ttl)
-            # z = 10
-            # kaimal = 14 / (1 + 9.6 * fstar) ** (2.4)
-            # kaimal *= -1 * z * ustar2 / Uhor
-            # axs[1, icol].plot(f, kaimal, 'm-', lw=5)
-            # fig.savefig('NonDim_CoSpecLog01.pdf')
-            fig.savefig(pt.figdir + 'CoSpecND_Lin01-{}.pdf'.format(case),
-                        dpi=200)
 
+            fig.savefig(pt.figdir + 'CoSpecND02_{}-{}.pdf'.format(
+                dat_nm.upper(), case),
+                dpi=200)
 
-
-            
     if flag.get('multi-ogive'):
 
         velranges = [(0, 0.5),

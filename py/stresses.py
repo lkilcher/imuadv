@@ -301,37 +301,50 @@ for idat, dat_nm in enumerate(do_data):
 
     if flag.get('uw-real'):
 
+        case = 'ebb'
+        case = 'flood'
+        case = 'both'
+        if case == 'ebb':
+            inds = bd.u > 1
+            ttl = r'Ebb ($\bar{u} > 1\,\mathrm{ms^{-1}}$)'
+        elif case == 'flood':
+            inds = bd.u < -1
+            ttl = r'Flood ($\bar{u} < -1\,\mathrm{ms^{-1}}$)'
+        elif case == 'both':
+            inds = np.abs(bd.u) > 1
+            ttl = r'$|\bar{u}| > 1\,\mathrm{ms^{-1}}$'
+        else:
+            raise Exception("Invalid case.")
+
+        m73f = np.array([1e-3, 10])
+        m73a = 0.1 * m73f ** (-7. / 3)
+        df = 2e-2
+        fstar_bins = np.arange(df, 10, df)
+        f = bd.freq
+        Cs = np.empty_like(fstar_bins)
+        Cs2 = np.empty_like(fstar_bins)
+        kaimal = 14 / (1 + 9.6 * fstar_bins) ** (2.4)
+        Uhor = np.abs(bd.U[inds])
+        fstar = f * z / Uhor[:, None]
+        ustar2 = np.sqrt(bd.upwp_[inds]**2 + bd.vpwp_[inds]**2)
+        Cdata = (-np.sign(bd['u'][inds][:, None]) *
+                 bd['Cspec_vel'][1][inds].real *
+                 Uhor[:, None] / (ustar2[:, None] * z))
+        Cdata2 = Cdata * fstar
+        for idx, fb in enumerate(fstar_bins):
+            itmp = (fb - (df / 2) < fstar) & (fstar < fb + (df / 2))
+            Cs[idx] = Cdata[itmp].mean()
+            Cs2[idx] = Cdata2[itmp].mean()
+
         newfig_kws = dict(figsize=3,
                           sharex=True, sharey=True,
                           right=0.95, left=0.2,
-                          bottom=0.15)
+                          bottom=0.15, top=0.9)
         pt_kws = dict(color='0.4', ms=3,
                       zorder=-5, alpha=0.3,
                       rasterized=True, mec='none')
 
         with pt.style['onecol']():
-
-            m73f = np.array([1e-3, 10])
-            m73a = 0.1 * m73f ** (-7. / 3)
-            df = 2e-2
-            fstar_bins = np.arange(df, 10, df)
-            f = bd.freq
-            Cs = np.empty_like(fstar_bins)
-            Cs2 = np.empty_like(fstar_bins)
-            kaimal = 14 / (1 + 9.6 * fstar_bins) ** (2.4)
-            inds = np.abs(bd.u) > 1
-            #inds = bd.u < -1
-            Uhor = np.abs(bd.U[inds])
-            fstar = f * z / Uhor[:, None]
-            ustar2 = np.sqrt(bd.upwp_[inds]**2 + bd.vpwp_[inds]**2)
-            Cdata = (-np.sign(bd['u'][inds][:, None]) *
-                     bd['Cspec_vel'][1][inds].real *
-                     Uhor[:, None] / (ustar2[:, None] * z))
-            Cdata2 = Cdata * fstar
-            for idx, fb in enumerate(fstar_bins):
-                itmp = (fb - (df / 2) < fstar) & (fstar < fb + (df / 2))
-                Cs[idx] = Cdata[itmp].mean()
-                Cs2[idx] = Cdata2[itmp].mean()
 
             fig, ax = pt.newfig(1000 * idat + 203,
                                 1, 1, **newfig_kws)
@@ -351,8 +364,10 @@ for idat, dat_nm in enumerate(do_data):
             ax.set_xlabel('$\hat{f}$')
             ax.legend(loc='lower left',
                       prop=dict(size='small'), numpoints=1)
+            ax.set_title(ttl)
 
-            fig.savefig(pt.figdir + 'CoSpecND_Log01.pdf', dpi=200)
+            fig.savefig(pt.figdir + 'CoSpecND_Log01-{}.pdf'.format(case),
+                        dpi=200)
 
             fig, ax = pt.newfig(1000 * idat + 213,
                                 1, 1, **newfig_kws)
@@ -371,14 +386,16 @@ for idat, dat_nm in enumerate(do_data):
             ax.set_xlabel('$\hat{f}$')
             ax.legend(loc='lower left',
                       prop=dict(size='small'), numpoints=1)
+            ax.set_title(ttl)
             # z = 10
             # kaimal = 14 / (1 + 9.6 * fstar) ** (2.4)
             # kaimal *= -1 * z * ustar2 / Uhor
             # axs[1, icol].plot(f, kaimal, 'm-', lw=5)
             # fig.savefig('NonDim_CoSpecLog01.pdf')
-            fig.savefig(pt.figdir + 'CoSpecND_Lin01.pdf', dpi=200)
-            
-        
+            fig.savefig(pt.figdir + 'CoSpecND_Lin01-{}.pdf'.format(case),
+                        dpi=200)
+
+
 
             
     if flag.get('multi-ogive'):

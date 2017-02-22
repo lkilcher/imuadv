@@ -18,10 +18,12 @@ flag['uw-real'] = True
 binners = dict(ttm=avm.TurbBinner(9600, 32),
                sm=avm.TurbBinner(4800, 16))
 pii = 2 * np.pi
+kappa = 0.4
 
 if 'bdat' not in vars():
     bdat = {}
     bdat['ttm'] = j14.load('ttm02b-top', 'pax', bin=True)
+    bdat['ttmb'] = j14.load('ttm02b-bottom', 'pax', bin=True)
     bdat['sm'] = smdat.load('SMN-5s', bindat=True)
     bdat['ttt'] = avm.load('/Users/lkilcher/data/pnnl/TTT_Vector_Feb2011_pax_b5m.h5')
     for nnm, onm in [('Cspec_vel', 'Cspec_u'),
@@ -33,6 +35,14 @@ if 'bdat' not in vars():
             bdat['sm'].add_data(nnm,
                                 bdat['sm'].pop_data(onm),
                                 'spec')
+    bdat['ttm'].dudz = (bdat['ttm'].u - bdat['ttmb'].u) / 0.5
+    bdat['ttm'].dvdz = (bdat['ttm'].v - bdat['ttmb'].v) / 0.5
+    bdat['ttm'].ustar2 = np.sqrt(bdat['ttm'].upwp_ ** 2 +
+                                 bdat['ttm'].vpwp_ ** 2)[:, None]
+    bdat['ttm'].S2 = bdat['ttm'].dudz ** 2 + bdat['ttm'].dvdz ** 2
+    bdat['ttm'].z = 10
+    bdat['sm'].z = 10
+    bdat['ttt'].z = 4.6
 
 pt.twocol()
 pairs = [(0, 1), (0, 2), (1, 2)]
@@ -264,7 +274,6 @@ for idat, dat_nm in enumerate(do_data):
 
             Uhor = np.abs(bd.U[inds]).mean()
             ustar2 = np.sqrt(bd.upwp_[inds]**2 + bd.vpwp_[inds]**2).mean()
-            z = 10
             fstar = f * z / Uhor
             kaimal = 14 / (1 + 9.6 * fstar) ** (2.4)
             kaimal *= -1 * z * ustar2 / Uhor
@@ -319,22 +328,60 @@ for idat, dat_nm in enumerate(do_data):
         else:
             raise Exception("Invalid case.")
 
-        def ndcs(dat, inds, z):
+        plt.figure(65)
+        plt.clf()
+        plt.hist(np.log10(bd.u[inds] ** 2 / bd.dudz[inds] ** 2))
+        factor = (bd.u[inds] ** 2 / bd.dudz[inds] ** 2).mean()
+        utmp = np.array([1, 3])
+        # plt.loglog(bd.u[inds] ** 2, bd.dudz[inds] ** 2, 'k.')
+        # plt.loglog(utmp ** 2, utmp ** 2 / factor, 'k--')
+
+        def ndcs(dat, inds):
+            z = dat.z
             Uhor = np.abs(dat.U[inds])[:, None]
             fstar = dat.freq * z / Uhor
             ustar2 = np.sqrt(dat.upwp_[inds] ** 2 +
                              dat.vpwp_[inds] ** 2)[:, None]
+            # ustar2 = np.abs(dat.upwp_[inds])[:, None]
             Cdata = (-np.sign(dat.u[inds][:, None]) *
                      dat['Cspec_vel'][1][inds].real *
                      Uhor / (ustar2 * z))
             return Cdata, fstar
 
-        def bin_cospec(Cdin, fsin, fstar_bins):
-            df = fstar_bins[1] - fstar_bins[0]
-            assert (df - np.diff(fstar_bins) < 1e-6).all()
-            Cs = np.empty_like(fstar_bins)
-            for idx, fb in enumerate(fstar_bins):
-                itmp = (fb - (df / 2) < fsin) & (fsin < fb + (df / 2))
+        # def ndcs(dat, inds):
+        #     z = dat.z
+        #     Uhor = np.abs(dat.U[inds])[:, None]
+        #     fstar = dat.freq * z / Uhor
+        #     #ustar2 = (kappa * z) ** 2 * dat.S2[inds, None]
+        #     ustar2 = (kappa * z * dat.dudz[inds, None]) ** 2
+        #     Cdata = (-np.sign(dat.u[inds][:, None]) *
+        #              dat['Cspec_vel'][1][inds].real *
+        #              Uhor / (ustar2 * z))
+        #     return Cdata, fstar
+
+        # def ndcs(dat, inds):
+        #     z = dat.z
+        #     Uhor = np.abs(dat.U[inds])[:, None]
+        #     fstar = dat.freq * z / Uhor
+        #     # The 0.0659 is from a fit of dudz to u.
+        #     ustar2 = dat.u[inds, None] ** 2 / 77400.
+        #     # ustar2 = (0.005 * dat.u[inds, None]) ** 2
+        #     ustar2 *= (kappa * z) ** 2
+        #     Cdata = (-np.sign(dat.u[inds][:, None]) *
+        #              dat['Cspec_vel'][1][inds].real *
+        #              Uhor / (ustar2 * z))
+        #     return Cdata, fstar
+
+        def bin_cospec(Cdin, fsin, fbins):
+            nb = len(fbins)
+            df = np.diff(fbins)
+            fbe = np.empty(nb + 1)
+            fbe[1:-1] = fbins[:-1] + df / 2
+            fbe[0] = fbins[0] - df[0] / 2
+            fbe[-1] = fbins[-1] + df[-1] / 2
+            Cs = np.empty_like(fbins)
+            for idx in range(nb):
+                itmp = (fbe[idx] < fsin) & (fsin < fbe[idx + 1])
                 Cs[idx] = Cdin[itmp].mean()
             return Cs
 
@@ -342,16 +389,18 @@ for idat, dat_nm in enumerate(do_data):
         m73a = 0.1 * m73f ** (-7. / 3)
         df = 2e-2
         fstar_bins = np.arange(df, 10, df)
-        Cdata, fstar = ndcs(bd, inds, z)
+        #fstar_bins = np.logspace(-2, 1, 50)
+        kaimal = 14.0 / (1 + 9.6 * fstar_bins) ** (2.4)
+        Cdata, fstar = ndcs(bd, inds)
         Cs = bin_cospec(Cdata, fstar, fstar_bins)
         Cs2 = Cs * fstar_bins
         if add_ttt:
-            z_ttt = 3
+            #z_ttt = 4.6
             #z_ttt = 10  # This gives better agreement, but why?
             # Is this b/c of shear?
             tmp = bdat['ttt']
             tmp_inds = np.abs(bdat['ttt'].u) > 1
-            Cdttt, fsttt = ndcs(tmp, tmp_inds, z_ttt)
+            Cdttt, fsttt = ndcs(tmp, tmp_inds)
             Cs_ttt = bin_cospec(Cdttt, fsttt, fstar_bins)
             Cs2_ttt = Cs_ttt * fstar_bins
 
@@ -370,8 +419,10 @@ for idat, dat_nm in enumerate(do_data):
                                  2, 1, **newfig_kws)
 
             ax = axs[1]
+            # ax.loglog(fstar_bins, np.abs(Cs), 'b-', lw=1,
+            #           label='Avg.')
             ax.loglog(fstar_bins, Cs, 'b-', lw=2,
-                      label='Avg.')
+                      label='Avg.',)
             ax.loglog(fstar.flatten(), Cdata.flatten(),
                       '.', label='single',
                       **pt_kws)
@@ -383,7 +434,7 @@ for idat, dat_nm in enumerate(do_data):
             ax.loglog(fstar_bins, kaimal, 'k-', lw=2, zorder=-2,
                       label='Kaimal')
             ax.set_xlim([1e-2, 10])
-            ax.set_ylim([1e-4, 10])
+            ax.set_ylim([1e-4, 30])
             # z = 10
             ax.set_ylabel('$\hat{C}\{u,w\}$')
             ax.set_xlabel('$\hat{f}$')

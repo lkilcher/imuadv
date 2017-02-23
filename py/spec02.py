@@ -2,6 +2,8 @@ import ttm.June2014 as j14
 import ptools as pt
 import numpy as np
 plt = pt.plt
+import kaimal
+
 
 flag = {}
 
@@ -12,15 +14,16 @@ flag['multi spec'] = True
 #flag['epsVu02'] = True
 #flag['multi spec norm'] = True
 #flag['multi spec norm2'] = True
+flag['add Kaimal'] = True
 
 vard = dict(
-    Spec_umot=dict(color='r', lw=1.5, zorder=1,
-                   label=pt.latex['uhead'].spec,
-                   noise=np.zeros(3),
+    Spec_velmot=dict(color='r', lw=1.5, zorder=1,
+                     label=pt.latex['uhead'].spec,
+                     noise=np.zeros(3),
     ),
-    Spec_uraw=dict(color='k', zorder=2,
-                   label=pt.latex['umeas'].spec,
-                   noise=[1.5e-4, 1.5e-4, 1.5e-5, ],
+    Spec_velraw=dict(color='k', zorder=2,
+                     label=pt.latex['umeas'].spec,
+                     noise=[1.5e-4, 1.5e-4, 1.5e-5, ],
     ),
     Spec=dict(color='b', lw=1.5, zorder=3,
               label=pt.latex['ue'].spec,
@@ -36,6 +39,9 @@ lscale = [3.8, 3.8, 1.4]
 if 'dat' not in vars():
     dat = j14.load('ttm02b-top', 'pax',
                    bin=True)
+
+specnd = kaimal.Kaimal(np.logspace(-3, 4, 1000))
+z_adv = 10
 
 if flag.get('multi spec'):
     with pt.style['twocol']():
@@ -53,6 +59,7 @@ if flag.get('multi spec'):
             vr = velranges[icol]
             umag = np.abs(dat.u)
             inds = (vr[0] < umag) & (umag < vr[1])
+            ustar2 = (dat.stress[1:] ** 2).sum(0)[inds].mean() ** 0.5
             axs[-1, icol].set_xlabel('$f\ \mathrm{[Hz]}$')
             if vr[0] == 0:
                 axs[0, icol].set_title(r"$ |\bar{u}| < %0.1f$" % vr[1],
@@ -71,12 +78,12 @@ if flag.get('multi spec'):
                 for fctr in [1, 1e-2, 1e-4, 1e-6, 1e-8]:
                     ax.loglog(*pt.powline(factor=fctr), linewidth=0.6,
                               linestyle=':', zorder=-6, color='k')
-                for v in ['Spec', 'Spec_umot', 'Spec_uraw', ]:
+                for v in ['Spec', 'Spec_velmot', 'Spec_velraw', ]:
                     # The col-row-var loop
                     kwd = vard[v].copy()
                     n = kwd.pop('noise')[irow]
                     dnow = dat[v][irow, inds].mean(0) * pt.pii - n
-                    if v == 'Spec_umot':
+                    if v == 'Spec_velmot':
                         _itmp = dat.freq < filtfreq
                         ax.loglog(dat.freq[~_itmp], dnow[~_itmp], **kwd)
                         kwd['linestyle'] = '--'
@@ -84,6 +91,10 @@ if flag.get('multi spec'):
                         ax.loglog(dat.freq[_itmp], dnow[_itmp], **kwd)
                     else:
                         ax.loglog(dat.freq, dnow, **kwd)
+                if flag['add Kaimal'] and specnd[irow] is not None:
+                    f0 = np.abs(dat.U[inds]).mean() / z_adv
+                    ax.plot(specnd.freq * f0, specnd[irow] * ustar2 / f0, 'c-',
+                            label='Kaimal', zorder=5)
         for irow in range(axs.shape[0]):
             # The col-only loop
             axs[irow, 0].set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')
@@ -102,24 +113,24 @@ if flag.get('multi spec'):
         fig.savefig(pt.figdir + 'SpecFig02_TTM02B-top.pdf')
 
 if flag.get('multi spec norm'):
+
     with pt.style['twocol']():
 
         velranges = [(0, 0.5),
                      (1, 1.5),
                      (2, 2.5)]
 
-        fig, axs = pt.newfig(101, 3, len(velranges),
+        fig, axs = pt.newfig(110, 3, len(velranges),
                              figsize=5,
                              right=0.86, bottom=0.1,
                              sharex=True, sharey=True)
-        z = 10
         for icol in range(axs.shape[1]):
             vr = velranges[icol]
-            umag = np.abs(dat.u)
+            umag = np.abs(dat.U)
             #umag = dat.u
             inds = (vr[0] < umag) & (umag < vr[1])
             U = umag[inds].mean()
-            ustar2 = (dat.stress[:2] ** 2).mean(0)[inds].mean() ** 0.5
+            ustar2 = (dat.stress[1:, inds] ** 2).sum(0).mean() ** 0.5
             axs[-1, icol].set_xlabel('$f\ \mathrm{[Hz]}$')
             if vr[0] == 0:
                 axs[0, icol].set_title(r"$ |\bar{u}| < %0.1f$" % vr[1],
@@ -136,12 +147,12 @@ if flag.get('multi spec norm'):
                 for fctr in [1, 1e-2, 1e-4, 1e-6, 1e-8]:
                     ax.loglog(*pt.powline(factor=fctr), linewidth=0.6,
                               linestyle=':', zorder=-6, color='k')
-                for v in ['Spec', 'Spec_umot', 'Spec_uraw', ]:
+                for v in ['Spec', 'Spec_velmot', 'Spec_velraw', ]:
                     # The col-row-var loop
                     kwd = vard[v].copy()
                     n = kwd.pop('noise')[irow]
                     spec = dat[v][irow, inds].mean(0) * pt.pii - n
-                    f0 = U / z
+                    f0 = U / z_adv
                     spec *= f0 / ustar2
                     freq = dat.freq / f0
                     ax.loglog(freq, spec, **kwd)
@@ -153,11 +164,14 @@ if flag.get('multi spec norm'):
                                transform=axs[irow, -1].transAxes, clip_on=False)
             #                    ha='left', va='bottom', fontsize='medium',
             #                    transform=axs[irow, -1].transAxes, clip_on=False)
-
+            for icol in range(axs.shape[1]):
+                ax = axs[irow, icol]
+                if specnd[irow] is not None:
+                    ax.plot(specnd.freq, specnd[irow], 'c-')
         axs[0, -1].legend(loc='upper left', bbox_to_anchor=[1.02, 1.0],
                           handlelength=1.4, handletextpad=0.4,
                           prop=dict(size='medium'))
-        ax.set_ylim((1e-4, 1))
+        ax.set_ylim((1e-2, 100))
         ax.set_xlim((1e-3, 5))
 
         fig.savefig(pt.figdir + 'SpecFig03_TTM02B-top.pdf')
@@ -188,13 +202,12 @@ if flag.get('multi spec norm2'):
                     fout[idx] = fp[inds].mean()
             return fout
 
-        z = 10
         ustar2 = np.sqrt((dat.stress[:2] ** 2).mean(0))
         U = np.abs(dat.U)
         noise = np.array(vard['Spec']['noise'])[:, None, None]
         specnd = ((dat.Spec * pt.pii - noise) *
-                  U[None, :, None] / (z * ustar2[None, :, None]))
-        freqnd = dat.freq[None, None, :] / (U[None, :, None] / z)
+                  U[None, :, None] / (z_adv * ustar2[None, :, None]))
+        freqnd = dat.freq[None, None, :] / (U[None, :, None] / z_adv)
         fnd = np.logspace(-3, 0, 1000)
         snd = np.empty(list(specnd.shape[:2]) + [len(fnd)], dtype=np.float32)
         for i0 in range(snd.shape[0]):

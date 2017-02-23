@@ -1,6 +1,7 @@
 import numpy as np
 import ptools as pt
 import make_SMdata_wBT as smdat
+import kaimal
 
 flag = {}
 #flag['bt_basic_time'] = True
@@ -8,7 +9,8 @@ flag = {}
 #flag['bt_filt_spec'] = True
 #flag['all spec'] = True
 flag['multi spec'] = True
-#flag['save figs'] = True
+flag['save figs'] = True
+flag['add Kaimal'] = True
 
 pii = 2 * np.pi
 
@@ -40,6 +42,9 @@ filtfreq = filt_freqs['5s']
 if 'unfilt' in dat_filt:
     bindat_filt['unfilt']['_u'] = bindat_filt['5s']['_u']
     dat_filt['unfilt']['_u'] = dat_filt['5s']['_u']
+
+specnd = kaimal.Kaimal(np.logspace(-3, 4, 1000))
+z_adv = 10
 
 
 def offset_scale(dat, offset, scale, ):
@@ -263,6 +268,7 @@ if flag.get('multi spec'):
             vr = velranges[icol]
             umag = np.abs(dnow.u)
             inds = (vr[0] < umag) & (umag < vr[1])
+            ustar2 = (dnow.stress[1:] ** 2).sum(0)[inds].mean() ** 0.5
             axs[-1, icol].set_xlabel('$f\ \mathrm{[Hz]}$')
             if vr[0] == 0:
                 axs[0, icol].set_title(r"$ |\bar{u}| < %0.1f$" % vr[1],
@@ -287,6 +293,13 @@ if flag.get('multi spec'):
                     n = kwd.pop('noise')[irow]
                     ax.loglog(dnow.freq, dnow[v][irow, inds].mean(0) * pii - n,
                               **kwd)
+                if flag['add Kaimal'] and specnd[irow] is not None:
+                    umag = np.abs(dnow.U[inds]).mean()
+                    f0 = umag / z_adv
+                    #print ustar2, umag, f0, ustar2 / f0
+                    ax.plot(specnd.freq * f0, specnd[irow] * ustar2 / f0, 'c-',
+                            label='Kaimal', zorder=5)
+
         for irow in range(axs.shape[0]):
             # The row-only loop
             axs[irow, 0].set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')

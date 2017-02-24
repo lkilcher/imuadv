@@ -13,7 +13,7 @@ flag = {}
 #flag['multi-real'] = True
 #flag['multi-real-vp'] = True
 flag['multi-real-vp1'] = True
-#flag['uw-real'] = True
+flag['uw-real'] = True
 #flag['multi-ogive'] = True
 flag['save fig'] = True
 
@@ -321,7 +321,7 @@ for idat, dat_nm in enumerate(do_data):
             fig, axs = pt.newfig(1000 * idat + 103,
                                  3, len(velranges),
                                  figsize=5.6,
-                                 squeeze=False, 
+                                 squeeze=False,
                                  sharex=True, sharey=True,
                                  right=0.7, left=0.15,
                                  hspace=0.15,
@@ -331,31 +331,22 @@ for idat, dat_nm in enumerate(do_data):
             for icol, vr in enumerate(velranges):
                 axcol = axs[:, icol]
                 inds = (vr[0] < bd['u']) & (bd['u'] < vr[1])
-                # U = bd['u'][inds].mean() + 1j * bd['']
-                # kaimal = 
+                ustar2 = np.sqrt(bd.upwp_[inds]**2 + bd.vpwp_[inds]**2).mean()
+                f0 = np.abs(bd.U[inds]).mean() / bd.z
+                kml = kaimal.Kaimal(bd.freq / f0)
+
                 axs[0, icol].text(.9, .9, 'N={}'.format(inds.sum()),
                                   ha='right', va='top', fontsize='medium',
                                   transform=axs[0, icol].transAxes)
                 axs[0, icol].set_title(r"$%0.1f < \bar{u} < %0.1f$" % vr,
                                        fontsize='medium')
                 for irow, ax in enumerate(axcol):
-                    # r"$\overline{%s'%s'}=$%0.0e" % (pt.vel_comps[pairs[irow][0]],
-                    #                                 pt.vel_comps[pairs[irow][1]],
-                    #                                 np.trapz(dtmp, f), ),
                     dtmp = bd.Cspec_vel[irow][inds].real * pii * f * fctr
-                    # rng = np.empty((2, dtmp.shape[1]))
-                    # for ifrq in range(dtmp.shape[1]):
-                    #     rng[0, ifrq], mid, rng[1, ifrq] = pt.boot(dtmp[:, ifrq])
                     ax.semilogx(f, dtmp.mean(0), 'b-',
                                 label=pt.latex['ue'].cspec_vp)
                     rng = (dtmp.std(0)[None, :] * np.array([[-1], [1]]) + dtmp.mean(0))
                     ax.fill_between(f, rng[0], rng[1], zorder=-12,
                                     facecolor=[0, 0, 1, 0.3], edgecolor='none')
-                    # ax.semilogx(f, dtmp.T * pii, '-', color='0.7', zorder=-10)
-                    # ax.text(.94, .06,
-                    #         r"%2.1f" % (np.trapz(dtmp.mean(0) / f, f), ),
-                    #         ha='right', va='bottom',
-                    #         transform=ax.transAxes)
                     dtmp = bd.Cspec_velmot[irow][inds].real * pii * f * fctr
                     itmp = f < 0.0333
                     ax.semilogx(f[itmp], dtmp.mean(0)[itmp], 'r--',
@@ -367,28 +358,21 @@ for idat, dat_nm in enumerate(do_data):
                                 label=pt.latex['umeas'].cspec_vp)
                     ax.axhline(0, color='k', linestyle=':', zorder=-5, lw=1)
                     ax.axvline(0.03, color='r', ls=':', zorder=-10)
+                    if irow == 1:
+                        ax.plot(bd.freq,
+                                -bd.freq * kml.Suw() * ustar2 / f0 * fctr,
+                                color='c', label='Kaimal')
 
             axs[0, -1].legend(loc='upper left', bbox_to_anchor=[1.05, 1],
                               borderaxespad=0, prop=dict(size='medium'),
                               handletextpad=0.2, handlelength=1.3)
 
             axs[0, 0].set_ylim([-3, 3])
-            # axs[0, 1].set_ylim([-np.pi, np.pi])
             axs[0, 0].set_xlim(1e-3, 5)
             for icol in range(axs.shape[1]):
                 axs[-1, icol].set_xlabel(r'$f\ \mathrm{[Hz]}$')
             for irow in range(axs.shape[0]):
-                # axs[irow, 0].set_ylabel('$f \cdot C\{%s,%s\} '
-                #                         '[10^{-3}\mathrm{m^2s^{-2}}]$' %
-                #                         (pt.vel_comps[pairs[irow][0]],
-                #                          pt.vel_comps[pairs[irow][1]]))
                 axs[irow, 0].set_ylabel('$[10^{-2}\,\mathrm{m^2s^{-2}}]$')
-                # axs[irow, -1].text(1.06, 0.03,
-                #                    r'$f \cdot C\{%s,%s\}$' % (
-                #                        pt.vel_comps[pairs[irow][0]],
-                #                        pt.vel_comps[pairs[irow][1]]),
-                #                    ha='left', va='bottom',
-                #                    transform=axs[irow, -1].transAxes)
                 axs[irow, -1].text(1.05, .1,
                                    r'$f \cdot C\{%s,%s\}$' % (
                                        pt.vel_comps[pairs[irow][0]],

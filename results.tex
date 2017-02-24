@@ -25,7 +25,7 @@ As discussed in detail in Part 1, the mooring motion of the TTM, $\spec{\uhead}$
 
 The mooring motion contaminates the uncorrected ADV measurements of velocity, $\spec{\umeas}$, whenever the amplitude of the motion is similar to or greater than the amplitude of the turbulence. Fortunately, much of this motion can be removed using the IMU's motion signals as detailed in Section \ref{sec:methods}. Lacking an independent measurement of turbulence velocity at this site, we interpret the agreement of these spectra with turbulence theory as evidence that motion correction has improved the velocity measurements. In particular, at high frequencies ($f>0.3$ Hz) for each mean-flow speed, the spectra decay with a $f^{-5/3}$ slope and have equal amplitude across the velocity components. These results are consistent with \citeauthor{Kolmogorov1941c}'s (1941) theory of isotropic turbulence, and are consistent with the semi-empirical spectral form of \cite{Kaimal++1972}, and other earlier measurements of turbulence in energetic tidal channels from stationary platforms \cite[]{Walter++2011, Thomson++2012, McMillan++2016}.
 
-The degree of agreement between Kaimal's theoretical form \cite[][]{Walter++2011}, and these measurements is encouraging, especially considering that $\ustar$ is estimated at the height of the measurement (10 m) rather than at the seafloor. This suggests that bottom-boundary layer physics are contributing to the turbulence at this site and depth, 10 m above the seafloor.
+The degree of agreement between Kaimal's theoretical form and these measurements is similar to that of \cite{Walter++2011}. This is an encouraging result, especially considering that $\ustar$ is estimated at the height of the measurement (10 m) rather than at the seafloor. This suggests that bottom-boundary layer physics are contributing to the turbulence at this site and depth.
 
 For $|\ue|>1.0$, motion correction modifies the $u$ and $v$ component spectra at frequencies as high as 3 Hz. This outcome indicates that in order for motion correction to be effective, synchronization between the ADV and IMU needs to be within 1/3 s or better. This suggests that asynchronous approaches to motion correction may be challenging, especially considering that the clock drift of some instrumentation can be as high as a few seconds per day. By integrating the IMU data into the ADV data stream, the Nortek ADV-IMU achieves a synchronization to within 1e-2 s. 
 
@@ -55,13 +55,7 @@ Spectra of SMB motion have broader peaks, with a maximum amplitude that is appro
 
 Like the TTM, the motion-corrected spectra from the SMB are consistent with turbulence theory and previous observations. Most importantly, there is an improvement in the quality of the motion-corrected spectra compared to the TTM. In particular, the persistent motion contamination peaks are completely removed. That is, this measurement system provides an accurate estimate of the turbulence spectra at this location from low frequencies to more than 1 Hz---well into the inertial subrange---for all three components of velocity.
 
-Note that this level of accuracy cannot be obtained without the independent estimate of $\ulow$. If we assume that $\ulow=0$, a similar plot to Figure \ref{fig:spec:sm} (not shown) reveals persistent motion-contamination peaks and troughs in the $u$ and $v$ spectra regardless of the choice of $f_a$. This assumption indicates that the low-frequency motion of the SMB is below a threshold in which the IMU's signal-to-noise ratio is high enough to resolve its motion. In other words, compared to the TTM, the SMB provides a more accurate measurement of turbulence when it includes an independent measure of $\ulow$ (here a bottom-tracking ADCP), but it does no better---and perhaps worse---when it does not.
-% * <sheri> 2016-10-21T00:00:00.000Z:
-%
-% Please define "ADCP" in the last sentence in the above paragraph - and put the acronym in parentheses after the definition.
-%
-% ^.
-
+Note that this level of accuracy cannot be obtained without the independent estimate of $\ulow$. If we assume that $\ulow=0$, a similar plot to Figure \ref{fig:spec:sm} (not shown) reveals persistent motion-contamination peaks and troughs in the $u$ and $v$ spectra regardless of the choice of $f_a$. This assumption indicates that the low-frequency motion of the SMB is below a threshold in which the IMU's signal-to-noise ratio is high enough to resolve its motion. In other words, compared to the TTM, the SMB provides a more accurate measurement of turbulence when it includes an independent measure of $\ulow$ (here a bottom-tracking ADP), but it does no better---and perhaps worse---when it does not.
 
 \subsection{Torpedo spectra}
 

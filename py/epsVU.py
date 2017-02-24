@@ -162,7 +162,7 @@ if flag.get('epsVu both'):
                 inds = [gt(0.6), lt(-0.6)][iax](d.u) & ~np.isnan(d.epsilon)
                 if ky == 'sm':
                     marker = 'o'
-                    label = 'SM'
+                    label = 'SMB'
                 elif ky == 'ttm':
                     marker = 'D'
                     label = 'TTM'

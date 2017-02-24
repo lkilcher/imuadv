@@ -13,7 +13,8 @@ flag = {}
 #flag['multi-real'] = True
 #flag['multi-real-vp'] = True
 #flag['multi-real-vp1'] = True
-flag['uw-real'] = True
+#flag['uw-real'] = True
+flag['uw-real1'] = True
 #flag['multi-ogive'] = True
 flag['save fig'] = True
 
@@ -483,6 +484,84 @@ for idat, dat_nm in enumerate(do_data):
             axs[0].set_title(ttl)
 
             fig.savefig(pt.figdir + 'CoSpecND02_{}-{}.pdf'.format(
+                dat_nm.upper(), case),
+                dpi=200)
+
+    if flag.get('uw-real1'):
+
+        case = 'ebb'
+        case = 'flood'
+        case = 'both'
+        add_ttt = True
+        if case == 'ebb':
+            inds = bd.u > 1.5
+            ttl = r'Ebb ($\bar{u} > 1.5\,\mathrm{ms^{-1}}$)'
+        elif case == 'flood':
+            inds = bd.u < -1.5
+            ttl = r'Flood ($\bar{u} < -1.5\,\mathrm{ms^{-1}}$)'
+        elif case == 'both':
+            inds = np.abs(bd.U) > 1.0
+            ttl = r'$|\bar{U}| > 1\,\mathrm{ms^{-1}}$'
+        else:
+            raise Exception("Invalid case.")
+
+        m73f = np.array([1e-3, 10])
+        m73a = 0.1 * m73f ** (-7. / 3)
+        df = 4e-2
+        fstar_bins = np.arange(0.02, 10, df)
+        #fstar_bins = np.logspace(-1.7, 1, 50)
+        gd_f = np.ones(len(bd.freq), dtype='bool')
+        #gd_f = (bd.freq < 0.1) | (bd.freq > 0.3)
+        kml = kaimal.Kaimal(fstar_bins)
+        Cdata, fstar = kaimal.nd_cospec(bd, inds)
+        Cs = kaimal.bin_cospec(Cdata[:, gd_f], fstar[:, gd_f], fstar_bins)
+        Cs2 = Cs * fstar_bins
+        if add_ttt:
+            #z_ttt = 4.6
+            #z_ttt = 10  # This gives better agreement, but why?
+            # Is this b/c of shear?
+            tmp = bdat['ttt']
+            tmp_inds = np.abs(bdat['ttt'].u) > 1
+            Cdttt, fsttt = kaimal.ndcs(tmp, tmp_inds)
+            Cs_ttt = kaimal.bin_cospec(Cdttt, fsttt, fstar_bins)
+            Cs2_ttt = Cs_ttt * fstar_bins
+
+        newfig_kws = dict(figsize=3,
+                          sharex=True, sharey=False,
+                          right=0.95, left=0.2,
+                          bottom=0.15, top=0.92,
+                          hspace=0.13)
+        pt_kws = dict(color='0.4', ms=3,
+                      zorder=-20, alpha=0.3,
+                      rasterized=True, mec='none')
+
+        with pt.style['onecol']():
+
+            fig, ax = pt.newfig(1000 * idat + 204,
+                                 1, 1, **newfig_kws)
+
+            ax.loglog(fstar_bins, Cs, 'b-', lw=2,
+                      label='Avg.',)
+            ax.loglog(fstar.flatten(), Cdata.flatten(),
+                      '.', label='single',
+                      **pt_kws)
+            if add_ttt:
+                ax.loglog(fstar_bins, Cs_ttt, 'm-', lw=1,
+                          label='TTT', zorder=-10)
+            ax.loglog(m73f, m73a, 'r--', lw=2,
+                      label='$\hat{f}^{-7/3}$')
+            ax.loglog(fstar_bins, kml.Suw(), 'k-', lw=2, zorder=-2,
+                      label='Kaimal')
+            ax.set_xlim([1e-2, 10])
+            ax.set_ylim([1e-4, 30])
+            ax.set_ylabel('$\hat{C}\{u,w\}$')
+            ax.legend(loc='lower left',
+                      prop=dict(size='small'), numpoints=1)
+
+            ax.set_xlabel('$\hat{f}$')
+            ax.set_title(ttl)
+
+            fig.savefig(pt.figdir + 'CoSpecND03_{}-{}.pdf'.format(
                 dat_nm.upper(), case),
                 dpi=200)
 

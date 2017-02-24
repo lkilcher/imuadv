@@ -12,7 +12,7 @@ flag = {}
 # flag['real/imag'] = True
 #flag['multi-real'] = True
 #flag['multi-real-vp'] = True
-flag['multi-real-vp1'] = True
+#flag['multi-real-vp1'] = True
 flag['uw-real'] = True
 #flag['multi-ogive'] = True
 flag['save fig'] = True
@@ -358,10 +358,10 @@ for idat, dat_nm in enumerate(do_data):
                                 label=pt.latex['umeas'].cspec_vp)
                     ax.axhline(0, color='k', linestyle=':', zorder=-5, lw=1)
                     ax.axvline(0.03, color='r', ls=':', zorder=-10)
-                    if irow == 1:
-                        ax.plot(bd.freq,
-                                -bd.freq * kml.Suw() * ustar2 / f0 * fctr,
-                                color='c', label='Kaimal')
+                    # if irow == 1:
+                    #     ax.plot(bd.freq,
+                    #             -bd.freq * kml.Suw() * ustar2 / f0 * fctr,
+                    #             color='c', label='Kaimal')
 
             axs[0, -1].legend(loc='upper left', bbox_to_anchor=[1.05, 1],
                               borderaxespad=0, prop=dict(size='medium'),
@@ -402,62 +402,13 @@ for idat, dat_nm in enumerate(do_data):
         else:
             raise Exception("Invalid case.")
 
-        plt.figure(65)
-        plt.clf()
-        plt.hist(np.log10(bd.u[inds] ** 2 / bd.dudz[inds] ** 2))
-        factor = (bd.u[inds] ** 2 / bd.dudz[inds] ** 2).mean()
-        utmp = np.array([1, 3])
-        # plt.loglog(bd.u[inds] ** 2, bd.dudz[inds] ** 2, 'k.')
-        # plt.loglog(utmp ** 2, utmp ** 2 / factor, 'k--')
-
-        def ndcs(dat, inds):
-            z = dat.z
-            Uhor = np.abs(dat.U[inds])[:, None]
-            fstar = dat.freq * z / Uhor
-            ustar2 = np.sqrt(dat.upwp_[inds] ** 2 +
-                             dat.vpwp_[inds] ** 2)[:, None]
-            # ustar2 = np.abs(dat.upwp_[inds])[:, None]
-            Cdata = (-np.sign(dat.u[inds][:, None]) *
-                     dat['Cspec_vel'][1][inds].real *
-                     Uhor / (ustar2 * z))
-            return Cdata, fstar
-
-        # def ndcs(dat, inds):
-        #     z = dat.z
-        #     Uhor = np.abs(dat.U[inds])[:, None]
-        #     fstar = dat.freq * z / Uhor
-        #     #ustar2 = (kappa * z) ** 2 * dat.S2[inds, None]
-        #     ustar2 = (kappa * z * dat.dudz[inds, None]) ** 2
-        #     Cdata = (-np.sign(dat.u[inds][:, None]) *
-        #              dat['Cspec_vel'][1][inds].real *
-        #              Uhor / (ustar2 * z))
-        #     return Cdata, fstar
-
-        # def ndcs(dat, inds):
-        #     z = dat.z
-        #     Uhor = np.abs(dat.U[inds])[:, None]
-        #     fstar = dat.freq * z / Uhor
-        #     # The 0.0659 is from a fit of dudz to u.
-        #     ustar2 = dat.u[inds, None] ** 2 / 77400.
-        #     # ustar2 = (0.005 * dat.u[inds, None]) ** 2
-        #     ustar2 *= (kappa * z) ** 2
-        #     Cdata = (-np.sign(dat.u[inds][:, None]) *
-        #              dat['Cspec_vel'][1][inds].real *
-        #              Uhor / (ustar2 * z))
-        #     return Cdata, fstar
-
-        def bin_cospec(Cdin, fsin, fbins):
-            nb = len(fbins)
-            df = np.diff(fbins)
-            fbe = np.empty(nb + 1)
-            fbe[1:-1] = fbins[:-1] + df / 2
-            fbe[0] = fbins[0] - df[0] / 2
-            fbe[-1] = fbins[-1] + df[-1] / 2
-            Cs = np.empty_like(fbins)
-            for idx in range(nb):
-                itmp = (fbe[idx] < fsin) & (fsin < fbe[idx + 1])
-                Cs[idx] = Cdin[itmp].mean()
-            return Cs
+        # plt.figure(65)
+        # plt.clf()
+        # plt.hist(np.log10(bd.u[inds] ** 2 / bd.dudz[inds] ** 2))
+        # factor = (bd.u[inds] ** 2 / bd.dudz[inds] ** 2).mean()
+        # utmp = np.array([1, 3])
+        # # plt.loglog(bd.u[inds] ** 2, bd.dudz[inds] ** 2, 'k.')
+        # # plt.loglog(utmp ** 2, utmp ** 2 / factor, 'k--')
 
         m73f = np.array([1e-3, 10])
         m73a = 0.1 * m73f ** (-7. / 3)
@@ -465,9 +416,8 @@ for idat, dat_nm in enumerate(do_data):
         fstar_bins = np.arange(df, 10, df)
         kml = kaimal.Kaimal(fstar_bins)
         #fstar_bins = np.logspace(-2, 1, 50)
-        kaimal = 14.0 / (1 + 9.6 * fstar_bins) ** (2.4)
-        Cdata, fstar = ndcs(bd, inds)
-        Cs = bin_cospec(Cdata, fstar, fstar_bins)
+        Cdata, fstar = kaimal.nd_cospec(bd, inds)
+        Cs = kaimal.bin_cospec(Cdata, fstar, fstar_bins)
         Cs2 = Cs * fstar_bins
         if add_ttt:
             #z_ttt = 4.6
@@ -475,8 +425,8 @@ for idat, dat_nm in enumerate(do_data):
             # Is this b/c of shear?
             tmp = bdat['ttt']
             tmp_inds = np.abs(bdat['ttt'].u) > 1
-            Cdttt, fsttt = ndcs(tmp, tmp_inds)
-            Cs_ttt = bin_cospec(Cdttt, fsttt, fstar_bins)
+            Cdttt, fsttt = kaimal.ndcs(tmp, tmp_inds)
+            Cs_ttt = kaimal.bin_cospec(Cdttt, fsttt, fstar_bins)
             Cs2_ttt = Cs_ttt * fstar_bins
 
         newfig_kws = dict(figsize=5,
@@ -528,7 +478,7 @@ for idat, dat_nm in enumerate(do_data):
             ax.set_xlim([1e-2, 10])
             ax.set_ylim([-1, 1])
             ax.set_ylabel('$\hat{f}\cdot \hat{C}\{u,w\}$')
-            
+
             axs[-1].set_xlabel('$\hat{f}$')
             axs[0].set_title(ttl)
 

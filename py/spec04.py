@@ -12,11 +12,11 @@ if 'bindat' not in vars():
     bindat = {}
 
 filters = {
-    '5m': 1. / 300,
-    '100s': 1. / 100,
-    '30s': 1. / 30,
-    '10s': 1. / 10,
-    '3s': 1. / 3,
+    '5m': 0.003,
+    '100s': 0.01,
+    '30s': 0.03,
+    '10s': 0.1,
+    '3s': 0.3,
 }
 
 velranges = [(0, 0.5),
@@ -66,7 +66,7 @@ with pt.style['twocol']():
                 # ax.loglog(freq,
                 #           bd['Spec_umot'][iax, inds].mean(0) * pt.pii,
                 #           linestyle=':', **kws)
-                ax.axvline(filt, color=kws['color'], linestyle='--',
+                ax.axvline(filt, color=kws['color'], linestyle=':',
                            alpha=0.5, zorder=-10)
             if vr[0] == 0:
                 axs[0, icol].set_title(r"$ |\bar{u}| < %0.1f$" % vr[1],
@@ -91,16 +91,16 @@ with pt.style['twocol']():
 
 
 pt_kws = {
-    '5m': dict(color='c',
-               zorder= -1, label='0.0033 Hz'),
+    '5m': dict(color='k',
+               zorder=-11, label='0.003 Hz', lw=5),
     '100s': dict(color='c', zorder=-2,
                  label='0.01 Hz'),
-    '30s': dict(color='k', lw=3, zorder=-10,
-                label='0.033 Hz'),
+    '30s': dict(color='b', lw=3, zorder=-10,
+                label='0.03 Hz'),
     '10s': dict(color='b', zorder=-4,
                 label='0.1 Hz'),
     '3s': dict(color='r', zorder=-5,
-               label='0.33 Hz')}
+               label='0.3 Hz', lw=1)}
 
 filts = [
     '5m',
@@ -134,7 +134,7 @@ with pt.style['onecol']():
             # ax.loglog(freq,
             #           bd['Spec_umot'][iax, inds].mean(0) * pt.pii,
             #           linestyle=':', **kws)
-            ax.axvline(filt, color=kws['color'], linestyle='--',
+            ax.axvline(filt, color=kws['color'], linestyle=':',
                        alpha=0.5, zorder=-10)
         if vr[0] == 0:
             axs[0].set_title(r"$ |\bar{u}| < %0.1f$" % vr[1],

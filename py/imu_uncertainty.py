@@ -24,9 +24,10 @@ binner = avm.TurbBinner(9600, 32, )
 var_accel_screen_level = 2e-4
 
 mcfilts = {'unfiltered': 0.0,
-           '30s': 1. / 30,
-           '10s': 1. / 10,
-           '5s': 1. / 5, }
+           '5m': 0.003,
+           '30s': 0.03,
+           '10s': 0.01,
+           '3s': 0.3, }
 
 if 'dmot' not in vars():
     dmot = avm.load(sm15.package_root + 'ADVs/TTM_NREL03_May2015_pax_b5m_VELMOOR.h5')
@@ -46,7 +47,8 @@ if 'rd' not in vars():
 if 'bindatmc' not in vars():
     bindatmc = {}
 
-    for filt_tag, filt_freq in mcfilts.iteritems():
+for filt_tag, filt_freq in mcfilts.iteritems():
+    if filt_tag not in bindatmc:
         mcdat = rd.copy()
         avm.motion.correct_motion(mcdat, accel_filtfreq=filt_freq)
 
@@ -140,7 +142,7 @@ if flag.get('plot_spec3', False):
     #         'k--', zorder=-5)
     ax.fill_between(line_f, line_high, line_low, facecolor='0.8',
                     edgecolor='none',
-                    linewidth=0.5, zorder=-8, linestyle='--')
+                    linewidth=0.5, zorder=-50, linestyle='--')
     # lmoor = 11
     # theta = 20 * np.pi / 180
     # line_bar = (2 * np.pi * line_f * lmoor * theta) ** 2
@@ -149,42 +151,47 @@ if flag.get('plot_spec3', False):
     # line_bar = (2 * np.pi * line_f * lmoor * theta) ** 2
     # ax.loglog(line_f, line_bar, '-.', color='0.4')
 
-    colors_now = {'unfiltered': 'k',
-                  '30s': 'm',
-                  '10s': 'b',
-                  '5s': 'g', }
+    plt_kwds = {'unfiltered': dict(color='k', lw=3, ),
+                '5m': dict(color='c', ),
+                '30s': dict(color='b', lw=2, ),
+                '10s': dict(color='m', ),
+                '5s': dict(color='g', ),
+                '3s': dict(color='r', )
+                }
+    ul_clr = 'g'
     tmp = bdmc.Spec_urot[:, gd].max(0).mean(0) * 2 * np.pi
     ax.loglog(bd.freq, tmp,
-              color='y', linestyle='-', label=r'$S\{\vec{n}_{\omega}\}$')
+              color='y', linestyle='-', label=r'$\vec{n}_{\omega}$')
     print ''
     print ('u_rot error level: {:0.3f} cm/s'
            .format((np.trapz(tmp, bdmc.freq) ** 0.5) * 100))
-    for tag in ['unfiltered', '30s', '5s']:
+
+    f_lbl = {'30s': '0.03 Hz',
+             '3s': '0.3 Hz', }
+    for tag in ['unfiltered', '30s', '3s']:
         bdmc = bindatmc[tag]
         tmp = bdmc.Spec_uacc[:, gd].max(0).mean(0) * 2 * np.pi
         tmp2 = bdmc.Spec_uacc[:, gd].min(0).mean(0) * 2 * np.pi
         if tag == 'unfiltered':
-            label = r'$S\{\vec{n}_{a}\}$'
+            label = r'$\vec{n}_{a}$'
             mot = dmot.Spec_velmoor_nofilt[0].mean(0)
             inds = mot < tmp[:len(mot)]
-            ax.loglog(dmot.freq[inds], mot[inds], color='b',
-                      lw=1, ls='-', )
+            ax.loglog(dmot.freq[inds], mot[inds], color=ul_clr,
+                      lw=1, ls='-', zorder=3)
             mot2 = dmot.Spec_velmoor_nofilt[2].mean(0)
             inds2 = mot2 < tmp2[:len(mot2)]
-            ax.loglog(dmot.freq[inds2], mot2[inds2], color='b',
-                      lw=1, ls='--')
+            ax.loglog(dmot.freq[inds2], mot2[inds2], color=ul_clr,
+                      lw=1, ls='--', zorder=3)
         else:
-            label = r'$S\{\vec{n}_{a}' + '(\mathrm{%s})\}$' % tag
-            ax.axvline(mcfilts[tag], color=colors_now[tag], linestyle=':')
-        ax.loglog(bd.freq, tmp,
-                  color=colors_now[tag], linestyle='-',
-                  label=label)
-        ax.loglog(bd.freq, tmp2,
-                  color=colors_now[tag], linestyle='--')
+            label = r'$\rangle \vec{n}_{a} \langle ' + '_\mathrm{%s}$' % f_lbl[tag]
+            ax.axvline(mcfilts[tag], color=plt_kwds[tag]['color'],
+                       linestyle=':')
+        ax.loglog(bd.freq, tmp, linestyle='-', label=label, **plt_kwds[tag])
+        ax.loglog(bd.freq, tmp2, linestyle='--', **plt_kwds[tag])
         print ('u_acc error level ({}): {:0.3f} cm/s'
                .format(tag, (np.trapz(tmp, bdmc.freq) ** 0.5) * 100))
-    ax.loglog(np.NaN, np.NaN, color='b',
-              lw=1, ls='-', label=r'$S\{\vec{u}_{\textnormal{low}}\}$')
+    ax.loglog(np.NaN, np.NaN, color=ul_clr,
+              lw=1, ls='-', label=r'$\vec{u}_{\textnormal{low}}$')
     bdmc = bindatmc['30s']
 
     #axs[1].set_xlim([1e-3, 20])
@@ -194,8 +201,8 @@ if flag.get('plot_spec3', False):
               handlelength=1.4, labelspacing=0.4, handletextpad=0.2)
     ax.set_xlabel('$f\ [\mathrm{hz}]$')
     ax.set_ylabel('$\mathrm{[m^2s^{-2}/hz]}$')
-    ax.axhline(2e-4, color='k', linestyle='-.')
-    ax.axhline(2e-5, color='k', linestyle=':')
+    ax.axhline(2e-4, color='0.5', linestyle='-', lw=1, zorder=-30)
+    ax.axhline(2e-5, color='0.5', linestyle='--', lw=1, zorder=-30)
     #axs[0].set_title('Spectra: Bench Test %s' % tag)
     # axs[0].set_ylabel('$u_{acc}\, \mathrm{[m^2/s^{2}/hz]}$', size='large')
     # axs[1].set_ylabel('$u_{rot}\,\mathrm{[m^2/s^2/hz]}$', size='large')

@@ -4,9 +4,6 @@
 
 - Move SM bottom track incorporation into SM2015 data folder!!!
 
-- Space-out panels (so y-labels don't overlap, eg Fig 8)
-
-
 py/make_map.py
 - Make map of larger area?
 - Change font sizes?

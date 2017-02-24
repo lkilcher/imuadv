@@ -260,8 +260,10 @@ if flag.get('multi spec'):
                      (2, 2.5)]
 
         fig, axs = pt.newfig(101, 3, len(velranges),
-                             figsize=5,
-                             right=0.86, bottom=0.1,
+                             figsize=5.4,
+                             right=0.86,
+                             bottom=0.08, top=0.96,
+                             hspace=0.14,
                              sharex=True, sharey=True)
 
         for icol in range(axs.shape[1]):
@@ -303,11 +305,11 @@ if flag.get('multi spec'):
         for irow in range(axs.shape[0]):
             # The row-only loop
             axs[irow, 0].set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')
-            axs[irow, -1].text(1.04, 0.05, '$%s$' % (pt.vel_comps[irow]),
-                               ha='left', va='bottom', fontsize='x-large',
+            axs[irow, -1].text(1.05, 0.05, '$S\{%s\}$' % (pt.vel_comps[irow]),
+                               ha='left', va='bottom', fontsize='large',
                                transform=axs[irow, -1].transAxes, clip_on=False)
-        axs[0, -1].legend(loc='upper left', bbox_to_anchor=[1.02, 1.0],
-                          handlelength=1.4, handletextpad=0.4,
+        axs[0, -1].legend(loc='upper left', bbox_to_anchor=[1.05, 1.0],
+                          handlelength=1.4, handletextpad=0.4, borderaxespad=0,
                           prop=dict(size='medium'))
         ax.set_ylim((1e-4, 1))
         ax.set_xlim((1e-3, 5))

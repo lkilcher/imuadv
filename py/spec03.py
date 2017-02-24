@@ -10,7 +10,7 @@ eps_freqs = np.array([[.1, 1],
                       [.1, 1],
                       [.1, 3], ])
 
-filtfreq = 1. / 30
+filtfreq = 0.03
 
 # 4800 points is 5min at 16hz
 binner = avm.TurbBinner(4800, 16)
@@ -58,8 +58,10 @@ with pt.style['onecol']():
                  ]
 
     fig, axs = pt.newfig(101, 3, len(velranges),
-                         figsize=5,
-                         right=0.7, bottom=0.1,
+                         figsize=5.4,
+                         right=0.7,
+                         top=0.96, bottom=0.08,
+                         hspace=0.14,
                          sharex=True, sharey=True)
     axs = axs.reshape((3, 1))
     for icol in range(axs.shape[1]):
@@ -100,14 +102,14 @@ with pt.style['onecol']():
     for irow in range(axs.shape[0]):
         # The col-only loop
         axs[irow, 0].set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')
-        axs[irow, -1].text(1.04, 0.05, '$%s$' % (pt.vel_comps[irow]),
-                           ha='left', va='bottom', fontsize='x-large',
+        axs[irow, -1].text(1.05, 0.05, '$S\{%s\}$' % (pt.vel_comps[irow]),
+                           ha='left', va='bottom', fontsize='large',
                            transform=axs[irow, -1].transAxes, clip_on=False)
         #                    ha='left', va='bottom', fontsize='medium',
         #                    transform=axs[irow, -1].transAxes, clip_on=False)
 
-    axs[0, -1].legend(loc='upper left', bbox_to_anchor=[1.02, 1.0],
-                      handlelength=1.4, handletextpad=0.4,
+    axs[0, -1].legend(loc='upper left', bbox_to_anchor=[1.05, 1.0],
+                      handlelength=1.4, handletextpad=0.4, borderaxespad=0,
                       prop=dict(size='medium'))
     ax.set_ylim((1e-4, 10))
     ax.set_xlim((1e-3, 5))

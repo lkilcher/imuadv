@@ -1,8 +1,22 @@
-- Add a DOI or 'extra material' that points to this repo
+- Finish responses
+
+- Submit
+
+- Clear unnecessary files from releases (v1.1?)
 
 - citations for software (in acknowledgements?)
 
+- Add a DOI or 'extra material' that points to this repo
+
 - Move SM bottom track incorporation into SM2015 data folder!!!
+
+- Add data-dload script to packages and add those to this repo.
+
+  . 'dload all' and 'processed' options
+
+- Add make_data script
+
+- Create v2.0 tag
 
 py/make_map.py
 - Make map of larger area?

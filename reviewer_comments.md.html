@@ -15,23 +15,23 @@ Reviewer #1
 
 > This is a very nice paper with only a few minor modifications requires for publication (in my opinion).
 
-Thank you for the positive feedback and support!
+Thank you for the positive feedback and support.
 
 > Line 186: It would be helpful if you could add a little more detail about how you normalized your spectra and cross spectra to preserve variance.
 
-The spectra and cross-spectra are normalized to preserve variance. That is, the Fourier transforms are scaled (multiplied by a scalar constant) so that the integral of the spectra is equal to the variance, or co-variance, of the signal(s) of interest.
+The spectra and cross-spectra are normalized to preserve variance. That is, the Fourier transforms are scaled (multiplied by a scalar constant) so that the integral of the spectra is equal to the variance, or co-variance, of the signal(s) of interest. We think the notation we use (now line 177) is a common way to express this.
 
 > Line 197: I believe that you should say "add" instead of "subtract" when discussing the motion compensation approach that you utilized.
 
-Thanks for this! We've replaced the word 'subtract' with the word 'remove', so the sentence now reads, "The essential approach of motion correction is to measure velocity on a moving platform and make an independent measurement of the platform motion, then remove the motion from the velocity measurements."
+Thanks for this. We've replaced the word 'subtract' with the word 'remove', so the sentence now reads, "The essential approach of motion correction is to measure velocity on a moving platform and make an independent measurement of the platform motion, then remove the motion from the velocity measurements."
 
 > Your paper would read better if you reference all of your figures from within the text. I believe that at very least Figures 2-6 and 15 are not referenced from the text.
 
-We apologize for the confusion on figure numbering. All figure numbers have been corrected.
+We apologize for the confusion on figure numbering. All figure numbers have been corrected and all figures are referenced in the text.
 
 > Figure 6: Is your presented measured acceleration based velocity spectra for the horizontal directions or the vertical direction? The magnitudes of these should be different and therefore I would suggest presenting both of these in this figure. Also, is your ADV Doppler noise calculated for a flow parallel or perpendicular to the head? Since these are different I would suggest presenting both of them in this figure. Also, a couple sentences in the text about how this was calculated would be helpful.
 
-Thanks for catching this! We've made significant revisions to section 3 to clarify many of these details. We've added the vertical component noise spectra, and the vertical component ADV noise levels to figure 6. We've also added much more discussion on the details of filter selection, and IMU noise-levels. Most notably, this includes a brief discussion of acoustic Doppler profiler bottom-track measurements from the StableMoor, and a discussion of a 'rigid pole' model for estimating low-frequency TTM motion.
+Thanks for pointing this out. We believe all of these comments are addressed as a part of significant revisions to section 3. We've added the vertical component noise spectra, and the vertical component ADV noise levels to figure 6. We've also added much more discussion on the details of filter selection, and IMU noise-levels. Most notably, this includes a brief discussion of acoustic Doppler profiler bottom-track measurements from the StableMoor, and a discussion of a 'rigid pole' model for estimating low-frequency TTM motion.
 
 > Line 316: Your figure number should be corrected as you do not have a figure listed as (Figure A1).  Should this be Figure 6?
 
@@ -39,14 +39,14 @@ We apologize for the confusion on figure numbering. All figure numbers have been
 
 > Please mention if the IMU data discussed in the appendix was high pass filtered.
 
-Thanks for catching this. We have added text that clarifies that a 5 minute high-pass filter was used in this case and we have also indicated this filter frequency in the figure.
+Thanks for catching this. We have added text that clarifies that a 5 minute high-pass filter was used in this case and we have also indicated this filter frequency in the figure. Please note that this entire appendix was moved to the companion paper (included with submission).
 
 Reviewer #2
 --------
 
 > Overall, I recommend Minor Revisions before publication. The manuscript is a succinct summary of a novel application of an IMU equipped ADV for making turbulence measurements including estimating Reynold's stresses and dissipation from moving, moored platforms that is of potential interest to both marine energy developers but also more broadly to researchers studying turbulence in natural settings. Moored platforms are ubiquitous and inexpensive and the use of motion correction for ADVs on such platforms represents a low-cost and apparently effective solution for making such measurements. Thus the article is a good fit for JAOT.
 
-Thank you for the positive feedback and support!
+Thank you for the positive feedback and support.
 
 > I only found minor issues with the article that should be addressed before acceptance:
 > Line 142: the weight of the anchor is given in pounds rather than Kilograms as the in the case of the TTM platform. Units should be consistent.
@@ -64,7 +64,7 @@ Thank you, we've made the suggested correction.
 # Reviewer #3
 > This manuscript compares turbulence measurements from 3 different moored platforms and describes a methodology for using ADVs, synchronized with inertial-motion-sensors (IMU), to collect reliable measurements of turbulence. It is part of a 2-part series describing the use of ADVs with IMU sensors in measuring turbulence. The paper fits well within the scope of the Journal of Atmospheric and Oceanic Technology and presents a valuable analysis of new technology that could be of great use to future observational studies of turbulent mixing. I would recommend the paper for publication once the following items have been addressed.
 
-Thank you for the positive feedback and support!
+Thank you for the positive feedback and support.
 
 > #### Major Comments:
 > (Figure 6): Is Figure 6 incorrectly listed as Figure A1 in the manuscript?  It appears to be demonstrating the effects of high-pass filtering on the signal-noise ratio of the IMU data, but since there is no mention of Figure 6 in the manuscript it is difficult to ascertain where it fits and what it is contributing to the paper.
@@ -77,15 +77,19 @@ Thank you for this suggestion. We've added a figure that compares different filt
 
 > (Figure 11): There is significant spread in these cospectral plots that makes characterizing the quality of stress measurements difficult. It would be more informative to present variance-preserving cospectra. A comparison of observed curves to a generalized semi-empirical model for turbulent cospectra (e.g. Kaimal et al 1972) could provide further information regarding the accuracy of moored cospectral flux estimates that have been motion-corrected.
 
-Thanks for this recommendation! We've now plotted co-spectra in a variance preserving form ($f \cdot C \lbrace x,y \rbrace $ vs. $\log (f)$), and we've also added a figure that shows non-dimensional u-w co-spectra on a log-log plot. We think these changes more clearly demonstrate the accuracy of motion-corrected cospectral flux estimates.
+Thanks for this recommendation. We've now plotted co-spectra in a variance preserving form ($f \cdot C \lbrace x,y \rbrace $ vs. $\log (f)$), and we've also added a figure that shows non-dimensional u-w co-spectra on a log-log plot. We agree that these changes more clearly demonstrate the accuracy of motion-corrected cospectral flux estimates.
 
 > (page 20, line 416-421): The authors discuss a production-dissipation balance in the TKE budget that is indicative of a bottom boundary layer, but the complex topography of the site and depth of the measurements warrants more discussion regarding other processes that could play a significant role in the observed TKE budget. What are typical stratification conditions at the site?
 
-Unfortunately, we did not measure the stratification during these measurement periods. However, prior research (Geyer and Cannon, 1982) suggests that stratification in Puget Sound is typically weak during the moderate and large tidal amplitudes of these measurements due to the strong tidal mixing that occurs there. We've expanded the discussion of the tke equation, and indicated that a more complete analysis is left for future work.
+Unfortunately, we did not measure the stratification during these measurement periods. However, prior research (Geyer and Cannon, 1982) suggests that stratification in Puget Sound is typically weak during the moderate and large tidal amplitudes of these measurements due to the strong tidal mixing that occurs there. We've indicated this in the text as part of a significant expansion of the discussion of the tke equation, and indicated that a more complete analysis is left for future work.
 
 > (Figure 14): There appear to be significant asymmetries between turbulent dissipation measured during flood and ebb shown in Figure 14 - can you separate the balance shown in Figure 13 and comment on flood/ebb asymmetries? How does it relate to times when production does not equal dissipation?
 
-**I created [this figure](https://www.dropbox.com/s/6rdg6z006jje277/EpsVProd01a.pdf?dl=0) that separates ebb (blue) and flood (red). The open circles are when $P_{uz}$ is negative (out of balance with dissipation). I'm not really sure this tells a different story than the one I'm already telling. Should I add this figure, or keep the version that is currently in the document (Figure 13)?**
+Thanks for this. We've expanded the discussion of ebb-flood asymmetries. However, we haven't changed Figure 13 because the prod-diss balance does not appear to be significantly different between ebb and flood.  Here is a figure that makes the suggested separation:
+
+<img src="./fig/EpsVProd03.png" alt="Production vs. Dissipation" style="width:304px;">
+
+If the reviewer thinks it is worthwhile we could switch to this figure, or we could include it as additional online material. Thanks again for asking us to look at this more. The revisions we've made are better because of this suggestion.
 
 > #### Minor Comments:
 
@@ -127,7 +131,7 @@ Thanks for this. These headings are redundant. We've removed them.
 
 > (page 11, line 219-221): Did you measure this low-frequency translational motion during the experiment? You say that it is important, but it is not clear how you addressed it based on this statement. This paragraph in general is a little difficult to follow, consider refining it before publication.
 
-The paragraph has been revised for clarity. We've completely rewritten this section to clarify the cases where we measured u\_low (on the StableMoor), when we estimate it from other sensors (the TTM), and when we didn't investigate it in detail (the torpedo). Also, we now refer to the appendix of Part I, which presents a detailed comparison of u\_low measured on the StableMoor to IMU derived translational motion.
+The paragraph has been revised for clarity. We've completely rewritten this section to clarify the cases where we measured u\_low (on the StableMoor), when we estimate it from other sensors (the TTM), and when we didn't investigate it in detail (the torpedo). Also, we now refer to the appendix of Part I (which was transferred there from the previous version of this work), which presents a detailed comparison of u\_low measured on the StableMoor to IMU derived translational motion.
 
 > (Figure 15): Should Figure 15 be listed as Figure A1? There is also no mention of this figure in the manuscript.
 

@@ -5,14 +5,14 @@ import numpy as np
 import gis
 
 flg = {}
-flg['turb time01'] = True
+#flg['turb time01'] = True
 #flg['turb time02'] = True
-flg['turb time03'] = True
+#flg['turb time03'] = True
 #flg['epsVprod01'] = True
 #flg['epsVprod02'] = True
 flg['epsVprod03'] = True
 #flg['eqnVeps01'] = True
-flg['eqnVeps02'] = True
+#flg['eqnVeps02'] = True
 flg['save figs'] = True
 
 lgnd_kws = dict(loc='upper left', bbox_to_anchor=(1.02, 1), )
@@ -527,7 +527,7 @@ if flg.get('epsVprod03'):
         axs[0].set_xlim([1e-6, 1e-2])
 
     if flg.get('save figs'):
-        fig.savefig(pt.figdir + 'EpsVProd03.pdf')
+        fig.savefig(pt.figdir + 'EpsVProd03.png')
 
 if flg.get('eqnVeps01', False):
 

@@ -12,7 +12,7 @@
 
 - Add make_data script
 
-- Create v2.0 tag
+- Issue dolfyn release (tag) specifically for this analysis
 
 py/make_map.py
 - Make map of larger area?

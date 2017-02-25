@@ -527,7 +527,7 @@ if flg.get('epsVprod03'):
         axs[0].set_xlim([1e-6, 1e-2])
 
     if flg.get('save figs'):
-        fig.savefig(pt.figdir + 'EpsVProd03.png')
+        fig.savefig(pt.figdir + 'EpsVProd03.png', dpi=300)
 
 if flg.get('eqnVeps01', False):
 

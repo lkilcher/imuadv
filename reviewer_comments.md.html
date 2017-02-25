@@ -77,28 +77,11 @@ Thank you for this suggestion. We've added a figure that compares different filt
 
 > (Figure 11): There is significant spread in these cospectral plots that makes characterizing the quality of stress measurements difficult. It would be more informative to present variance-preserving cospectra. A comparison of observed curves to a generalized semi-empirical model for turbulent cospectra (e.g. Kaimal et al 1972) could provide further information regarding the accuracy of moored cospectral flux estimates that have been motion-corrected.
 
-Thanks for this recommendation! We've now plotted co-spectra in a variance preserving form ($f \cdot C \lbrace x,y \rbrace $ vs. $\log (f)$). **Still need to: include semi-empirical curves, and finish discussion of the cospectra.**
+Thanks for this recommendation! We've now plotted co-spectra in a variance preserving form ($f \cdot C \lbrace x,y \rbrace $ vs. $\log (f)$), and we've also added a figure that shows non-dimensional u-w co-spectra on a log-log plot. We think these changes more clearly demonstrate the accuracy of motion-corrected cospectral flux estimates.
 
 > (page 20, line 416-421): The authors discuss a production-dissipation balance in the TKE budget that is indicative of a bottom boundary layer, but the complex topography of the site and depth of the measurements warrants more discussion regarding other processes that could play a significant role in the observed TKE budget. What are typical stratification conditions at the site?
 
 Unfortunately, we did not measure the stratification during these measurement periods. However, prior research (Geyer and Cannon, 1982) suggests that stratification in Puget Sound is typically weak during the moderate and large tidal amplitudes of these measurements due to the strong tidal mixing that occurs there. We've expanded the discussion of the tke equation, and indicated that a more complete analysis is left for future work.
-
-<!--
-$$
-    u_*^2 =  (\kappa z \frac{d u }{d z})^2
-$$
-
-$$
-    (z u_*^2)/U = (z^3 \kappa^2 (\frac{d u}{d z})^2)/U
-$$
-
-$$
-    \frac{\partial \overline{u_i u_i u_j}}{\partial x_i} = 
-    \frac{\partial \overline{uuu}}{\partial x} + \frac{\partial \overline{uuv}}{\partial y} + \frac{\partial \overline{uuw}}{\partial z} +
-    \frac{\partial \overline{vvu}}{\partial x} + \frac{\partial \overline{vvv}}{\partial y} + \frac{\partial \overline{vvw}}{\partial z} +
-    \frac{\partial \overline{wwu}}{\partial x} + \frac{\partial \overline{wwv}}{\partial y} + \frac{\partial \overline{www}}{\partial z}
-$$
--->
 
 > (Figure 14): There appear to be significant asymmetries between turbulent dissipation measured during flood and ebb shown in Figure 14 - can you separate the balance shown in Figure 13 and comment on flood/ebb asymmetries? How does it relate to times when production does not equal dissipation?
 

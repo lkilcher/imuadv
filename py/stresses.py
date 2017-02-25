@@ -454,7 +454,7 @@ for idat, dat_nm in enumerate(do_data):
                       **pt_kws)
             if add_ttt:
                 ax.loglog(fstar_bins, Cs_ttt, 'm-', lw=1,
-                          label='TTT', zorder=-10)
+                          label='tripod', zorder=-10)
             ax.loglog(m73f, m73a, 'r--', lw=2,
                       label='$\hat{f}^{-7/3}$')
             ax.loglog(fstar_bins, kml.Suw(), 'k-', lw=2, zorder=-2,
@@ -522,7 +522,7 @@ for idat, dat_nm in enumerate(do_data):
             # Is this b/c of shear?
             tmp = bdat['ttt']
             tmp_inds = np.abs(bdat['ttt'].u) > 1
-            Cdttt, fsttt = kaimal.ndcs(tmp, tmp_inds)
+            Cdttt, fsttt = kaimal.nd_cospec(tmp, tmp_inds)
             Cs_ttt = kaimal.bin_cospec(Cdttt, fsttt, fstar_bins)
             Cs2_ttt = Cs_ttt * fstar_bins
 
@@ -547,7 +547,7 @@ for idat, dat_nm in enumerate(do_data):
                       **pt_kws)
             if add_ttt:
                 ax.loglog(fstar_bins, Cs_ttt, 'm-', lw=1,
-                          label='TTT', zorder=-10)
+                          label='tripod', zorder=-10)
             ax.loglog(m73f, m73a, 'r--', lw=2,
                       label='$\hat{f}^{-7/3}$')
             ax.loglog(fstar_bins, kml.Suw(), 'k-', lw=2, zorder=-2,

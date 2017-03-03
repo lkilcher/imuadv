@@ -3,6 +3,8 @@ import glob
 
 z = zipfile.ZipFile('Kilcher_etal_IMU-ADV.zip', 'w', compression=8)
 
+fl_fignum = open('FigNumber.txt', 'w')
+
 figfiles = ['map04_annot',
             'TTM_Simple',
             'TTM_image01_annot',
@@ -29,5 +31,13 @@ files += ['ametsoc.cls',
 
 for fl in files:
     z.write(fl)
-
+    
 z.close()
+
+
+for num, fl in enumerate(figfiles):
+    s = '{:25}'.format(fl + '.pdf')
+    s += ' = Figure {}\n'.format(num + 1)
+    fl_fignum.write(s)
+
+fl_fignum.close()

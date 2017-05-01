@@ -1,3 +1,18 @@
+- Tag/DOI data and code
+  - Test SM2015
+  - Test TTM/June2012
+  - Tag DOLfYN
+  - Document DOLfYN tags in data repos
+  - Tag Data repos (DRs)
+  - Upload data and DRs (tags) to MHKDR
+  - Add pull script to this repo
+  - Rewrite code to use pull'd data
+  - Verify all figures come out correctly with pull'd data
+  - Add README that points to DRs
+  - Finalize edits to this paper
+  - Tag this repo, and upload it to MHKDR (w/ DOI)
+  - Cite data at MHKDR (DOI's)
+
 - Clear unnecessary files from releases (v1.1?)
 
 - citations for software (in acknowledgements?)

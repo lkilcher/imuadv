@@ -1,8 +1,12 @@
 - Tag/DOI data and code
+  - Clean up this repo?
+    - Remove extra plotting?
+    - Functionalize plotting scripts? ... Too much work?
   - Test SM2015
   - Test TTM/June2012
+  - Document versions of NumPy + MatPlotLib in DOLfYN
   - Tag DOLfYN
-  - Document DOLfYN tags in data repos
+  - Add DOLfYN tag to data repos
   - Tag Data repos (DRs)
   - Upload data and DRs (tags) to MHKDR
   - Add pull script to this repo

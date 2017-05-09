@@ -37,7 +37,7 @@ map_data = bm(projection=proj,
 
 if 'bdat' not in vars():
     bdat = {}
-    dat = np.load('/Users/lkilcher/data/bathy/puget_sound/g1230485/g1230485.npz')
+    dat = np.load('data/bathy/g1230485.npz')
     dparams = {}
     for nm in dat.files:
         if not nm == 'elev':

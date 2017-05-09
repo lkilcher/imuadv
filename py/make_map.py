@@ -32,7 +32,7 @@ map_data = bm(projection=proj,
               urcrnrlon=grid_urcrnr[0], urcrnrlat=grid_urcrnr[1],
               lat_1=lat_1, lat_2=lat_2)
 
-dat = np.load('/Users/lkilcher/data/bathy/puget_sound/g1230485/g1230485.npz')
+dat = np.load('data/bathy/g1230485.npz')
 dparams = {}
 for nm in dat.files:
     if not nm == 'elev':

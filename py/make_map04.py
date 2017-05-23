@@ -6,9 +6,8 @@ import matplotlib.colors as mplc
 from matplotlib import cm
 import numpy as np
 import ptools as pt
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
 from matplotlib.patches import ArrowStyle
-plt.ion()
 
 #
 # From the ./metadata.htm file
@@ -35,6 +34,8 @@ map_data = bm(projection=proj,
               urcrnrlon=grid_urcrnr[0], urcrnrlat=grid_urcrnr[1],
               lat_1=lat_1, lat_2=lat_2)
 
+# This is for interactive mode
+# (I don't want to reload the data every time I modify+run the script)
 if 'bdat' not in vars():
     bdat = {}
     dat = np.load('data/bathy/g1230485.npz')
@@ -216,5 +217,5 @@ for lon in [-122.6666666]:
             transform=ax.get_xaxis_transform(),
             ha='center', va='top', clip_on=False)
 
-fig.savefig(pt.figdir + 'map04.png', dpi=300)
+#fig.savefig(pt.figdir + 'map04.png', dpi=300)
 fig.savefig(pt.figdir + 'map04.pdf')

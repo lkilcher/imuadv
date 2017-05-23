@@ -36,3 +36,8 @@ ttm01b top + bot
 Nose mode files. Others?
 
 """
+
+import data.bathy
+data.bathy.pull_data()
+data.bathy.process_data()
+

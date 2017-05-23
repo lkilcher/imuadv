@@ -5,19 +5,18 @@ except ValueError:
     import tools as tbx
 import zipfile
 
-datdir = 'bathy/'
 fnm = 'g1230485'
 
 
 def pull_data():
     tbx.retrieve(
         'https://www.ocean.washington.edu/data/pugetsound/datasets/psdem2005/rasters/tiles/g1230485/g1230485.zip',
-        datdir + fnm + '.zip'
+        tbx.datdir + fnm + '.zip'
     )
 
 
 def process_data():
-    with zipfile.ZipFile(datdir + fnm + '.zip') as zf:
+    with zipfile.ZipFile(tbx.datdir + fnm + '.zip') as zf:
         with zf.open(fnm + '/' + fnm + '.asc') as fl:
 
             # Get the header information.
@@ -31,4 +30,4 @@ def process_data():
             # Read the data
             dat = np.loadtxt(fl, dtype=np.float32)
 
-    np.savez_compressed(datdir + fnm + '.npz', elev=dat, **params)
+    np.savez_compressed(tbx.datdir + fnm + '.npz', elev=dat, **params)

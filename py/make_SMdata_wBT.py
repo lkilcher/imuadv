@@ -65,6 +65,9 @@ if __name__ == '__main__':
 
     dat.props['noise'] = doppler_noise
 
+    # The offset-index between S. Harding's bt file, and the ADV data (`dat`)
+    # S. Harding already corrected offsets, so t_IMU is his estimate
+    # of ADV time.
     offind = np.abs(bt['t_IMU'][0] - dat.mpltime).argmin()
 
     # Perform basic motion correction based on IMU data:

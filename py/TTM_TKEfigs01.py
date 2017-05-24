@@ -7,9 +7,9 @@ flg = {}
 #flg['turb time01'] = True
 #flg['turb time02'] = True
 #flg['turb time03'] = True
-#flg['epsVprod01'] = True
+flg['epsVprod01'] = True
 #flg['epsVprod02'] = True
-flg['epsVprod03'] = True
+#flg['epsVprod03'] = True
 #flg['eqnVeps01'] = True
 #flg['eqnVeps02'] = True
 flg['save figs'] = True
@@ -20,11 +20,11 @@ lgnd_kws = dict(loc='upper left', bbox_to_anchor=(1.02, 1), )
 if 'dat' not in vars():
     dat = j14.load('ttm02b-top', 'pax',
                    bin=True)
-    dat2 = j14.load('ttm02b-bottom', 'pax',
+    dat2 = j14.load('ttm02b-bot', 'pax',
                     bin=True)
     dat3 = j14.load('ttm01b-top', 'pax',
                     bin=True).subset(slice(3, -2))
-    dat4 = j14.load('ttm01b-bottom', 'pax',
+    dat4 = j14.load('ttm01b-bot', 'pax',
                     bin=True).subset(slice(3, -2))
 
 p_angle = (90 - 310) * np.pi / 180
@@ -398,6 +398,54 @@ if flg.get('epsVprod01'):
         umag = np.abs(dnow0.u)
         iumag = np.abs(dnow0.u) > 1.0
         inds = (tke_eqn['Prod_uz'] > 0)
+
+        alpha = 0.7
+        inow = inds & iumag
+        axs.loglog(tke_eqn['eps'][inow],
+                   tke_eqn['Prod_uz'][inow],
+                   'o',
+                   label='$P_{uz}>0\ \mathrm{(N = %d)}$' %
+                   inow.sum(),
+                   mfc='k', mec='none', ms=3,
+                   alpha=alpha,
+                   zorder=2,)
+        inow = ~inds & iumag
+        axs.loglog(tke_eqn['eps'][inow],
+                   -tke_eqn['Prod_uz'][inow],
+                   'o',
+                   label='$P_{uz}<0\ \mathrm{(N = %d)}$' %
+                   inow.sum(),
+                   mfc='none', mec='k', ms=2.5,
+                   alpha=alpha,
+                   zorder=-2)
+        axs.legend(loc='upper left', numpoints=1, handlelength=1,
+                   handletextpad=0.2,
+                   prop=dict(size='medium'))
+
+        axs.plot([1e-8, 1], [1e-8, 1], 'k:')
+        axs.set_ylim([1e-6, 1e-2])
+        axs.set_xlim([1e-6, 1e-2])
+        axs.set_xlabel('$\epsilon\ \mathrm{[W/kg]}$')
+        axs.set_ylabel('$P_{uz}\ \mathrm{[W/kg]}$')
+
+    if flg.get('save figs'):
+        fig.savefig(pt.figdir + 'EpsVProd01.pdf')
+
+
+if flg.get('epsVprod01a'):
+
+    with pt.style['onecol']():
+
+        fig, axs = pt.newfig(301, 1, 1,
+                             figsize=3,
+                             hspace=0.17,
+                             #left=0.12, right=0.81,
+                             #bottom=0.08, top=0.97,
+                             sharex=True, sharey=False)
+
+        umag = np.abs(dnow0.u)
+        iumag = np.abs(dnow0.u) > 1.0
+        inds = (tke_eqn['Prod_uz'] > 0)
         iupos = dnow0.u > 0
 
         alpha = 0.7
@@ -433,9 +481,6 @@ if flg.get('epsVprod01'):
                    mfc='none', mec='b', ms=2.5,
                    alpha=alpha,
                    zorder=-2)
-        # axs.legend(loc='upper left', numpoints=1, handlelength=1,
-        #            handletextpad=0.2,
-        #            prop=dict(size='medium'))
 
         axs.plot([1e-8, 1], [1e-8, 1], 'k:')
         axs.set_ylim([1e-6, 1e-2])

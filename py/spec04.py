@@ -23,7 +23,7 @@ velranges = [(0, 0.5),
              (1, 1.5),
              (2, 2.5)]
 
-noise=[1.5e-4, 1.5e-4, 1.5e-5, ]
+noise = [1.5e-4, 1.5e-4, 1.5e-5, ]
 
 binner = avm.TurbBinner(5 * 60 * dat.fs, dat.fs)
 for ftag, filt in filters.iteritems():

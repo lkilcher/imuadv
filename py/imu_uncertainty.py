@@ -1,6 +1,6 @@
 from __future__ import division
 from dolfyn.adv import api as avm
-import nortek_vector.bench_tests as btests
+import data.tools as data_tbx
 import ptools as pt
 import numpy as np
 import ttm.sm2015 as sm15
@@ -34,7 +34,7 @@ if 'dmot' not in vars():
 
 
 if 'rd' not in vars():
-    rd = btests.load('C')
+    rd = avm.load(data_tbx.datdir + 'btest-C.h5')
     rd.props['body2head_rotmat'] = np.eye(3)
     rd.props['body2head_vec'] = np.array([1, 1, 1]) * np.sqrt(1. / 3)
 

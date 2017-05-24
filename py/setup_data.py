@@ -1,11 +1,6 @@
 """
 The following figures are used by the document:
 
-X map04_annot.pdf
-X TTM_Simple
-X TTM_image01_annot
-X StableMoor_Composite
-X Torpedo_Image01_annot
 stationary_noise04
 SpecFig04_filtering2
 TimeFig02
@@ -19,10 +14,7 @@ EpsVProd01
 EpsVU_03
 
 
-The following data files are needed:
-
-# bench test
-C
+The following data files are still needed:
 
 # June2012
 AWAC
@@ -34,10 +26,27 @@ ttm01b top + bot
 
 # SM2015
 Nose mode files. Others?
+!!! Currently I'm using the SM2015 TTM for imu_uncertainty fig. Need to fix this.
 
 """
 
 import data.bathy
-data.bathy.pull_data()
-data.bathy.process_data()
+import data.btest
+
+print("""
+This script downloads and pre-processes data files for making the
+figures. This can take some time (several hours, depending on your
+internet connection), so be ready to be patient.
+""")
+
+
+###
+# This is the bathymetry data for Figure 1
+data.bathy.pull()
+data.bathy.process()
+
+###
+# This is the bench-test data, for Figure 6
+data.btest.pull()
+data.btest.process()
 

@@ -1,6 +1,5 @@
 import ptools as pt
 import ttm.June2014 as j14
-import matplotlib.pyplot as plt
 import numpy as np
 import gis
 
@@ -519,8 +518,6 @@ if flg.get('epsVprod03'):
         # for rng in zip(logbins[:-1], logbins[1:]):
         #     inds = (rng[0] < tke_eqn['eps']) & (tke_eqn['eps'] < rng[1])
         #     xval = np.mean(rng)
-        #     plt.plot(xval, tke_eqn['Prod_uz'][inds].mean(), 'r.')
-        #     plt.plot(xval, -tke_eqn['Prod_uz'][inds].mean(), 'ro')
 
         axs[-1].set_xlabel('$\epsilon\ \mathrm{[W/kg]}$')
         axs[0].set_ylim([1e-6, 1e-2])

@@ -1,3 +1,6 @@
+- Remove DB links
+- copy bathy to DR
+- Use different TTM data for stationary_noise04.pdf (imu_uncertainty.py)
 - Tag/DOI data and code
   - Clean up this repo?
     - Remove extra plotting?
@@ -12,9 +15,9 @@
   - Add pull script to this repo
   - Rewrite code to use pull'd data
   - Verify all figures come out correctly with pull'd data
-  - Add README that points to DRs
+  - Finalise README
   - Finalize edits to this paper
-  - Tag this repo, and upload it to MHKDR (w/ DOI)
+  - Tag this repo, and upload it to MHKDR (w/ DOI), with extra data data files.
   - Cite data at MHKDR (DOI's)
 
 - Clear unnecessary files from releases (v1.1?)

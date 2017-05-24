@@ -1,24 +1,76 @@
 """
 The following figures are used by the document:
 
-stationary_noise04
-SpecFig04_filtering2
-TimeFig02
-SpecFig02_TTM02B-top
-SpecFig02_SMnose
-SpecFig03_TTT
-StressSpec_TTM_04vp
-CoSpecND03_TTM-both
-TurbTime_TTM_01
-EpsVProd01
-EpsVU_03
-
+01+ map04_annot.pdf
+  :map04.py
+  . bathy
+02- TTM_Simple
+03- TTM_image01_annot
+04- StableMoor_Composite
+05- Torpedo_Image01_annot
+06+ stationary_noise04
+  :imu_uncertainty.py
+  . btest-C
+  . !!! sm15-TTM-VELMOOR (switch to J14?)
+07+ SpecFig04_filtering2
+  :spec04.py
+  . j14.ttm02b-top.raw
+08+ TimeFig02
+  :TTM_TimeFigs.py
+  . j12.awac.bnd
+  ? j12.awac.raw
+  . j12.nrel-pax.bnd
+  ? j12.nrel-pax.raw
+09+ SpecFig02_TTM02B-top
+  :spec02.py
+  . dat = j14.load('ttm02b-top', 'pax',
+                   bin=True)
+10+ SpecFig02_SMnose
+  :spec_SM01.py
+  . SMN data (reorganize)
+11+ SpecFig03_TTT
+  :spec03.py
+  . sm15.ttt_davit_b-pax.bnd
+12+ StressSpec_TTM_04vp
+  stresses.py
+  . j14.load('ttm02b-top', 'pax', bin=True)
+  ? j14.load('ttm02b-bottom', 'pax', bin=True)
+  ? smdat.load('SMN-5s', bindat=True)
+  . TTT avm.load('/Users/lkilcher/data/pnnl/TTT_Vector_Feb2011_pax_b5m.h5')
+13+ CoSpecND03_TTM-both
+  :stresses.py
+  ... Same as 12
+14+ TurbTime_TTM_01
+  :TTM_TKEfigs01.py
+  . dat = j14.load('ttm02b-top', 'pax',
+                   bin=True)
+  ? dat2 = j14.load('ttm02b-bot', 'pax',
+                    bin=True)
+  ? dat3 = j14.load('ttm01b-top', 'pax',
+                    bin=True).subset(slice(3, -2))
+  ? dat4 = j14.load('ttm01b-bot', 'pax',
+                    bin=True).subset(slice(3, -2))
+15+ EpsVProd01
+  :TTM_TKEfigs01.py
+  . dat = j14.load('ttm02b-top', 'pax',
+                   bin=True)
+  . dat2 = j14.load('ttm02b-bot', 'pax',
+                    bin=True)
+  ? dat3 = j14.load('ttm01b-top', 'pax',
+                    bin=True).subset(slice(3, -2))
+  ? dat4 = j14.load('ttm01b-bot', 'pax',
+                    bin=True).subset(slice(3, -2))
+16+ EpsVU_03
+  :epsVU.py
+  . dat['ttm'] = j14.load('ttm02b-top', 'pax',
+                          bin=True)
+  . dat['sm'] = sm.load('SMN-5s', bindat=True)
 
 The following data files are still needed:
 
 # June2012
 AWAC
-TTM / NREL:raw,bin both pax
+TTM / NREL:raw,bnd both pax
 
 # June2014
 ttm02b top + bot
@@ -50,3 +102,5 @@ data.bathy.process()
 data.btest.pull()
 data.btest.process()
 
+###
+# This is the 

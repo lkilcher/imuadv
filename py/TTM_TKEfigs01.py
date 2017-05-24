@@ -4,7 +4,7 @@ import numpy as np
 import gis
 
 flg = {}
-#flg['turb time01'] = True
+flg['turb time01'] = True
 #flg['turb time02'] = True
 #flg['turb time03'] = True
 flg['epsVprod01'] = True

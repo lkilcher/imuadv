@@ -12,7 +12,7 @@ flag = {}
 # flag['real/imag'] = True
 #flag['multi-real'] = True
 #flag['multi-real-vp'] = True
-#flag['multi-real-vp1'] = True
+flag['multi-real-vp1'] = True
 #flag['uw-real'] = True
 flag['uw-real1'] = True
 #flag['multi-ogive'] = True
@@ -26,7 +26,7 @@ kappa = 0.4
 if 'bdat' not in vars():
     bdat = {}
     bdat['ttm'] = j14.load('ttm02b-top', 'pax', bin=True)
-    bdat['ttmb'] = j14.load('ttm02b-bottom', 'pax', bin=True)
+    bdat['ttmb'] = j14.load('ttm02b-bot', 'pax', bin=True)
     bdat['sm'] = smdat.load('SMN-5s', bindat=True)
     bdat['ttt'] = avm.load('/Users/lkilcher/data/pnnl/TTT_Vector_Feb2011_pax_b5m.h5')
     for nnm, onm in [('Cspec_vel', 'Cspec_u'),

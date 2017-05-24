@@ -65,7 +65,7 @@ with pt.style['onecol']():
     velranges = [(0, 3),
                  ]
 
-    fig, axs = pt.newfig(101, 3, len(velranges),
+    fig, axs = pt.newfig(3101, 3, len(velranges),
                          figsize=5.4,
                          right=0.7,
                          top=0.96, bottom=0.08,

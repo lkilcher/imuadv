@@ -8,6 +8,7 @@ import numpy as np
 import ptools as pt
 import matplotlib.pyplot as plt
 from matplotlib.patches import ArrowStyle
+import data.bathy
 
 #
 # From the ./metadata.htm file
@@ -38,7 +39,7 @@ map_data = bm(projection=proj,
 # (I don't want to reload the data every time I modify+run the script)
 if 'bdat' not in vars():
     bdat = {}
-    dat = np.load('data/bathy/g1230485.npz')
+    dat = data.bathy.load()
     dparams = {}
     for nm in dat.files:
         if not nm == 'elev':

@@ -39,3 +39,7 @@ def process():
             dat = np.loadtxt(fl, dtype=np.float32)
 
     np.savez_compressed(outfile, elev=dat, **params)
+
+
+def load():
+    return np.load(tbx.datdir + fnm + '.npz')

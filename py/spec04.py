@@ -45,7 +45,7 @@ pt_kws = {
 
 with pt.style['twocol']():
 
-    fig, axs = pt.newfig(101, 3, len(velranges),
+    fig, axs = pt.newfig(4101, 3, len(velranges),
                          figsize=5,
                          right=0.86, bottom=0.1,
                          sharex=True, sharey=True)
@@ -112,7 +112,7 @@ filts = [
 with pt.style['onecol']():
 
     vr = (2, 2.5)
-    fig, axs = pt.newfig(102, 3, 1,
+    fig, axs = pt.newfig(4102, 3, 1,
                          figsize=5,
                          right=0.7, bottom=0.1,
                          hspace=0.2,

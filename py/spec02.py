@@ -50,7 +50,7 @@ if flag.get('multi spec'):
                      (1, 1.5),
                      (2, 2.5)]
 
-        fig, axs = pt.newfig(101, 3, len(velranges),
+        fig, axs = pt.newfig(2101, 3, len(velranges),
                              figsize=5.4,
                              right=0.86,
                              bottom=0.08, top=0.96,
@@ -122,7 +122,7 @@ if flag.get('multi spec norm'):
                      (1, 1.5),
                      (2, 2.5)]
 
-        fig, axs = pt.newfig(110, 3, len(velranges),
+        fig, axs = pt.newfig(2110, 3, len(velranges),
                              figsize=5,
                              right=0.86, bottom=0.1,
                              sharex=True, sharey=True)
@@ -185,7 +185,7 @@ if flag.get('multi spec norm2'):
                      (1, 1.5),
                      (2, 2.5)]
 
-        fig, axs = pt.newfig(111, 3, len(velranges),
+        fig, axs = pt.newfig(2111, 3, len(velranges),
                              figsize=5,
                              right=0.86, bottom=0.1,
                              sharex=True, sharey=True)
@@ -261,7 +261,7 @@ if flag.get('multi spec color-vel'):
                      (1, 1.5),
                      (2, 2.5)]
 
-        fig, axs = pt.newfig(301, 3, 1,
+        fig, axs = pt.newfig(2301, 3, 1,
                              figsize=5,
                              right=0.7, bottom=0.1,
                              sharex=True, sharey=True, squeeze=False)

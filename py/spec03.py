@@ -1,4 +1,4 @@
-import ttm.sm2015 as sm15
+import data.smb_may2015 as sm15
 import ptools as pt
 import numpy as np
 plt = pt.plt

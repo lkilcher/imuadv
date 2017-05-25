@@ -3,7 +3,7 @@ from dolfyn.adv import api as avm
 import data.tools as data_tbx
 import ptools as pt
 import numpy as np
-import ttm.sm2015 as sm15
+#import data.smb_may2015 as sm15
 
 
 def spec_epsilon(epsilon, tke, k, alpha=0.5, ):

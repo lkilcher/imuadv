@@ -3,7 +3,7 @@ import ptools as pt
 from scipy.io import loadmat, savemat
 import scipy.signal as sig
 import matplotlib.pyplot as plt
-import ttm.sm2015 as data_api
+import data.smb_may2015 as data_api
 import dolfyn.adv.api as avm
 
 flag = {}

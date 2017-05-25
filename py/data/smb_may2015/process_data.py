@@ -1,8 +1,7 @@
 import numpy as np
 import dolfyn.adv.api as avm
 import scipy.signal as sig
-#import ttm.sm2015 as data_api
-from .base import datdir, load
+from .base import datdir, load, tbx
 
 filt_freqs = {
     'unfilt': 0.0,
@@ -11,6 +10,8 @@ filt_freqs = {
     '30s': 1. / 30
 }
 
+fname = 'SMN'
+
 doppler_noise = [2e-5, 2e-5, 0]
 
 eps_freqs = np.array([[.1, 3],
@@ -18,18 +19,48 @@ eps_freqs = np.array([[.1, 3],
                       [.1, 3], ])
 
 
-if __name__ == '__main__':
+def pre_process_adv():
+    print("Pre-processing SMB-Nose mode vec file.")
+    outfile = datdir + fname + '.h5'
+    if tbx.checkhash(outfile, '62aa7b3370411cbe'):
+        print("   hash check passed; skipping pre-processing.")
+        return
+    rr = avm.read_nortek(datdir + fname + '.VEC')
+    rr = rr.subset(slice(*rr.props['inds_range']))
+    rr.pitch, rr.roll, rr.heading = avm.rotate.orient2euler(rr)
+    rr.roll -= 180
+    rr.roll[rr.roll < -180] += 360
+    # Clean
+    avm.clean.cleanFill(rr.u, rr.u > 0.5)
+    avm.clean.GN2002(rr.u)
+    avm.clean.GN2002(rr.v)
+    avm.clean.GN2002(rr.w)
+    # Remove extraneous data
+    rr.pop_data('AnaIn')
+    rr.pop_data('AnaIn1')
+    rr.pop_data('AnaIn2LSB')
+    rr.pop_data('AnaIn2MSB')
+    rr.pop_data('orientation_down')
+    rr.pop_data('status')
+    rr.pop_data('error')
+    rr.pop_data('Count')
+    rr.groups.pop('#extra')
+    rr.save(outfile)
+
+
+def merge_adv_bt(filt_freqs=filt_freqs):
+    print("Processing SMB-Nose mode data (merging bottom-track).")
 
     # 4800 points is 5min at 16hz
     binner = avm.TurbBinner(4800, 16)
 
     bt = load('SMN-BT')
 
-    bt_var = 'ubt'
-    bt_var = 'ubt2'
+    bt_var = 'velbt'
+    bt_var = 'velbt2'
 
     # Load the 'raw' (unprocessed) data that corresponds to the file above.
-    dat = data_api.load('SM_Nose', coordsys='raw')
+    dat = avm.load(datdir + fname + '.h5')
 
     dat.props['noise'] = doppler_noise
 
@@ -48,21 +79,21 @@ if __name__ == '__main__':
 
         # Calculate 'rotational' motion of ADP head.
         motcalc = avm.motion.CalcMotion(datmc)
-        ur_adp = motcalc.calc_urot(np.array([-1, 0, 0]), to_earth=False)
+        vel_adp = motcalc.calc_velrot(np.array([-1, 0, 0]), to_earth=False)
 
-        datmc.add_data('ubt', bt['BT_INST_interp'], 'orient')
-        datmc.add_data('ubt2', bt['BT_INST_interp'] + ur_adp, 'orient')
-        datmc.add_data('ur_adp', ur_adp, 'orient')
-        bt_vars = {'ubt', 'ubt2'}
+        datmc.add_data('velbt', bt['BT_INST_interp'], 'orient')
+        datmc.add_data('velbt2', bt['BT_INST_interp'] + vel_adp, 'orient')
+        datmc.add_data('vel_adp', vel_adp, 'orient')
+        bt_vars = {'velbt', 'velbt2'}
         datmc.rotate_vars.update(bt_vars)
         # The ADP data is in the instrument frame, so rotate it into the earth frame.
         avm.rotate.inst2earth(datmc, rotate_vars=bt_vars, force=True)
         if filt_freq > 0:
             filt = sig.butter(2, filt_freq / (datmc.fs / 2))
-            datmc.ubt = sig.filtfilt(filt[0], filt[1], datmc.ubt)
-            datmc.ubt2 = sig.filtfilt(filt[0], filt[1], datmc.ubt2)
+            datmc.velbt = sig.filtfilt(filt[0], filt[1], datmc.velbt)
+            datmc.velbt2 = sig.filtfilt(filt[0], filt[1], datmc.velbt2)
         if filt_freq > 0:
-            datmc._u += datmc[bt_var]  # Add the bt to the vel
+            datmc.vel += datmc[bt_var]  # Add the bt to the vel
         datnow = datmc.copy()
         avm.rotate.inst2earth(datmc, reverse=True)
 
@@ -70,22 +101,22 @@ if __name__ == '__main__':
 
         avm.rotate.earth2principal(datnow)
         datbd = binner(datnow)
-        datbd.add_data('Spec_uraw', binner.psd(datnow.uraw), 'spec')
-        datbd.add_data('Spec_uacc', binner.psd(datnow.uacc), 'spec')
-        datbd.add_data('Spec_urot', binner.psd(datnow.urot), 'spec')
-        datbd.add_data('Spec_ubt', binner.psd(datnow.ubt), 'spec')
-        datbd.add_data('Spec_ubt2', binner.psd(datnow.ubt2), 'spec')
+        datbd.add_data('Spec_velraw', binner.psd(datnow.velraw), 'spec')
+        datbd.add_data('Spec_velacc', binner.psd(datnow.velacc), 'spec')
+        datbd.add_data('Spec_velrot', binner.psd(datnow.velrot), 'spec')
+        datbd.add_data('Spec_velbt', binner.psd(datnow.velbt), 'spec')
+        datbd.add_data('Spec_velbt2', binner.psd(datnow.velbt2), 'spec')
         if filt_freq > 0:
-            umot = datnow.uacc + datnow.urot + datnow[bt_var]
+            umot = datnow.velacc + datnow.velrot + datnow[bt_var]
         else:
-            umot = datnow.uacc + datnow.urot
-        datbd.add_data('Spec_umot', binner.psd(umot), 'spec')
+            umot = datnow.velacc + datnow.velrot
+        datbd.add_data('Spec_velmot', binner.psd(umot), 'spec')
 
-        datbd.add_data('Cspec_umot', binner.calc_vel_cpsd(umot), 'spec')
-        datbd.add_data('Cspec_uraw', binner.calc_vel_cpsd(datnow.uraw), 'spec')
-        datbd.add_data('Cspec_u', binner.calc_vel_cpsd(datnow._u), 'spec')
+        datbd.add_data('Cspec_velmot', binner.calc_vel_cpsd(umot), 'spec')
+        datbd.add_data('Cspec_velraw', binner.calc_vel_cpsd(datnow.velraw), 'spec')
+        datbd.add_data('Cspec_vel', binner.calc_vel_cpsd(datnow.vel), 'spec')
 
-        epstmp = np.zeros_like(datbd.u)
+        epstmp = np.zeros_like(datbd.vel)
         Ntmp = 0
         for idx, frq_rng in enumerate(eps_freqs):
             if frq_rng is None:

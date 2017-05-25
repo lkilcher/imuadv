@@ -2,7 +2,6 @@ import numpy as np
 import dolfyn.adv.api as avm
 import scipy.signal as sig
 #import ttm.sm2015 as data_api
-import os
 from .base import datdir, load
 
 filt_freqs = {
@@ -20,11 +19,6 @@ eps_freqs = np.array([[.1, 3],
 
 
 if __name__ == '__main__':
-
-    try:
-        os.mkdir(datdir)
-    except:
-        pass
 
     # 4800 points is 5min at 16hz
     binner = avm.TurbBinner(4800, 16)

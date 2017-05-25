@@ -86,6 +86,7 @@ import data.bathy
 import data.btest
 import data.ttm_june2012.setup_data as j12setup
 import data.ttm_june2014.setup_data as j14setup
+import data.smb_may2015.setup_data as m15setup
 
 print("""
 This script downloads and pre-processes data files for making the
@@ -113,3 +114,7 @@ j12setup.process()
 # This is the June 2014 TTM dataset
 j14setup.pull()
 j14setup.process()
+
+###
+# This is the May 2015 SMB dataset
+m15setup.pull()

@@ -1,17 +1,20 @@
-- Remove DB links
-- Link for BT_IMU_sync_data.mat
-- Add nose-mode file pre-processing to make_SMBdat script?
-- Move SMBdat script to data/ folder.
-- copy bathy to DR
-- Use different TTM data for stationary_noise04.pdf (imu_uncertainty.py)
+- Data to MHKDR:
+  - All dropbox links (replace the links with mhkdr links)
+  - bathy data
+  - 
+  - Link for BT_IMU_sync_data.mat
+
 - Reorganize SM data
-- Simplify plotting scripts (remove unnecessary data dependency?)
+  - Move SMBdat script to data/ folder.
+  - Add nose-mode file pre-processing to make_SMBdat script?
+
+- Use different TTM data for stationary_noise04.pdf (imu_uncertainty.py)
+
 - Tag/DOI data and code
   - Clean up this repo?
     - Remove extra plotting?
     - Functionalize plotting scripts? ... Too much work?
   - Test SM2015
-  - Test TTM/June2012
   - Document versions of NumPy + MatPlotLib in DOLfYN
   - Tag DOLfYN
   - Add DOLfYN tag to data repos
@@ -22,8 +25,10 @@
   - Verify all figures come out correctly with pull'd data
   - Finalise README
   - Finalize edits to this paper
-  - Tag this repo, and upload it to MHKDR (w/ DOI), with extra data data files.
+  - Tag this repo, and upload it to MHKDR (w/ DOI), with extra data files.
   - Cite data at MHKDR (DOI's)
+
+? Simplify plotting scripts (remove unnecessary data dependency?)
 
 - Clear unnecessary files from releases (v1.1?)
 
@@ -31,42 +36,12 @@
 
 - Add a DOI or 'extra material' that points to this repo
 
-- Move SM bottom track incorporation into SM2015 data folder!!!
+X Move SM bottom track incorporation into SM2015 data folder!!!
+  - Now planning to simply roll existing script into this repo
+    directly. Will include this functionality in next later version of
+    SM2015 data if necessary
 
-- Add data-dload script to packages and add those to this repo.
-
-  . 'dload all' and 'processed' options
-
-- Add make_data script
-
-- Issue dolfyn release (tag) specifically for this analysis
-
-py/make_map.py
-- Make map of larger area?
-- Change font sizes?
-- Add tidal-flow arrow.
-
-fig/ttm04b
-- Increase font sizes?
-- Add pop-up buoy?
+- Fix vector styling (bold instead of \vec)
 
 fig/TimeFig01
-? Compare to 'old-style' ADV measurements?
 ? Change y-axis sizes so that 1m/s is the same vertical size on all plots
-? Plot mag/direction instead? Difference?
-
-fig/SpecFig_annot
-- Consistent mplstyle
-- Multiple velocity ranges?
-- Consistent legends
-
-- Do we need the bench tests from Nortek?
-
-DATA ORGANIZATION
-- Add DOLfYN support for CSV output.
-
-
-DISCUSSION
-- We tried a spectral approach to MC, but it diddn't work because you need the phase information.
-- Discuss SNR of \uhead compared to measurements.
-- These results are specific to this site and platform. In particular, the TKE+dissipation level, relative to the amplitude of motion, will determine the success of the approach.

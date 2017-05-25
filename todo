@@ -1,11 +1,9 @@
 - Data to MHKDR:
   - All dropbox links (replace the links with mhkdr links)
   - bathy data
-  - 
   - Link for BT_IMU_sync_data.mat
 
 - Reorganize SM data
-  - Move SMBdat script to data/ folder.
   - Add nose-mode file pre-processing to make_SMBdat script?
 
 - Use different TTM data for stationary_noise04.pdf (imu_uncertainty.py)

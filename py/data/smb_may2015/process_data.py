@@ -10,16 +10,17 @@ filt_freqs = {
     '30s': 1. / 30
 }
 
-fname = 'SMN'
-
 doppler_noise = [2e-5, 2e-5, 0]
 
 eps_freqs = np.array([[.1, 3],
                       [.1, 3],
                       [.1, 3], ])
 
+# 4800 points is 5min at 16hz
+binner = avm.TurbBinner(4800, 16)
 
-def pre_process_adv():
+
+def pre_process_adv(fname):
     print("Pre-processing SMB-Nose mode vec file.")
     outfile = datdir + fname + '.h5'
     if tbx.checkhash(outfile, '62aa7b3370411cbe'):
@@ -48,11 +49,8 @@ def pre_process_adv():
     rr.save(outfile)
 
 
-def merge_adv_bt(filt_freqs=filt_freqs):
+def merge_adv_bt(fname, filt_freqs=filt_freqs):
     print("Processing SMB-Nose mode data (merging bottom-track).")
-
-    # 4800 points is 5min at 16hz
-    binner = avm.TurbBinner(4800, 16)
 
     bt = load('SMN-BT')
 
@@ -133,3 +131,41 @@ def merge_adv_bt(filt_freqs=filt_freqs):
         datbd.add_data('epsilon', epstmp, 'main')
 
         datbd.save(datdir + 'SMN_bindat_filt-{}.h5'.format(filt_tag))
+
+
+def process_basic(fname, do_eps=False):
+
+    rr = avm.load(datdir + fname + '.h5')
+
+    print('Correcting motion...')
+    rm = rr.copy()
+    avm.motion.correct_motion(rm, accel_filtfreq=0.03)
+
+    print("Binning 'principal axes' data...")
+    avm.rotate.earth2principal(rm)
+    bm = binner(rm)
+    bm.add_data('Spec_velrot', binner.psd(rm.velrot), 'spec')
+    bm.add_data('Spec_velacc', binner.psd(rm.velacc), 'spec')
+    bm.add_data('Spec_velmot', binner.psd(rm.velacc + rm.velrot), 'spec')
+    bm.add_data('Spec_velraw',
+                binner.psd(rm.vel - (rm.velacc + rm.velrot)),
+                'spec')
+    if do_eps:
+        epstmp = np.zeros_like(bm.vel)
+        Ntmp = 0
+        for idx, frq_rng in enumerate(eps_freqs):
+            if frq_rng is None:
+                continue
+            om_rng = frq_rng * 2 * np.pi
+            N = ((om_rng[0] < bm.omega) & (bm.omega < om_rng[1])).sum()
+            epstmp += binner.calc_epsilon_LT83(bm.Spec[idx],
+                                               bm.omega,
+                                               np.abs(bm.U),
+                                               om_rng) * N
+            Ntmp += N
+        epstmp /= Ntmp
+        epstmp[np.abs(bm.U) < 0.2] = np.NaN
+        bm.add_data('epsilon', epstmp, 'main')
+    fname_now = fname + '_pax_b5m.h5'
+    print("Saving file: {}".format(fname_now))
+    bm.save(datdir + fname_now)

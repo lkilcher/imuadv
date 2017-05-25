@@ -1,0 +1,8 @@
+{"inds_range": [10000, 45800],
+ "body2head_rotmat": [[0, 0, 1],
+                      [0, 1, 0],
+                      [-1, 0, 0]],
+ "body2head_vec": [ 0.20955,  0.0,  0.60325],
+ "motion accel_filtfreq Hz": 0.03,
+ "declination": 16.30
+}

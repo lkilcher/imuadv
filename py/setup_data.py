@@ -118,4 +118,5 @@ j14setup.process()
 ###
 # This is the May 2015 SMB dataset
 m15setup.pull()
-m15setup.process()
+m15setup.process_SMN()
+m15setup.process_torpedo()

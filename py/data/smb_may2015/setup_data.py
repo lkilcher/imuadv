@@ -15,8 +15,19 @@ def pull():
         datdir + 'BT_IMU_sync_data.mat',
         hash='109bcde2ef771de9'
     )
+    print("Retrieving Davit Torpedo data from May2015 (SMB deployment) ...")
+    tbx.retrieve(
+        '<NEED LINK HERE!>... dropbox?',
+        datdir + 'TTT_Davit_B_May2015.VEC',
+        hash='422831f6f5f1873f'
+    )
 
 
-def process():
-    pd.pre_process_adv()
+def process_SMN():
+    pd.pre_process_adv('SMN')
     pd.merge_adv_bt({'5s': 0.2})
+
+
+def process_torpedo():
+    pd.pre_process_adv('TTT_Davit_B_May2015')
+    pd.process_basic('TTT_Davit_B_May2015')

@@ -1,10 +1,9 @@
 import numpy as np
 import dolfyn.adv.api as avm
-from scipy.io import loadmat
 import scipy.signal as sig
-import ttm.sm2015 as data_api
+#import ttm.sm2015 as data_api
 import os
-from .. import tools as tbx
+from .base import datdir, load
 
 filt_freqs = {
     'unfilt': 0.0,
@@ -18,35 +17,6 @@ doppler_noise = [2e-5, 2e-5, 0]
 eps_freqs = np.array([[.1, 3],
                       [.1, 3],
                       [.1, 3], ])
-
-
-datdir = tbx.datdir + 'smb_may2015/'
-
-
-def load(tag, bindat=True):
-    """Load ADP-BT motion-corrected StableMoor data.
-
-    Possible values of `tag` are:
-    'SMN-BT'      : Load SM nose ADP BT file.
-
-    'SMN-5s'      : 5s filtered SM nose
-    'SMN-10s'     : 10s filtered SM nose
-    'SMN-10s'     : 10s filtered SM nose
-    'SMN-30s'     : 30s filtered SM nose
-    'SMN-unfilt'  : unfiltered SM nose data
-
-    """
-    if tag == 'SMN-BT':
-        # This file is from Sam Harding.
-        dat = loadmat(data_api.package_root + 'ADCP/BT_IMU_sync_data.mat')
-        dat['t_IMU'] = dat['t_IMU'][0] - 366
-        return dat
-    dset, filt_tag = tag.split('-')
-    if bindat:
-        prefix = 'bindat'
-    else:
-        prefix = 'mcdat'
-    return avm.load(datdir + '{}_{}_filt-{}.h5'.format(dset, prefix, filt_tag))
 
 
 if __name__ == '__main__':

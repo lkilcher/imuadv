@@ -4,6 +4,7 @@ from scipy.io import loadmat
 import scipy.signal as sig
 import ttm.sm2015 as data_api
 import os
+from .. import tools as tbx
 
 filt_freqs = {
     'unfilt': 0.0,
@@ -17,6 +18,9 @@ doppler_noise = [2e-5, 2e-5, 0]
 eps_freqs = np.array([[.1, 3],
                       [.1, 3],
                       [.1, 3], ])
+
+
+datdir = tbx.datdir + 'smb_may2015/'
 
 
 def load(tag, bindat=True):
@@ -42,13 +46,13 @@ def load(tag, bindat=True):
         prefix = 'bindat'
     else:
         prefix = 'mcdat'
-    return avm.load('tmpdat/{}_{}_filt-{}.h5'.format(dset, prefix, filt_tag))
+    return avm.load(datdir + '{}_{}_filt-{}.h5'.format(dset, prefix, filt_tag))
 
 
 if __name__ == '__main__':
 
     try:
-        os.mkdir('./tmpdat')
+        os.mkdir(datdir)
     except:
         pass
 
@@ -98,7 +102,7 @@ if __name__ == '__main__':
         datnow = datmc.copy()
         avm.rotate.inst2earth(datmc, reverse=True)
 
-        datmc.save('tmpdat/SMN_mcdat_filt-{}.h5'.format(filt_tag))
+        datmc.save(datdir + 'SMN_mcdat_filt-{}.h5'.format(filt_tag))
 
         avm.rotate.earth2principal(datnow)
         datbd = binner(datnow)
@@ -133,4 +137,4 @@ if __name__ == '__main__':
         # epstmp[np.abs(datbd.U) < 0.2] = np.NaN
         datbd.add_data('epsilon', epstmp, 'main')
 
-        datbd.save('tmpdat/SMN_bindat_filt-{}.h5'.format(filt_tag))
+        datbd.save(datdir + 'SMN_bindat_filt-{}.h5'.format(filt_tag))

@@ -1,4 +1,4 @@
-import ttm.June2014 as j14
+import data.ttm_june2014 as j14
 import ptools as pt
 import numpy as np
 plt = pt.plt

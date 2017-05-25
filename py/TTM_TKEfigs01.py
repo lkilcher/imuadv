@@ -1,5 +1,5 @@
 import ptools as pt
-import ttm.June2014 as j14
+import data.ttm_june2014 as j14
 import numpy as np
 import gis
 

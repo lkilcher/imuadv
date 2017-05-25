@@ -1,3 +1,6 @@
 [submodule "py/data/ttm_june2014"]
 	path = py/data/ttm_june2014
 	url = git://github.com/lkilcher/TTMdata_June2014.git
+[submodule "py/data/ttm_june2012"]
+	path = py/data/ttm_june2012
+	url = git://github.com/lkilcher/TTMdata_June2012.git

@@ -84,6 +84,8 @@ Nose mode files. Others?
 
 import data.bathy
 import data.btest
+import data.ttm_june2012.setup_data as j12setup
+import data.ttm_june2014.setup_data as j14setup
 
 print("""
 This script downloads and pre-processes data files for making the
@@ -103,4 +105,11 @@ data.btest.pull()
 data.btest.process()
 
 ###
-# This is the 
+# This is the June 2012 TTM dataset
+j12setup.pull()
+j12setup.process()
+
+###
+# This is the June 2014 TTM dataset
+j14setup.pull()
+j14setup.process()

@@ -1,4 +1,4 @@
-import ttm.June2014 as j14
+import data.ttm_june2014 as j14
 import dolfyn.adv.api as avm
 import ptools as pt
 import matplotlib.pyplot as plt

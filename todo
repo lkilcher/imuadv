@@ -1,4 +1,7 @@
 - Remove DB links
+- Link for BT_IMU_sync_data.mat
+- Add nose-mode file pre-processing to make_SMBdat script?
+- Move SMBdat script to data/ folder.
 - copy bathy to DR
 - Use different TTM data for stationary_noise04.pdf (imu_uncertainty.py)
 - Reorganize SM data

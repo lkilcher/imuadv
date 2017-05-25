@@ -3,7 +3,7 @@ import dolfyn.adv.api as avm
 from dolfyn.tools.misc import delta
 import numpy as np
 import dolfyn.data.binned as binmod
-import ttm.June2012 as j12
+import data.ttm_june2012 as j12
 plt = pt.plt
 import scipy.signal as sig
 import matplotlib.ticker as tkr

@@ -1,17 +1,3 @@
-Python 2.7, MPL 1.5.1, NumPy 1.11.2, scipy 0.19.0, h5py 2.7.0, [mpl_basemap](https://matplotlib.org/basemap/) 1.0.7 (for the map figure).
+This is the source repository for the publication ["Turbulence Measurements from Compliant Moorings - Part II: Motion Correction", by L. Kilcher, J. Thomson, S. Harding, and S. Nylund (doi: 10.1175/JTECH-D-16-0213.1)](http://dx.doi.org/10.1175/JTECH-D-16-0213.1). The entire source for creating the document is included here (latex files, figures, python scripts, and links to source data files).
 
-- Point to MHKDR
-- DOLfYN dependence.
-
-Run:
-
-    $ cd py/
-    $ python setup_data.py
-
-That takes a while. 
-
-If you want to recreate the figures, you can do:
-
-    $ python make_figs.py
-    
-To regenerate all of the figures used in the publication.
+Info on running the analysis performed for this work--including scripts for downloading source data, and re-generating figures--can be found in the `py/README.md` file.

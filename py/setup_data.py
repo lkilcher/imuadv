@@ -11,7 +11,7 @@ The following figures are used by the document:
 06+ stationary_noise04
   :imu_uncertainty.py
   . btest-C
-  . !!! sm15-TTM-VELMOOR (switch to J14?)
+  . j14.ttm02b-top.ttmlean
 07+ SpecFig04_filtering2
   :spec04.py
   . j14.ttm02b-top.raw
@@ -77,8 +77,9 @@ ttm02b top + bot
 ttm01b top + bot
 
 # SM2015
-Nose mode files. Others?
-!!! Currently I'm using the SM2015 TTM for imu_uncertainty fig. Need to fix this.
+Nose mode files.
+Torpedo_Davit.
+
 
 """
 

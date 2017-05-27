@@ -365,7 +365,7 @@ def boot(x, m=500, alpha=0.05, axis=None):
         # mi[idx]=array([random.choice(x) for i in range(n)]).mean() # This is
         # EXCEEDINGLY slow.
     mi.sort()
-    idx = np.round(m * alpha / 2)
+    idx = int(np.round(m * alpha / 2))
     return mi[idx], x.mean(), mi[-idx - 1]
 
 

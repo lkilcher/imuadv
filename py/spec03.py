@@ -17,8 +17,7 @@ filtfreq = 0.03
 binner = avm.TurbBinner(4800, 16)
 
 if 'dat' not in vars():
-    dat = sm15.load('TTT_Davit_B', 'pax',
-                    bindat=True)
+    dat = sm15.load('TTT_Davit_B_May2015_pax_b5m.h5')
     epstmp = np.zeros_like(dat.u)
     Ntmp = 0
     for idx, frq_rng in enumerate(eps_freqs):
@@ -38,19 +37,15 @@ if 'dat' not in vars():
 pii = 2 * np.pi
 
 vard = dict(
-    Spec_umot=dict(color='r', lw=1.5, zorder=1,
-                   label=pt.latex['uhead'].spec,
-                   noise=np.zeros(3),
-    ),
-    Spec_uraw=dict(color='k', zorder=2,
-                   label=pt.latex['umeas'].spec,
-                   noise=[1.5e-4, 1.5e-4, 1.5e-5, ],
-
-    ),
+    Spec_velmot=dict(color='r', lw=1.5, zorder=1,
+                     label=pt.latex['uhead'].spec,
+                     noise=np.zeros(3), ),
+    Spec_velraw=dict(color='k', zorder=2,
+                     label=pt.latex['umeas'].spec,
+                     noise=[1.5e-4, 1.5e-4, 1.5e-5, ], ),
     Spec=dict(color='b', lw=1.5, zorder=3,
               label=pt.latex['ue'].spec,
-              noise=[1.5e-4, 1.5e-4, 1.5e-5, ],
-    ),
+              noise=[1.5e-4, 1.5e-4, 1.5e-5, ], ),
 )
 
 z = 35
@@ -94,12 +89,12 @@ with pt.style['onecol']():
             for fctr in [1, 1e-2, 1e-4, 1e-6, 1e-8]:
                 ax.loglog(*pt.powline(factor=fctr), linewidth=0.6,
                           linestyle=':', zorder=-6, color='k')
-            for v in ['Spec', 'Spec_umot', 'Spec_uraw', ]:
+            for v in ['Spec', 'Spec_velmot', 'Spec_velraw', ]:
                 # The col-row-var loop
                 kwd = vard[v].copy()
                 n = kwd.pop('noise')[irow]
                 dnow = dat[v][irow, inds].mean(0) * pt.pii - n
-                if v == 'Spec_umot':
+                if v == 'Spec_velmot':
                     _itmp = dat.freq < filtfreq
                     ax.loglog(dat.freq[~_itmp], dnow[~_itmp], **kwd)
                     kwd['linestyle'] = '--'
@@ -126,5 +121,3 @@ with pt.style['onecol']():
     ax.set_xlim((1e-3, 5))
 
     fig.savefig(pt.figdir + 'SpecFig03_TTT.pdf')
-
-

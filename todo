@@ -4,9 +4,6 @@
   - Link for BT_IMU_sync_data.mat
   - Link for Tripod data
 
-- Reorganize SM data
-  - Add nose-mode file pre-processing to make_SMBdat script?
-
 - Tag/DOI data and code
   - Clean up this repo?
     - Remove extra plotting?

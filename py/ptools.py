@@ -8,7 +8,6 @@ from matplotlib.path import Path
 from matplotlib.patches import BoxStyle
 # import matplotlib.gridspec as gridspec
 
-plt.ion()
 datetime = dt.datetime.datetime
 rcParams = mpl.rcParams
 

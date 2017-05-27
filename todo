@@ -6,8 +6,6 @@
 - Reorganize SM data
   - Add nose-mode file pre-processing to make_SMBdat script?
 
-- Use different TTM data for stationary_noise04.pdf (imu_uncertainty.py)
-
 - Tag/DOI data and code
   - Clean up this repo?
     - Remove extra plotting?

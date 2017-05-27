@@ -46,7 +46,7 @@ def cp_env():
         path += p + ':'
     path = path[:-1]  # Drop the last ":"
     e['PYTHONPATH'] = path
-    return
+    return e
 
 
 def run(script_name):

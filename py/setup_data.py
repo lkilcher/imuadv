@@ -114,6 +114,7 @@ j12setup.process()
 # This is the June 2014 TTM dataset
 j14setup.pull()
 j14setup.process()
+j14setup.ttmlean.process()
 
 ###
 # This is the May 2015 SMB dataset

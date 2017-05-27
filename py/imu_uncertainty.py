@@ -3,7 +3,7 @@ from dolfyn.adv import api as avm
 import data.tools as data_tbx
 import ptools as pt
 import numpy as np
-#import data.smb_may2015 as sm15
+import data.ttm_june2014 as j14
 
 
 def spec_epsilon(epsilon, tke, k, alpha=0.5, ):
@@ -30,7 +30,8 @@ mcfilts = {'unfiltered': 0.0,
            '3s': 0.3, }
 
 if 'dmot' not in vars():
-    dmot = avm.load(sm15.package_root + 'ADVs/TTM_NREL03_May2015_pax_b5m_VELMOOR.h5')
+    dmot = avm.load(j14.datdir +
+                    'ttm02b_ADVtop_NREL03_June2014_velmoor-f10s_b5m.h5')
 
 
 if 'rd' not in vars():
@@ -172,13 +173,14 @@ if flag.get('plot_spec3', False):
         bdmc = bindatmc[tag]
         tmp = bdmc.Spec_uacc[:, gd].max(0).mean(0) * 2 * np.pi
         tmp2 = bdmc.Spec_uacc[:, gd].min(0).mean(0) * 2 * np.pi
+        vrinds = (1. < np.abs(dmot.u)) & (np.abs(dmot.u) < 2.)
         if tag == 'unfiltered':
             label = r'$\vec{n}_{a}$'
-            mot = dmot.Spec_velmoor_nofilt[0].mean(0)
+            mot = dmot.Spec_velmoor_nofilt[0][vrinds].mean(0)
             inds = mot < tmp[:len(mot)]
             ax.loglog(dmot.freq[inds], mot[inds], color=ul_clr,
                       lw=1, ls='-', zorder=3)
-            mot2 = dmot.Spec_velmoor_nofilt[2].mean(0)
+            mot2 = dmot.Spec_velmoor_nofilt[2][vrinds].mean(0)
             inds2 = mot2 < tmp2[:len(mot2)]
             ax.loglog(dmot.freq[inds2], mot2[inds2], color=ul_clr,
                       lw=1, ls='--', zorder=3)

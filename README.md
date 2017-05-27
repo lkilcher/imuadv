@@ -1,4 +1,4 @@
-Python 2.7, MPL 2.0, NumPy 1.11.2
+Python 2.7, MPL 1.5.1, NumPy 1.11.2
 
 - Point to MHKDR
 - DOLfYN dependence.

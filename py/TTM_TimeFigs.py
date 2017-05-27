@@ -38,7 +38,7 @@ if 'dat_mc' not in vars():
     #datr = avm.load(datdir + 'TTM_Vectors/TTM_NRELvector_Jun2012_pax.h5')
     # binner_nr = avm.turb_binner(
     #     n_bin=10258, fs=datr.fs, n_fft=10240, n_fft_coh=2048)
-    # acov = binner_nr.calc_acov(datr._u)
+    # acov = binner_nr.calc_acov(datr.vel)
     # lint = binner_nr.calc_Lint(acov, dat_mc.U_mag)
 
 frmt = 'p'
@@ -226,7 +226,7 @@ if flg.get('do_check_awac_amp', False):
     with pt.style['classic']():
         fg, axs = pt.newfig(40, 4, 1, figsize=[8, 8], sharex=True)
         thresh = 100
-        d = awacr._amp[:, depi, awi].mean(0)
+        d = awacr.amp[:, depi, awi].mean(0)
         bd = d > thresh
         ax = axs[0]
         ax.plot(msk(awacr.u[depi, awi]))
@@ -236,9 +236,9 @@ if flg.get('do_check_awac_amp', False):
         ax.plot(msk(awacr.w[depi, awi]))
         ax = axs[3]
         ax.plot(d, 'k')
-        ax.plot(awacr._amp[0, depi, awi], 'r')
-        ax.plot(awacr._amp[1, depi, awi], 'b')
-        ax.plot(awacr._amp[2, depi, awi], 'g')
+        ax.plot(awacr.amp[0, depi, awi], 'r')
+        ax.plot(awacr.amp[1, depi, awi], 'b')
+        ax.plot(awacr.amp[2, depi, awi], 'g')
         ax.axhline(thresh, color='r')
 
 
@@ -267,14 +267,14 @@ if flg.get('do_check_awac_amp2', False):
     with pt.style['classic']():
         fg, axs = pt.newfig(41, 5, 1, figsize=[8, 8], sharex=True)
         thresh = 100
-        d = awacr._amp[:, depi, awi].mean(0)
-        #damp = np.diff(awacr._amp[:, depi, awi].astype(np.int16), 1, 0)
+        d = awacr.amp[:, depi, awi].mean(0)
+        #damp = np.diff(awacr.amp[:, depi, awi].astype(np.int16), 1, 0)
         #bd = d > thresh
-        damp = np.diff(np.pad(awacr._amp[:, depi, awi].astype(np.int16),
+        damp = np.diff(np.pad(awacr.amp[:, depi, awi].astype(np.int16),
                               ((0, 1), (0, 0)), 'wrap'),
                        1, 0)
         tmp = sig.convolve(damp, np.ones((1, 10)) / 10, 'same')
-        bd = screen(awacr._amp[:, depi, awi])
+        bd = screen(awacr.amp[:, depi, awi])
         ax = axs[0]
         ax.plot(t, awacr.u[depi, awi], '0.6')
         ax.plot(ta, datr.u[avi], 'r')
@@ -289,9 +289,9 @@ if flg.get('do_check_awac_amp2', False):
         ax.plot(t, msk(awacr.w[depi, awi]), 'b')
         ax = axs[3]
         ax.plot(t, d, 'k')
-        ax.plot(t, awacr._amp[0, depi, awi], 'r')
-        ax.plot(t, awacr._amp[1, depi, awi], 'b')
-        ax.plot(t, awacr._amp[2, depi, awi], 'g')
+        ax.plot(t, awacr.amp[0, depi, awi], 'r')
+        ax.plot(t, awacr.amp[1, depi, awi], 'b')
+        ax.plot(t, awacr.amp[2, depi, awi], 'g')
         ax.axhline(thresh, color='r')
         ax = axs[4]
         #ax.plot(t, d, 'k')
@@ -310,9 +310,9 @@ if flg.get('show awac avg fix', False):
     t = (bnr.mean(awacr.mpltime) - t0) * 24
     dat_mc.time = (dat_mc.mpltime - t0) * 24
     depi = 9
-    bd = screen(awacr._amp[:, depi], thresh=0.05)
+    bd = screen(awacr.amp[:, depi], thresh=0.05)
     u = bnr.mean(np.ma.masked_where(np.tile(bd[None, :], (3, 1)),
-                                    awacr._u[:, depi]),
+                                    awacr.vel[:, depi]),
                  mask_thresh=0.5)
     scale = np.array([[-2.1, 2.1],
                       [-1, 1],
@@ -331,7 +331,7 @@ if flg.get('show awac avg fix', False):
                     ha='left', va='top')
             ax.axhline(0, color='k', linestyle='--', lw=0.5)
             ax.set_ylabel(r'$\bar{%s}\ \mathrm{[m/s]}$' % format('uvw'[iax]))
-            ax.plot(dat_mc.time, dat_mc._u[iax], 'k', lw=2)
+            ax.plot(dat_mc.time, dat_mc.vel[iax], 'k', lw=2)
             ax.plot(t, u[iax] + offset[iax], 'r', lw=1.0)
         ax = axs[0]
         ax.yaxis.set_ticks(np.arange(-3.0, 3.5, 1.0))
@@ -382,8 +382,8 @@ if flg.get('show awac avg2', False):
     bnr = binmod.TimeBinner(300, 1)
     t = bnr.mean(awacr.mpltime)
     depi = 9
-    bd = screen(awacr._amp[:, depi])
-    u = bnr.mean(np.ma.masked_where(np.tile(bd[None, :], (3, 1)), awacr._u[:, depi]),
+    bd = screen(awacr.amp[:, depi])
+    u = bnr.mean(np.ma.masked_where(np.tile(bd[None, :], (3, 1)), awacr.vel[:, depi]),
                  mask_thresh=0.6)
     umag = velmag(u)
     delta_ang = dang(u, ui)
@@ -392,10 +392,10 @@ if flg.get('show awac avg2', False):
         fg, axs = pt.newfig(43, 3, 1, figsize=5, sharex=True)
         thresh = 100
         ax = axs[0]
-        ax.plot(dat_mc.mpltime, velmag(dat_mc._u), 'b', lw=2)
+        ax.plot(dat_mc.mpltime, velmag(dat_mc.vel), 'b', lw=2)
         ax.plot(t, velmag(u), 'r')
         ax = axs[1]
-        ax.plot(dat_mc.mpltime, velang(dat_mc._u), 'b', lw=2)
+        ax.plot(dat_mc.mpltime, velang(dat_mc.vel), 'b', lw=2)
         ax.plot(t, velang(u), 'r')
         ax = axs[2]
         ax.plot(t, delta_ang, 'r')

@@ -166,7 +166,8 @@ if flag.get('epsVu both'):
                 elif ky == 'ttm':
                     marker = 'D'
                     label = 'TTM'
-                scat = ax.plot(np.abs(d.U[inds]), d.epsilon[inds], marker, c='k',
+                scat = ax.plot(np.abs(d.U[inds]), d.epsilon[inds],
+                               marker, c='k',
                                ms=3, label=label)
             ax.set_title(['Ebb', 'Flood'][iax])
             inds = [gt(0.6), lt(-0.6)][iax](dnow['u']) & ~np.isnan(dnow['eps'])

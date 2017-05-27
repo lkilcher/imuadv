@@ -56,7 +56,6 @@ for filt_tag, filt_freq in mcfilts.iteritems():
         bdmc = binner(mcdat)
         bdmc.add_data('Spec_urot', binner.psd(mcdat.velrot))
         bdmc.add_data('Spec_uacc', binner.psd(mcdat.velacc))
-        bdmc.omega[-1] *= -1
         bindatmc[filt_tag] = bdmc
 
 

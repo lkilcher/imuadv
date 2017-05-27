@@ -18,7 +18,7 @@ binner = avm.TurbBinner(4800, 16)
 
 if 'dat' not in vars():
     dat = sm15.load('TTT_Davit_B', 'pax',
-                    bin=True)
+                    bindat=True)
     epstmp = np.zeros_like(dat.u)
     Ntmp = 0
     for idx, frq_rng in enumerate(eps_freqs):

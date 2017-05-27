@@ -1,6 +1,7 @@
 from .. import tools as tbx
 from scipy.io import loadmat
 import dolfyn.adv.api as avm
+from os.path import isfile
 
 datdir = tbx.datdir + 'smb_may2015/'
 
@@ -18,6 +19,12 @@ def load(tag, bindat=True):
     'SMN-unfilt'  : unfiltered SM nose data
 
     """
+    for fl in [tag,
+               tag + '.h5',
+               datdir + tag,
+               datdir + tag + '.h5']:
+        if isfile(fl):
+            return avm.load(fl)
     if tag == 'SMN-BT':
         # This file is from Sam Harding.
         dat = loadmat(datdir + 'BT_IMU_sync_data.mat')

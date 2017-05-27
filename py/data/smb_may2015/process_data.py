@@ -114,7 +114,7 @@ def merge_adv_bt(fname, filt_freqs=filt_freqs):
         datbd.add_data('Cspec_velraw', binner.calc_vel_cpsd(datnow.velraw), 'spec')
         datbd.add_data('Cspec_vel', binner.calc_vel_cpsd(datnow.vel), 'spec')
 
-        epstmp = np.zeros_like(datbd.vel)
+        epstmp = np.zeros_like(datbd.u)
         Ntmp = 0
         for idx, frq_rng in enumerate(eps_freqs):
             if frq_rng is None:

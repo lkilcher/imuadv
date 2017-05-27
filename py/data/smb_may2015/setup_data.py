@@ -25,7 +25,7 @@ def pull():
 
 def process_SMN():
     pd.pre_process_adv('SMN')
-    pd.merge_adv_bt({'5s': 0.2})
+    pd.merge_adv_bt('SMN', filt_freqs={'5s': 0.2})
 
 
 def process_torpedo():

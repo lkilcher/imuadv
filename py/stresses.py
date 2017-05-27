@@ -1,5 +1,5 @@
 import data.ttm_june2014 as j14
-import make_SMdata_wBT as smdat
+import data.smb_may2015 as smdat
 import ptools as pt
 import dolfyn.adv.api as avm
 import numpy as np

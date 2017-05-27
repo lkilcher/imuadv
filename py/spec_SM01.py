@@ -1,6 +1,6 @@
 import numpy as np
 import ptools as pt
-import make_SMdata_wBT as smdat
+import data.smb_may2015 as smdat
 import kaimal
 
 flag = {}
@@ -40,8 +40,8 @@ filtfreq = filt_freqs['5s']
 # The mean velocity is totally contaminated by motion correction, so
 # lets fix it here
 if 'unfilt' in dat_filt:
-    bindat_filt['unfilt']['_u'] = bindat_filt['5s']['_u']
-    dat_filt['unfilt']['_u'] = dat_filt['5s']['_u']
+    bindat_filt['unfilt']['vel'] = bindat_filt['5s']['vel']
+    dat_filt['unfilt']['vel'] = dat_filt['5s']['vel']
 
 specnd = kaimal.Kaimal(np.logspace(-3, 4, 1000))
 z_adv = 10
@@ -148,19 +148,19 @@ if flag.get('bt_filt_spec', False):
                           (datbd.Spec[iax][inds].mean(0) - doppler_noise[iax]) * pii,
                           'b', label=pt.latex['ue'].spec, linewidth=1.5, zorder=10)
                 ax.loglog(datbd.freq,
-                          (datbd.Spec_uraw[iax][inds].mean(0) - doppler_noise[iax]) * pii,
+                          (datbd.Spec_velraw[iax][inds].mean(0) - doppler_noise[iax]) * pii,
                           'k', label=pt.latex['umeas'].spec)
                 ax.loglog(datbd.freq,
-                          datbd.Spec_umot[iax][inds].mean(0) * pii,
+                          datbd.Spec_velmot[iax][inds].mean(0) * pii,
                           'r', label=pt.latex['uhead'].spec, zorder=8, )
                 # ax.loglog(datbd.freq,
-                #           datbd.Spec_urot[iax][inds].mean(0) * pii,
+                #           datbd.Spec_velrot[iax][inds].mean(0) * pii,
                 #           'm', label='$u_{rot}$')
                 # ax.loglog(datbd.freq,
-                #           datbd.Spec_uacc[iax][inds].mean(0) * pii,
+                #           datbd.Spec_velacc[iax][inds].mean(0) * pii,
                 #           'b', label='$u_{acc}$')
                 # ax.loglog(datbd.freq,
-                #           datbd.Spec_ubt[iax][inds].mean(0) * pii,
+                #           datbd.Spec_velbt[iax][inds].mean(0) * pii,
                 #           'r', label='$u_{bt}$')
                 ax.plot(line['x'], line['y'], 'k--')
                 ax.axvline(filt_freq, linestyle=':', color='k')
@@ -205,19 +205,19 @@ if flag.get('all spec'):
                       (datbd.Spec[iax][inds].mean(0) - doppler_noise[iax]) * pii,
                       linewidth=2, zorder=10, **kwd)
             # ax.loglog(datbd.freq,
-            #           (datbd.Spec_uraw[iax][inds].mean(0) - 2e-5) * pii,
+            #           (datbd.Spec_velraw[iax][inds].mean(0) - 2e-5) * pii,
             #           'y', label='$u_{raw}$')
             # ax.loglog(datbd.freq,
-            #           datbd.Spec_umot[iax][inds].mean(0) * pii,
+            #           datbd.Spec_velmot[iax][inds].mean(0) * pii,
             #           'k', label='$u_{mot}$', zorder=8, linewidth=1.5)
             # ax.loglog(datbd.freq,
-            #           datbd.Spec_urot[iax][inds].mean(0) * pii,
+            #           datbd.Spec_velrot[iax][inds].mean(0) * pii,
             #           'm', label='$u_{rot}$')
             # ax.loglog(datbd.freq,
-            #           datbd.Spec_uacc[iax][inds].mean(0) * pii,
+            #           datbd.Spec_velacc[iax][inds].mean(0) * pii,
             #           'b', label='$u_{acc}$')
             # ax.loglog(datbd.freq,
-            #           datbd.Spec_ubt[iax][inds].mean(0) * pii,
+            #           datbd.Spec_velbt[iax][inds].mean(0) * pii,
             #           'r', label='$u_{bt}$')
             ax.plot(line['x'], line['y'], 'k--')
             ax.axvline(filt_freq, linestyle=':', color='k')
@@ -238,11 +238,11 @@ if flag.get('all spec'):
 if flag.get('multi spec'):
 
     vard = dict(
-        Spec_umot=dict(color='r', lw=1.5, zorder=1,
+        Spec_velmot=dict(color='r', lw=1.5, zorder=1,
                        label=pt.latex['uhead'].spec,
                        noise=np.zeros(3),
         ),
-        Spec_uraw=dict(color='k', zorder=2,
+        Spec_velraw=dict(color='k', zorder=2,
                        label=pt.latex['umeas'].spec,
                        noise=[1.5e-4, 1.5e-4, 1.5e-5, ],
 
@@ -289,7 +289,7 @@ if flag.get('multi spec'):
                 for fctr in [1, 1e-2, 1e-4, 1e-6, 1e-8]:
                     ax.loglog(*pt.powline(factor=fctr), linewidth=0.6,
                               linestyle=':', zorder=-6, color='k')
-                for v in ['Spec', 'Spec_umot', 'Spec_uraw', ]:
+                for v in ['Spec', 'Spec_velmot', 'Spec_velraw', ]:
                     # The col-row-var loop
                     kwd = vard[v].copy()
                     n = kwd.pop('noise')[irow]

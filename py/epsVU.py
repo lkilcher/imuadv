@@ -1,5 +1,5 @@
 import data.ttm_june2014 as j14
-import make_SMdata_wBT as sm
+import data.smb_may2015 as sm
 import ptools as pt
 import numpy as np
 plt = pt.plt

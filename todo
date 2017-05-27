@@ -2,6 +2,7 @@
   - All dropbox links (replace the links with mhkdr links)
   - bathy data
   - Link for BT_IMU_sync_data.mat
+  - Link for Tripod data
 
 - Reorganize SM data
   - Add nose-mode file pre-processing to make_SMBdat script?

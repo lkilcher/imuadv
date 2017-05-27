@@ -1,23 +1,24 @@
+- Test setup_data on blank server
+- Test make_figs on blank server
+- How much disk space for setup_data.py (add to: py/README.md)?
+
 - Data to MHKDR:
   - All dropbox links (replace the links with mhkdr links)
   - bathy data
-  - Link for BT_IMU_sync_data.mat
-  - Link for Tripod data
 
 - Tag/DOI data and code
   - Clean up this repo?
-    - Remove extra plotting?
     - Functionalize plotting scripts? ... Too much work?
-  - Test SM2015
-  - Document versions of NumPy + MatPlotLib in DOLfYN
   - Tag DOLfYN
+  - Add DOLfYN tag to pypi
   - Add DOLfYN tag to data repos
+  - Add proper DOLfYN tag to requirements.txt
   - Tag Data repos (DRs)
   - Upload data and DRs (tags) to MHKDR
   - Add pull script to this repo
   - Rewrite code to use pull'd data
   - Verify all figures come out correctly with pull'd data
-  - Finalise README
+  - Finalise READMEs (<root>/README.md, and <root>/py/README.md)
   - Finalize edits to this paper
   - Tag this repo, and upload it to MHKDR (w/ DOI), with extra data files.
   - Cite data at MHKDR (DOI's)

@@ -36,7 +36,7 @@ The following figures are used by the document:
   . j14.load('ttm02b-top', 'pax', bin=True)
   ? j14.load('ttm02b-bottom', 'pax', bin=True)
   ? smdat.load('SMN-5s', bindat=True)
-  . TTT avm.load('/Users/lkilcher/data/pnnl/TTT_Vector_Feb2011_pax_b5m.h5')
+  . Tripod
 13+ CoSpecND03_TTM-both
   :stresses.py
   ... Same as 12
@@ -85,6 +85,7 @@ Torpedo_Davit.
 
 import data.bathy
 import data.btest
+import data.tripod
 import data.ttm_june2012.setup_data as j12setup
 import data.ttm_june2014.setup_data as j14setup
 import data.smb_may2015.setup_data as m15setup
@@ -105,6 +106,11 @@ data.bathy.process()
 # This is the bench-test data, for Figure 6
 data.btest.pull()
 data.btest.process()
+
+###
+# This is for Figure 13
+data.tripod.pull()
+data.tripod.process()
 
 ###
 # This is the June 2012 TTM dataset

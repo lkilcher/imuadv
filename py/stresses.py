@@ -1,5 +1,6 @@
 import data.ttm_june2014 as j14
 import data.smb_may2015 as smdat
+import data.tripod as tripod
 import ptools as pt
 import dolfyn.adv.api as avm
 import numpy as np
@@ -28,7 +29,7 @@ if 'bdat' not in vars():
     bdat['ttm'] = j14.load('ttm02b-top', 'pax', bin=True)
     bdat['ttmb'] = j14.load('ttm02b-bot', 'pax', bin=True)
     bdat['sm'] = smdat.load('SMN-5s', bindat=True)
-    bdat['ttt'] = avm.load('/Users/lkilcher/data/pnnl/TTT_Vector_Feb2011_pax_b5m.h5')
+    bdat['ttt'] = tripod.load()
     for nnm, onm in [('Cspec_vel', 'Cspec_u'),
                      ('Cspec_velrot', 'Cspec_urot'),
                      ('Cspec_velraw', 'Cspec_uraw'),

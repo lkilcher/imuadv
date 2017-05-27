@@ -1,6 +1,7 @@
 - Test setup_data on blank server
 - Test make_figs on blank server
 - How much disk space for setup_data.py (add to: py/README.md)?
+- data/<submodules> POINT TO TAGS!
 
 - Data to MHKDR:
   - All dropbox links (replace the links with mhkdr links)
@@ -30,11 +31,6 @@
 - citations for software (in acknowledgements?)
 
 - Add a DOI or 'extra material' that points to this repo
-
-X Move SM bottom track incorporation into SM2015 data folder!!!
-  - Now planning to simply roll existing script into this repo
-    directly. Will include this functionality in next later version of
-    SM2015 data if necessary
 
 - Fix vector styling (bold instead of \vec)
 

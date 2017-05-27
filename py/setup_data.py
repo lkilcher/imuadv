@@ -34,7 +34,7 @@ The following figures are used by the document:
 12+ StressSpec_TTM_04vp
   stresses.py
   . j14.load('ttm02b-top', 'pax', bin=True)
-  ? j14.load('ttm02b-bottom', 'pax', bin=True)
+  . j14.load('ttm02b-bottom', 'pax', bin=True)
   ? smdat.load('SMN-5s', bindat=True)
   . Tripod
 13+ CoSpecND03_TTM-both
@@ -44,22 +44,14 @@ The following figures are used by the document:
   :TTM_TKEfigs01.py
   . dat = j14.load('ttm02b-top', 'pax',
                    bin=True)
-  ? dat2 = j14.load('ttm02b-bot', 'pax',
+  . dat2 = j14.load('ttm02b-bot', 'pax',
                     bin=True)
-  ? dat3 = j14.load('ttm01b-top', 'pax',
-                    bin=True).subset(slice(3, -2))
-  ? dat4 = j14.load('ttm01b-bot', 'pax',
-                    bin=True).subset(slice(3, -2))
 15+ EpsVProd01
   :TTM_TKEfigs01.py
   . dat = j14.load('ttm02b-top', 'pax',
                    bin=True)
   . dat2 = j14.load('ttm02b-bot', 'pax',
                     bin=True)
-  ? dat3 = j14.load('ttm01b-top', 'pax',
-                    bin=True).subset(slice(3, -2))
-  ? dat4 = j14.load('ttm01b-bot', 'pax',
-                    bin=True).subset(slice(3, -2))
 16+ EpsVU_03
   :epsVU.py
   . dat['ttm'] = j14.load('ttm02b-top', 'pax',
@@ -114,14 +106,18 @@ data.tripod.process()
 
 ###
 # This is the June 2012 TTM dataset
-j12setup.pull()
-j12setup.process()
+j12setup.pull([j12setup.FILEINFO['adv-nrel'],
+               j12setup.FILEINFO['awac']])
+j12setup.proc.process_adv([j12setup.FILEINFO['adv-nrel']])
+j12setup.proc.process_awac()
 
 ###
 # This is the June 2014 TTM dataset
-j14setup.pull()
-j14setup.process()
-j14setup.ttmlean.process()
+finfo = [j14setup.FILEINFO['ttm02b-top'],
+         j14setup.FILEINFO['ttm02b-bot']]
+j14setup.pull(finfo)
+j14setup.process(finfo)
+j14setup.ttmlean.process(finfo['ttm01b-top'])
 
 ###
 # This is the May 2015 SMB dataset

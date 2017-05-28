@@ -5,7 +5,7 @@ fname = 'tripod_data'
 
 
 def pull():
-    print("Retrieving btest data...")
+    print("Retrieving tripod data...")
     tbx.retrieve(
         'https://www.dropbox.com/s/qppgv82xwxrcs0u/TTT_Vector_Feb2011.vec?dl=1',
         tbx.datdir + fname + '.VEC',

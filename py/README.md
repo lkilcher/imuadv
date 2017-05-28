@@ -14,6 +14,10 @@ Once you have python installed, you can get most of these packages by doing:
 
 If you want to be able to reproduce Figure 1 (map), [follow the instruction for installing basemap](http://matplotlib.org/basemap/users/installing.html).
 
+Next, you need to do a bit more `git` magic and install the submodules that this library depends on:
+
+    $ git submodule update --init
+
 Once those steps are complete, the source data can be downloaded and processed by:
 
     $ python setup_data.py

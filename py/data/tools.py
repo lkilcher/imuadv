@@ -1,12 +1,17 @@
 import shutil
 import os.path as path
 import hashlib
+import ssl
 try:
     from urllib.request import urlopen
 except:
     from urllib import urlopen
 
 datdir = path.dirname(path.realpath(__file__)) + '/'
+
+insecure_ctx = ssl.create_default_context()
+insecure_ctx.check_hostname = False
+insecure_ctx.verify_mode = ssl.CERT_NONE
 
 
 def sha(fname):
@@ -23,7 +28,10 @@ def checkhash(fname, hash=None):
     return sha(fname) == hash
 
 
-def retrieve(url, fname, hash=None):
+def retrieve(url, fname, hash=None, verify=True):
+    url_kwargs = {}
+    if verify:
+        url_kwargs['context'] = insecure_ctx
     val = checkhash(fname, hash)
     if val is None:
         pass
@@ -33,6 +41,6 @@ def retrieve(url, fname, hash=None):
     else:
         print("   Hash test failed; "
               "overwriting existing file...")
-    response = urlopen(url)
+    response = urlopen(url, **url_kwargs)
     with open(fname, 'wb') as f:
         shutil.copyfileobj(response, f)

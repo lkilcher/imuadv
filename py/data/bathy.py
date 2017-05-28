@@ -12,9 +12,10 @@ fnm = 'bathy-data'
 def pull():
     print("Retrieving bathy data...")
     tbx.retrieve(
-        'https://www.ocean.washington.edu/data/pugetsound/datasets/psdem2005/rasters/tiles/g1230485/g1230485.zip',
+        'http://www.ocean.washington.edu/data/pugetsound/datasets/psdem2005/rasters/tiles/g1230485/g1230485.zip',
         tbx.datdir + fnm + '.zip',
-        hash='6dcc6bddac16284a'
+        hash='6dcc6bddac16284a',
+        verify=False
     )
 
 

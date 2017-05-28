@@ -7,6 +7,7 @@ The analysis in these scripts were done using:
 - scipy 0.19.0
 - h5py 2.7.0, 
 - [mpl_basemap](http://matplotlib.org/basemap/) 1.0.7, for the map (Figure 1).
+- LaTeX, for generating figure math text
 
 Once you have python installed, you can get most of these packages by doing:
 

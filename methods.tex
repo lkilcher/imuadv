@@ -20,7 +20,7 @@ The Microstrain IMU available in the Nortek Vector ADV measures the linear accel
   \label{eqn:uhead}
 \begin{split}
   \uhead & = \urot + \uacc + \ulow \\
-      & = \omatinv \cdot \AngRt^*(t)\times\l + \int \rangle \Accel(t)\langle_{f_{a}} \,\mathrm{d}t + \ulow
+      & = \omatinv \cdot \AngRt^*(t)\times\l + \int \rangle \Accel(t)\langle_{f_{a}} \,dt + \ulow
 \end{split}
 \end{align}
 Here, $*$ superscripts denote quantities in the ADV's local coordinate system, and $\l$ is the vector from the IMU to the ADV head. $\omatinv$---the inverse of the orientation matrix---rotates vectors from the ADV to the Earth reference frame. The notation $\rangle \cdot \langle _{f_a}$ indicates a high-pass filtering operation at frequency $f_a$. The high-pass filter reduces low-frequency noise in $\Accel$---sometimes referred to as bias drift---that is amplified by integration \cite[]{Barshan+Whyte1995, Bevly2004, Gulmammadov2009}. $\ulow$ is the low-frequency translational motion that is unresolved by $\uacc$, and it is discussed in more detail below. To avoid double counting, $\ulow$ should be estimated by applying the complementary low-pass filter (i.e., at $f_a$) to the independent measurement of low-frequency motion. We use fourth order, zero-phase (bidirectional), Hanning filters for all filtering operations.

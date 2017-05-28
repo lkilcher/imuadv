@@ -291,19 +291,19 @@ for idat, dat_nm in enumerate(do_data):
         for icol in range(axs.shape[1]):
             axs[-1, icol].set_xlabel(r'$f\ \mathrm{[Hz]}$')
         for irow in range(axs.shape[0]):
-            # axs[irow, 0].set_ylabel('$f \cdot C\{%s,%s\} '
+            # axs[irow, 0].set_ylabel('$f\, C\{%s,%s\} '
             #                         '[10^{-3}\mathrm{m^2s^{-2}}]$' %
             #                         (pt.vel_comps[pairs[irow][0]],
             #                          pt.vel_comps[pairs[irow][1]]))
             axs[irow, 0].set_ylabel('$[10^{-3}\mathrm{m^2s^{-2}}]$')
             # axs[irow, -1].text(1.06, 0.03,
-            #                    r'$f \cdot C\{%s,%s\}$' % (
+            #                    r'$f \, C\{%s,%s\}$' % (
             #                        pt.vel_comps[pairs[irow][0]],
             #                        pt.vel_comps[pairs[irow][1]]),
             #                    ha='left', va='bottom',
             #                    transform=axs[irow, -1].transAxes)
             axs[irow, 0].text(.06, .9,
-                              r'$f \cdot C\{%s,%s\}$' % (
+                              r'$f \, C\{%s,%s\}$' % (
                                   pt.vel_comps[pairs[irow][0]],
                                   pt.vel_comps[pairs[irow][1]]),
                               ha='left', va='top',
@@ -376,7 +376,7 @@ for idat, dat_nm in enumerate(do_data):
             for irow in range(axs.shape[0]):
                 axs[irow, 0].set_ylabel('$[10^{-2}\,\mathrm{m^2s^{-2}}]$')
                 axs[irow, -1].text(1.05, .1,
-                                   r'$f \cdot C\{%s,%s\}$' % (
+                                   r'$f \, C\{%s,%s\}$' % (
                                        pt.vel_comps[pairs[irow][0]],
                                        pt.vel_comps[pairs[irow][1]]),
                                    ha='left', va='bottom', size='large',
@@ -479,7 +479,7 @@ for idat, dat_nm in enumerate(do_data):
                         lw=2, zorder=-2)
             ax.set_xlim([1e-2, 10])
             ax.set_ylim([-1, 1])
-            ax.set_ylabel('$\hat{f}\cdot \hat{C}\{u,w\}$')
+            ax.set_ylabel('$\hat{f}\, \hat{C}\{u,w\}$')
 
             axs[-1].set_xlabel('$\hat{f}$')
             axs[0].set_title(ttl)

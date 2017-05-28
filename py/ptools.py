@@ -18,6 +18,12 @@ from matplotlib.patches import BoxStyle
 
 datetime = dt.datetime.datetime
 rcParams = mpl.rcParams
+rcParams['text.usetex'] = True
+
+with open('../defs.sty') as fl:
+    preamble = fl.read()
+
+rcParams['text.latex.preamble'] = preamble
 
 pii = 2 * np.pi
 
@@ -75,12 +81,12 @@ class label(object):
 
     @property
     def cspec_vp(self, ):
-        return label(prfx=r'f \cdot C\{', sufx=self.sufx + r'\}', comp=self.comp)
+        return label(prfx=r'f C\{', sufx=self.sufx + r'\}', comp=self.comp)
 
 
-latex = dict(umeas=label(sufx=r'_\mathrm{m}'),
+latex = dict(umeas=label(sufx=r'_m'),
              ue=label(),
-             uhead=label(sufx=r'_\mathrm{h}'),
+             uhead=label(sufx=r'_h'),
 )
 
 

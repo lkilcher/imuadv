@@ -116,7 +116,7 @@ finfo = [j14setup.FILEINFO['ttm02b-top'],
          j14setup.FILEINFO['ttm02b-bot']]
 j14setup.pull(finfo)
 j14setup.process(finfo)
-j14setup.ttmlean.process(finfo['ttm01b-top'])
+j14setup.ttmlean.process(j14setup.FILEINFO['ttm02b-top'])
 
 ###
 # This is the May 2015 SMB dataset

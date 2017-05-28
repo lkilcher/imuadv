@@ -1,9 +1,17 @@
-import matplotlib.pyplot as plt
+import os
 import matplotlib as mpl
+try:
+    os.environ['DISPLAY']
+except KeyError:
+    # There is no 'DISPLAY'
+    mpl.use('Agg')
+else:
+    # There is a 'DISPLAY' (no NameError)
+    mpl.use('TkAgg')
+import matplotlib.pyplot as plt
 import matplotlib.colors as mplc
 import numpy as np
 import matplotlib.dates as dt
-import os.path
 from matplotlib.path import Path
 from matplotlib.patches import BoxStyle
 # import matplotlib.gridspec as gridspec

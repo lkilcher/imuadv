@@ -30,8 +30,8 @@ mcfilts = {'unfiltered': 0.0,
            '3s': 0.3, }
 
 if 'dmot' not in vars():
-    dmot = avm.load(j14.datdir +
-                    'ttm02b_ADVtop_NREL03_June2014_velmoor-f10s_b5m.h5')
+    dmot = avm.load(j14.FILEINFO['ttm02b-top'].abs_fname +
+                    '_velmoor-f10s_b5m.h5')
 
 
 if 'rd' not in vars():

@@ -8,8 +8,8 @@ plt = pt.plt
 import scipy.signal as sig
 import matplotlib.ticker as tkr
 
-awacr = j12.load('AWAC', coordsys='pax', data_groups='ALL')
-awac = j12.load('AWAC', coordsys='pax', bin=True)
+awacr = j12.load('awac', coordsys='pax', data_groups='ALL')
+awac = j12.load('awac', coordsys='pax', bin=True)
 
 
 def rms(arr, ax=-1):
@@ -29,11 +29,11 @@ flg = {}
 #flg['do_awacVadv_up'] = True
 flg['show awac avg fix'] = True
 #flg['show awac avg2'] = True
-#flg['save figs'] = True
+flg['save figs'] = True
 
 if 'dat_mc' not in vars():
-    dat_mc = j12.load('NREL', coordsys='pax', bin=True)
-    datr = j12.load('NREL', coordsys='pax', bin=False)
+    dat_mc = j12.load('adv-nrel', coordsys='pax', bin=True)
+    datr = j12.load('adv-nrel', coordsys='pax', bin=False)
     #dat_mc = avm.load(datdir + 'TTM_Vectors/TTM_NRELvector_Jun2012_pax_b5m.h5')
     #datr = avm.load(datdir + 'TTM_Vectors/TTM_NRELvector_Jun2012_pax.h5')
     # binner_nr = avm.turb_binner(

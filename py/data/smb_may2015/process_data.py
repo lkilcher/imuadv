@@ -1,7 +1,7 @@
 import numpy as np
 import dolfyn.adv.api as avm
 import scipy.signal as sig
-from .base import datdir, load, tbx
+from .base import datdir, load
 
 filt_freqs = {
     'unfilt': 0.0,
@@ -23,9 +23,6 @@ binner = avm.TurbBinner(4800, 16)
 def pre_process_adv(fname):
     print("Pre-processing SMB-Nose mode vec file.")
     outfile = datdir + fname + '.h5'
-    if tbx.checkhash(outfile, '62aa7b3370411cbe'):
-        print("   hash check passed; skipping pre-processing.")
-        return
     rr = avm.read_nortek(datdir + fname + '.VEC')
     rr = rr.subset(slice(*rr.props['inds_range']))
     rr.pitch, rr.roll, rr.heading = avm.rotate.orient2euler(rr)

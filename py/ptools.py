@@ -81,7 +81,7 @@ class label(object):
 
     @property
     def cspec_vp(self, ):
-        return label(prfx=r'f C\{', sufx=self.sufx + r'\}', comp=self.comp)
+        return label(prfx=r'f\,C\{', sufx=self.sufx + r'\}', comp=self.comp)
 
 
 latex = dict(umeas=label(sufx=r'_m'),

@@ -1,10 +1,8 @@
 - Q for editor: What is this comment about funding info (AU9)?
-- data/<submodules> POINT TO TAGS!
 - Add correct \ell^* to images
 
 - Data to MHKDR:
   - All dropbox links (replace the links with mhkdr links)
-  - bathy data
 
 - Tag/DOI data and code
   - Clean up this repo?

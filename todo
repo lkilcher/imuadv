@@ -8,12 +8,7 @@
 
 - Tag/DOI data and code
   - Clean up this repo?
-    - Functionalize plotting scripts? ... Too much work?
-  - Tag DOLfYN
   - Add DOLfYN tag to pypi
-  - Add DOLfYN tag to data repos
-  - Add proper DOLfYN tag to requirements.txt
-  - Tag Data repos (DRs)
   - Upload data and DRs (tags) to MHKDR
   - Finalise READMEs (<root>/README.md, and <root>/py/README.md)
   - Finalize edits to this paper
@@ -21,7 +16,3 @@
   - Cite data at MHKDR (DOI's)
 
 - Clear unnecessary files from releases (v1.1?)
-
-- citations for software (in acknowledgements?)
-
-- Add a DOI or 'extra material' that points to this repo

@@ -11,7 +11,7 @@ In order to reproduce the figures exactly, I recommend installing the exact same
 - [mpl_basemap](http://matplotlib.org/basemap/) 1.0.7, for the map (Figure 1).
 - LaTeX, for generating figure math text
 
-Once you have python installed, you can get most of these packages--excluding basemap and LaTeX--by doing:
+Once you have Python installed, you can get most of these packages--excluding basemap and LaTeX--by doing:
 
     $ pip install -r requirements.txt
 

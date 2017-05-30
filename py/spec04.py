@@ -76,7 +76,7 @@ with pt.style['twocol']():
                                        fontsize='medium')
 
     for iax, ax in enumerate(axs[:, 0]):
-        ax.set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')
+        ax.set_ylabel('$\mathrm{[m^2\,s^{-2}\,Hz^{-1}]}$')
 
     ax.set_xlim([1e-3, 1])
     ax.set_ylim([1e-4, 1])
@@ -146,7 +146,7 @@ with pt.style['onecol']():
     for iax, ax in enumerate(axs):
         ax.text(0.07, 0.1, r'$S\{%s\}$' % 'uvw'[iax],
                 transform=ax.transAxes)
-        ax.set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')
+        ax.set_ylabel('$\mathrm{[m^2\,s^{-2}\,Hz^{-1}]}$')
         bd = bindat[filts[0]]
         ax.loglog(freq, bd.Spec_umot[iax, inds].mean(0) * pt.pii,
                   lw=3,
@@ -157,11 +157,11 @@ with pt.style['onecol']():
         #           color='r', zorder=-20, alpha=0.3)
     ax.set_xlim([1e-3, 1])
     ax.set_ylim([1e-3, 1])
-    ax.set_xlabel('$f \mathrm{[Hz]}$')
+    ax.set_xlabel('$f\ \mathrm{[Hz]}$')
 
     #axs[0].legend(loc='lower left', prop=dict(size='medium'))
     axs[0].legend(loc='upper left', bbox_to_anchor=[1.02, 1.0],
-                  handlelength=1.4, handletextpad=0.4,
+                  handlelength=1.1, handletextpad=0.4,
                   prop=dict(size='medium'))
 
     fig.savefig(pt.figdir + 'SpecFig04_filtering2.pdf')

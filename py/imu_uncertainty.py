@@ -89,9 +89,9 @@ if flag.get('plot_spec', False):
     #axs[1].set_xlim([1e-3, 20])
     #axs[0].set_ylim([1e-9, 1e-4])
     #axs[0].set_title('Spectra: Bench Test %s' % tag)
-    axs[0].set_ylabel('$a\, \mathrm{[m^2/s^{4}/hz]}$', size='large')
-    axs[1].set_ylabel('$\omega\,\mathrm{[rad^2/s^2/hz]}$', size='large')
-    axs[1].set_xlabel('$f\, \mathrm{[hz]}$', size='large')
+    axs[0].set_ylabel('$a\, \mathrm{[m^2/s^{4}/Hz]}$', size='large')
+    axs[1].set_ylabel('$\omega\,\mathrm{[rad^2/s^2/Hz]}$', size='large')
+    axs[1].set_xlabel('$f\, \mathrm{[Hz]}$', size='large')
 
     #fig.saxes.hide('xticklabels', fig.saxes.ax[-1, :])
 
@@ -110,9 +110,9 @@ if flag.get('plot_spec2', False):
     #axs[1].set_xlim([1e-3, 20])
     ax.set_ylim([1e-8, 1e1])
     #axs[0].set_title('Spectra: Bench Test %s' % tag)
-    # axs[0].set_ylabel('$u_{acc}\, \mathrm{[m^2/s^{2}/hz]}$', size='large')
-    # axs[1].set_ylabel('$u_{rot}\,\mathrm{[m^2/s^2/hz]}$', size='large')
-    # axs[1].set_xlabel('$f\, \mathrm{[hz]}$', size='large')
+    # axs[0].set_ylabel('$u_{acc}\, \mathrm{[m^2/s^{2}/Hz]}$', size='large')
+    # axs[1].set_ylabel('$u_{rot}\,\mathrm{[m^2/s^2/Hz]}$', size='large')
+    # axs[1].set_xlabel('$f\, \mathrm{[Hz]}$', size='large')
 
     #fig.saxes.hide('xticklabels', fig.saxes.ax[-1, :])
     fig.savefig(pt.figdir + 'stationary_noise02.pdf')
@@ -161,7 +161,7 @@ if flag.get('plot_spec3', False):
     ul_clr = 'g'
     tmp = bdmc.Spec_urot[:, gd].max(0).mean(0) * 2 * np.pi
     ax.loglog(bd.freq, tmp,
-              color='y', linestyle='-', label=r'$\vec{n}_{\omega}$')
+              color='y', linestyle='-', label=r'$\vec{n}_\mathbf{\omega}$')
     print ''
     print ('u_rot error level: {:0.3f} cm/s'
            .format((np.trapz(tmp, bdmc.freq) ** 0.5) * 100))
@@ -174,7 +174,7 @@ if flag.get('plot_spec3', False):
         tmp2 = bdmc.Spec_uacc[:, gd].min(0).mean(0) * 2 * np.pi
         vrinds = (1. < np.abs(dmot.u)) & (np.abs(dmot.u) < 2.)
         if tag == 'unfiltered':
-            label = r'$\vec{n}_{a}$'
+            label = r'$\vec{n}_\mathbf{a}$'
             mot = dmot.Spec_velmoor_nofilt[0][vrinds].mean(0)
             inds = mot < tmp[:len(mot)]
             ax.loglog(dmot.freq[inds], mot[inds], color=ul_clr,
@@ -184,7 +184,7 @@ if flag.get('plot_spec3', False):
             ax.loglog(dmot.freq[inds2], mot2[inds2], color=ul_clr,
                       lw=1, ls='--', zorder=3)
         else:
-            label = r'$\rangle \vec{n}_{a} \langle ' + '_\mathrm{%s}$' % f_lbl[tag]
+            label = r'$\rangle \vec{n}_\mathbf{a} \langle ' + '_\mathrm{%s}$' % f_lbl[tag]
             ax.axvline(mcfilts[tag], color=plt_kwds[tag]['color'],
                        linestyle=':')
         ax.loglog(bd.freq, tmp, linestyle='-', label=label, **plt_kwds[tag])
@@ -200,14 +200,14 @@ if flag.get('plot_spec3', False):
     ax.set_xlim([1e-3, 1e1])
     ax.legend(prop=dict(size='small'),
               handlelength=1.4, labelspacing=0.4, handletextpad=0.2)
-    ax.set_xlabel('$f\ [\mathrm{hz}]$')
-    ax.set_ylabel('$\mathrm{[m^2s^{-2}/hz]}$')
+    ax.set_xlabel('$f\ [\mathrm{Hz}]$')
+    ax.set_ylabel('$\mathrm{[m^2\,s^{-2}\,Hz^{-1}]}$')
     ax.axhline(2e-4, color='0.5', linestyle='-', lw=1, zorder=-30)
     ax.axhline(2e-5, color='0.5', linestyle='--', lw=1, zorder=-30)
     #axs[0].set_title('Spectra: Bench Test %s' % tag)
-    # axs[0].set_ylabel('$u_{acc}\, \mathrm{[m^2/s^{2}/hz]}$', size='large')
-    # axs[1].set_ylabel('$u_{rot}\,\mathrm{[m^2/s^2/hz]}$', size='large')
-    # axs[1].set_xlabel('$f\, \mathrm{[hz]}$', size='large')
+    # axs[0].set_ylabel('$u_{acc}\, \mathrm{[m^2/s^{2}/Hz]}$', size='large')
+    # axs[1].set_ylabel('$u_{rot}\,\mathrm{[m^2/s^2/Hz]}$', size='large')
+    # axs[1].set_xlabel('$f\, \mathrm{[Hz]}$', size='large')
 
     #fig.saxes.hide('xticklabels', fig.saxes.ax[-1, :])
     fig.savefig(pt.figdir + 'stationary_noise04.pdf')

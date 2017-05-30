@@ -330,7 +330,7 @@ if flg.get('show awac avg fix', False):
                     transform=ax.transAxes, fontsize='small',
                     ha='left', va='top')
             ax.axhline(0, color='k', linestyle='--', lw=0.5)
-            ax.set_ylabel(r'$\bar{%s}\ \mathrm{[m/s]}$' % format('uvw'[iax]))
+            ax.set_ylabel(r'$\bar{%s}\ \mathrm{[m\,s^{-1}]}$' % format('uvw'[iax]))
             ax.plot(dat_mc.time, dat_mc.vel[iax], 'k', lw=2)
             ax.plot(t, u[iax] + offset[iax], 'r', lw=1.0)
         ax = axs[0]

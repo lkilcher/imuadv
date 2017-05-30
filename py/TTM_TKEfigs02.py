@@ -106,7 +106,7 @@ if flg.get('turb time02'):
         ax.semilogy(t_hours, dnow.upup_, 'b-', label=r"$\overline{u^2}$")
         ax.semilogy(t_hours, dnow.vpvp_, 'r-', label=r"$\overline{v^2}$")
         ax.semilogy(t_hours, dnow.wpwp_, 'g-', label=r"$\overline{w^2}$")
-        ax.set_ylabel(r'$\mathrm{tke}\ \mathrm{[m^2/s^2]}$')
+        ax.set_ylabel(r'$\mathrm{tke}\ \mathrm{[m^2\,s^{-2}]}$')
         ax.legend(**lgnd_kws)
 
         ax = axs[1]
@@ -116,12 +116,12 @@ if flg.get('turb time02'):
         ax.plot(t_hours, dnow1.upvp_, 'b.', label=r"$\overline{uv}$")
         ax.plot(t_hours, dnow1.upwp_, 'r.', label=r"$\overline{uw}$")
         ax.plot(t_hours, dnow1.vpwp_, 'g.', label=r"$\overline{vw}$")
-        ax.set_ylabel(r'$\mathrm{stress}\ \mathrm{[m^2/s^2]}$')
+        ax.set_ylabel(r'$\mathrm{stress}\ \mathrm{[m^2\,s^{-2}]}$')
         #ax.legend(**lgnd_kws)
 
         ax = axs[2]
         ax.semilogy(t_hours, tke_eqn['eps'], 'k.')
-        ax.set_ylabel('$\epsilon\ \mathrm{[W/kg]}$')
+        ax.set_ylabel('$\epsilon\ \mathrm{[W\,kg^{-1}]}$')
 
         ax = axs[3]
         inds = tke_eqn['Prod_uz'] > 0
@@ -268,7 +268,7 @@ if flg.get('turb time03'):
         ax.legend(**lkw)
 
         for iax, ax in enumerate(axs):
-            ax.set_ylabel('$\mathrm{[W/kg]}$')
+            ax.set_ylabel('$\mathrm{[W\,kg^{-1}]}$')
             ax.text(0.02, 0.93, '({})'.format('ABCDEFG'[iax]),
                     transform=ax.transAxes,
                     va='top', ha='left')
@@ -348,12 +348,12 @@ if flg.get('eqnVeps02'):
                       mfc='none', mec='k', ms=2.5,
                       zorder=-2)
             ax.plot([1e-8, 1], [1e-8, 1], 'k:')
-            ax.set_ylabel('$\sum \ \mathrm{[W/kg]}$')
+            ax.set_ylabel('$\sum \ \mathrm{[W\,kg^{-1}]}$')
             ax.legend(loc='upper left', numpoints=1, handlelength=1,
                       handletextpad=0.2,
                       prop=dict(size='medium'))
 
-        axs[-1].set_xlabel('$\epsilon\ \mathrm{[W/kg]}$')
+        axs[-1].set_xlabel('$\epsilon\ \mathrm{[W\,kg^{-1}]}$')
         axs[0].set_ylim([1e-6, 1e-2])
         axs[0].set_xlim([1e-6, 1e-2])
 

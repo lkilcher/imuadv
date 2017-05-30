@@ -112,7 +112,7 @@ for idat, dat_nm in enumerate(do_data):
         for ax in axs[-1, :]:
             ax.set_xlabel(r'$f\ \mathrm{[Hz]}$')
         for irow in range(axs.shape[0]):
-            axs[irow, 0].set_ylabel('$\mathrm{m^2s^{-2}/Hz}$')
+            axs[irow, 0].set_ylabel('$\mathrm{m^2\,s^{-2}\,Hz^{-1}}$')
 
         if flag.get('save fig'):
             fig.savefig(pt.figdir + 'StressSpec_{}_01.pdf'.format(dat_nm.upper()))
@@ -158,7 +158,7 @@ for idat, dat_nm in enumerate(do_data):
         for ax in axs[-1, :]:
             ax.set_xlabel(r'$f\ \mathrm{[Hz]}$')
         for irow in range(axs.shape[0]):
-            axs[irow, 0].set_ylabel('$\mathrm{m^2s^{-2}/Hz}$')
+            axs[irow, 0].set_ylabel('$\mathrm{m^2\,s^{-2}\,Hz^{-1}}$')
 
         if flag.get('save fig'):
             fig.savefig(pt.figdir + 'StressSpec_{}_02.pdf'.format(dat_nm.upper()))
@@ -218,7 +218,7 @@ for idat, dat_nm in enumerate(do_data):
         for icol in range(axs.shape[1]):
             axs[-1, icol].set_xlabel(r'$f\ \mathrm{[Hz]}$')
         for irow in range(axs.shape[0]):
-            axs[irow, 0].set_ylabel('$\mathrm{m^2s^{-2}/Hz}$')
+            axs[irow, 0].set_ylabel('$\mathrm{m^2\,s^{-2}\,Hz^{-1}}$')
             axs[irow, -1].text(1.03, 0.03,
                                r'$C\{%s,%s\}$' % (pt.vel_comps[pairs[irow][0]],
                                                   pt.vel_comps[pairs[irow][1]]),
@@ -292,10 +292,10 @@ for idat, dat_nm in enumerate(do_data):
             axs[-1, icol].set_xlabel(r'$f\ \mathrm{[Hz]}$')
         for irow in range(axs.shape[0]):
             # axs[irow, 0].set_ylabel('$f\, C\{%s,%s\} '
-            #                         '[10^{-3}\mathrm{m^2s^{-2}}]$' %
+            #                         '[10^{-3}\mathrm{m^2\,s^{-2}}]$' %
             #                         (pt.vel_comps[pairs[irow][0]],
             #                          pt.vel_comps[pairs[irow][1]]))
-            axs[irow, 0].set_ylabel('$[10^{-3}\mathrm{m^2s^{-2}}]$')
+            axs[irow, 0].set_ylabel('$[10^{-3}\mathrm{m^2\,s^{-2}}]$')
             # axs[irow, -1].text(1.06, 0.03,
             #                    r'$f \, C\{%s,%s\}$' % (
             #                        pt.vel_comps[pairs[irow][0]],
@@ -374,7 +374,7 @@ for idat, dat_nm in enumerate(do_data):
             for icol in range(axs.shape[1]):
                 axs[-1, icol].set_xlabel(r'$f\ \mathrm{[Hz]}$')
             for irow in range(axs.shape[0]):
-                axs[irow, 0].set_ylabel('$[10^{-2}\,\mathrm{m^2s^{-2}}]$')
+                axs[irow, 0].set_ylabel('$[10^{-2}\,\mathrm{m^2\,s^{-2}}]$')
                 axs[irow, -1].text(1.05, .1,
                                    r'$f \, C\{%s,%s\}$' % (
                                        pt.vel_comps[pairs[irow][0]],
@@ -394,13 +394,13 @@ for idat, dat_nm in enumerate(do_data):
         add_ttt = False
         if case == 'ebb':
             inds = bd.u > 1
-            ttl = r'Ebb ($\bar{u} > 1\,\mathrm{ms^{-1}}$)'
+            ttl = r'Ebb ($\bar{u} > 1\,\mathrm{m\,s^{-1}}$)'
         elif case == 'flood':
             inds = bd.u < -1
-            ttl = r'Flood ($\bar{u} < -1\,\mathrm{ms^{-1}}$)'
+            ttl = r'Flood ($\bar{u} < -1\,\mathrm{m\,s^{-1}}$)'
         elif case == 'both':
             inds = np.abs(bd.u) > 1
-            ttl = r'$|\bar{u}| > 1\,\mathrm{ms^{-1}}$'
+            ttl = r'$|\bar{u}| > 1\,\mathrm{m\,s^{-1}}$'
         else:
             raise Exception("Invalid case.")
 
@@ -496,13 +496,13 @@ for idat, dat_nm in enumerate(do_data):
         add_ttt = True
         if case == 'ebb':
             inds = bd.u > 1.5
-            ttl = r'Ebb ($\bar{u} > 1.5\,\mathrm{ms^{-1}}$)'
+            ttl = r'Ebb ($\bar{u} > 1.5\,\mathrm{m\,s^{-1}}$)'
         elif case == 'flood':
             inds = bd.u < -1.5
-            ttl = r'Flood ($\bar{u} < -1.5\,\mathrm{ms^{-1}}$)'
+            ttl = r'Flood ($\bar{u} < -1.5\,\mathrm{m\,s^{-1}}$)'
         elif case == 'both':
             inds = np.abs(bd.U) > 1.0
-            ttl = r'$|\bar{U}| > 1\,\mathrm{ms^{-1}}$'
+            ttl = r'$\bar{U} > 1\,\mathrm{m\,s^{-1}}$'
         else:
             raise Exception("Invalid case.")
 
@@ -613,7 +613,7 @@ for idat, dat_nm in enumerate(do_data):
         for icol in range(axs.shape[1]):
             axs[-1, icol].set_xlabel(r'$f\ \mathrm{[Hz]}$')
         for irow in range(axs.shape[0]):
-            axs[irow, 0].set_ylabel('$\mathrm{m^2s^{-2}/Hz}$')
+            axs[irow, 0].set_ylabel('$\mathrm{m^2\,s^{-2}\,Hz^{-1}}$')
             axs[irow, -1].text(1.03, 0.03,
                                r'$C_R\{%s,%s\}$' % (pt.vel_comps[pairs[irow][0]],
                                                     pt.vel_comps[pairs[irow][1]]),

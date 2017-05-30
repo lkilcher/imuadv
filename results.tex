@@ -17,7 +17,7 @@ Figure \ref{fig:vel_time} shows a comparison of $\vec{\bar u}$ measured by an AD
 \begin{figure*}[t]
   \centering
   \includegraphics{SpecFig02_TTM02B-top}
-  \caption{Turbulence spectra from the June 2014 TTM deployment. Each column is for a range of streamwise velocity magnitudes (indicated at top). The rows are for each component of velocity (indicated at far right). The uncorrected spectra are black, the corrected spectra are blue, and the spectra of ADV head motion is red (also indicated in the legend). The vertical red dotted line indicates $f_a$ for estimating $\uhead$; below this frequency $\spec{\uhead}$ is plotted as a dashed line.   Diagonal black dotted lines indicate a $f^{-5/3}$ slope. The cyan line in the first and last rows indicates the semi-empirical Kaimal spectrum for the measured values of $\ustar$ and $\bar U$. The number of spectral ensembles, N, in each column is indicated in the top row.}
+  \caption{Turbulence spectra from the June 2014 TTM deployment. Each column is for a range of streamwise velocity magnitudes (indicated at top, in $\mathrm{m\,s^{-1}}$). The rows are for each component of velocity (indicated at far right). The uncorrected spectra are black, the corrected spectra are blue, and the spectra of ADV head motion is red (also indicated in the legend). The vertical red dotted line indicates $f_a$ for estimating $\uhead$; below this frequency $\spec{\uhead}$ is plotted as a dashed line.   Diagonal black dotted lines indicate a $f^{-5/3}$ slope. The cyan line in the first and last rows indicates the semi-empirical Kaimal spectrum for the measured values of $\ustar$ and $\bar U$. The number of spectral ensembles, N, in each column is indicated in the top row.}
   \label{fig:spec:ttm}
 \end{figure*}
 
@@ -57,7 +57,7 @@ Note that this level of accuracy cannot be obtained without the independent esti
 \begin{figure}[t]
   \centering
   \includegraphics{SpecFig03_TTT}
-  \caption{Turbulence spectra from the turbulence torpedo during a 35-minute period when the mean velocity was 1.3 ms$^{-1}$. Annotations and line colors are identical to Figure \ref{fig:spec:ttm}.}
+  \caption{Turbulence spectra from the turbulence torpedo during a 35-minute period when the mean velocity was 1.3 $\mathrm{m\,s^{-1}}$. Annotations and line colors are identical to Figure \ref{fig:spec:ttm}.}
   \label{fig:spec:torpedo}
 \end{figure}
 
@@ -69,13 +69,13 @@ $\spec{u_\head}$ and $\spec{v_\head}$ for the turbulence torpedo is broadband an
 \begin{figure}[t]
   \centering
   \includegraphics{StressSpec_TTM_04vp}
-  \caption{Variance preserving cross-spectra between components of $\ue$ (blue), $\uhead$ (red), and $\umeas$ (black) from the June 2014 TTM deployment. The upper row is $f \cspec{u}{v}$, the middle row is $f \cspec{u}{w}$, and the bottom row is $f \cspec{v}{w}$ (also indicated at right).  Note that these cross-spectra are between components of a velocity vector (e.g., $\ue$), not between different vectors (i.e., not between $\ue$ and $\umeas$). N is the number of spectral ensembles in this average, i.e. when $2 < |u| < 2.5\,\mathrm{[ms^{-1}]}$. The light blue shading indicates one standard deviation of $f C\{\ue\}$.}
+  \caption{Variance preserving cross-spectra between components of $\ue$ (blue), $\uhead$ (red), and $\umeas$ (black) from the June 2014 TTM deployment. The upper row is $f\,\cspec{u}{v}$, the middle row is $f\,\cspec{u}{w}$, and the bottom row is $f\,\cspec{v}{w}$ (also indicated at right).  Note that these cross-spectra are between components of a velocity vector (e.g., $\ue$), not between different vectors (i.e., not between $\ue$ and $\umeas$). N is the number of spectral ensembles in this average, i.e. when $2 < |u| < 2.5\,\mathrm{m\,s^{-1}}$. The light blue shading indicates one standard deviation of $f\,C\{\ue\}$.}
   \label{fig:cspec:ttm}
 \end{figure}
 
 Cross-spectra indicate the correlation between different velocity components as a function of frequency, and their integrals are the Reynold's stresses. Head motion cross-spectra, $C\{\uhead\}$ (Figure \ref{fig:cspec:ttm}, red), and uncorrected velocity cross-spectra, $C\lbrace \umeas \rbrace$ (black), from TTM measurements have large peaks at the same frequency (0.15 Hz) as peaks in auto-spectra (Figure \ref{fig:spec:ttm}).  This indicates that mooring motion contaminates the uncorrected cross-spectral velocity measurements, and that Reynold's stress estimates based on uncorrected velocity measurements will be contaminated by mooring motion. 
 
-Fortunately, motion corrected velocity cross-spectra, $C\{\ue\}$ (Figure \ref{fig:cspec:ttm}, blue), have reduced cross-spectral amplitudes at these frequencies. This indicates that motion correction reduces motion contamination to produce more reliable estimates of velocity cross spectra and Reynold's stresses (Figure \ref{fig:cspec:ttm}). Notably, the low standard deviation of $f C\{\ue\}$ (indicated by the blue shading) compared to the mean values of $C\{\uhead\}$ and $C\{\umeas\}$---at the frequencies of maximum motion---indicates that even the individual values of $C\{\ue\}$ are reduced at these frequencies, compared to $C\{\umeas\}$, not just their mean.
+Fortunately, motion corrected velocity cross-spectra, $C\{\ue\}$ (Figure \ref{fig:cspec:ttm}, blue), have reduced cross-spectral amplitudes at these frequencies. This indicates that motion correction reduces motion contamination to produce more reliable estimates of velocity cross spectra and Reynold's stresses (Figure \ref{fig:cspec:ttm}). Notably, the low standard deviation of $f\, C\{\ue\}$ (indicated by the blue shading) compared to the mean values of $C\{\uhead\}$ and $C\{\umeas\}$---at the frequencies of maximum motion---indicates that even the individual values of $C\{\ue\}$ are reduced at these frequencies, compared to $C\{\umeas\}$, not just their mean.
 
 These results indicate that motion-corrected TTM velocity measurements can be used to estimate turbulence Reynold's stresses. Without motion correction, Reynold's stress estimates would be contaminated by the large peaks in the cross spectra that are caused by the swaying and fluttering motion of the TTM vane. Cross-spectra of TTM data for other velocity ranges (i.e., $<$ 2 ms$^{-1}$), and cross-spectra from the SMB show similar results (not shown). However, we note that because the SMB is less-stable in pitch than the TTM (see Part I for details), the TTM provides a more accurate estimates of  $\uw$.
 

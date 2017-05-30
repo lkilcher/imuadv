@@ -1,10 +1,6 @@
 - Q for editor: What is this comment about funding info (AU9)?
 - data/<submodules> POINT TO TAGS!
-- Fix u_a, u_\omega vectors, where needed
-- Remove \cdot from legend of specfig
 - Add correct \ell^* to images
-- Remove fractions from unit labels
-
 
 - Data to MHKDR:
   - All dropbox links (replace the links with mhkdr links)

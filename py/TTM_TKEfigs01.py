@@ -78,7 +78,7 @@ if flg.get('turb time01'):
         ax.plot(t_hours, dnow.v, 'g-', label=r'$\bar{v}$')
         ax.plot(t_hours, dnow.w, 'r-', label=r'$\bar{w}$')
         ax.axhline(0, color='k', linestyle=':')
-        ax.set_ylabel('$\mathrm{[m/s]}$')
+        ax.set_ylabel('$\mathrm{[m\,s^{-1}]}$')
         ax.text(12.7, .97, 'ebb 1',
                 va='top', ha='center',
                 transform=ax.get_xaxis_transform())
@@ -95,7 +95,7 @@ if flg.get('turb time01'):
         ax.semilogy(t_hours, dnow.upup_, 'b-', label=r"$\overline{u^2}$")
         ax.semilogy(t_hours, dnow.vpvp_, 'g-', label=r"$\overline{v^2}$")
         ax.semilogy(t_hours, dnow.wpwp_, 'r-', label=r"$\overline{w^2}$")
-        ax.set_ylabel(r'$\mathrm{[m^2/s^2]}$')
+        ax.set_ylabel(r'$\mathrm{[m^2\,s^{-2}]}$')
         ax.legend(**lgnd_kws)
 
         ax = axs[2]
@@ -105,14 +105,14 @@ if flg.get('turb time01'):
                 '-', c=[0.8, 0, 0.8], label=r"$\overline{uw}$")
         ax.plot(t_hours, dnow.vpwp_,
                 '-', c=[0.8, 0.8, 0], label=r"$\overline{vw}$")
-        ax.set_ylabel(r'$\mathrm{[m^2/s^2]}$')
+        ax.set_ylabel(r'$\mathrm{[m^2\,s^{-2}]}$')
         ax.legend(**lgnd_kws)
 
         ax = axs[3]
         ax.semilogy(t_hours, tke_eqn['eps'], 'ko', ms=3, zorder=4,
                     mfc='k', mec='none',
                     label='$\epsilon$')
-        ax.set_ylabel('$\mathrm{[W/kg]}$')
+        ax.set_ylabel('$\mathrm{[W\,kg^{-1}]}$')
 
         inds = tke_eqn['Prod_uz'] > 0
         ax.semilogy(t_hours[inds],
@@ -196,8 +196,8 @@ if flg.get('epsVprod01'):
         axs.plot([1e-8, 1], [1e-8, 1], 'k:')
         axs.set_ylim([1e-6, 1e-2])
         axs.set_xlim([1e-6, 1e-2])
-        axs.set_xlabel('$\epsilon\ \mathrm{[W/kg]}$')
-        axs.set_ylabel('$P_{uz}\ \mathrm{[W/kg]}$')
+        axs.set_xlabel('$\epsilon\ \mathrm{[W\,kg^{-1}]}$')
+        axs.set_ylabel('$P_{uz}\ \mathrm{[W\,kg^{-1}]}$')
 
     if flg.get('save figs'):
         fig.savefig(pt.figdir + 'EpsVProd01.pdf')
@@ -256,8 +256,8 @@ if flg.get('epsVprod01a'):
         axs.plot([1e-8, 1], [1e-8, 1], 'k:')
         axs.set_ylim([1e-6, 1e-2])
         axs.set_xlim([1e-6, 1e-2])
-        axs.set_xlabel('$\epsilon\ \mathrm{[W/kg]}$')
-        axs.set_ylabel('$P_{uz}\ \mathrm{[W/kg]}$')
+        axs.set_xlabel('$\epsilon\ \mathrm{[W\,kg^{-1}]}$')
+        axs.set_ylabel('$P_{uz}\ \mathrm{[W\,kg^{-1}]}$')
 
     if flg.get('save figs'):
         fig.savefig(pt.figdir + 'EpsVProd01a.pdf')
@@ -326,7 +326,7 @@ if flg.get('epsVprod03'):
                       mfc='none', mec='k', ms=2.5,
                       zorder=-2)
             ax.plot([1e-8, 1], [1e-8, 1], 'k:')
-            ax.set_ylabel('$P_{uz}\ \mathrm{[W/kg]}$')
+            ax.set_ylabel('$P_{uz}\ \mathrm{[W\,kg^{-1}]}$')
             ax.legend(loc='upper left', numpoints=1, handlelength=1,
                       handletextpad=0.2,
                       prop=dict(size='medium'))
@@ -335,7 +335,7 @@ if flg.get('epsVprod03'):
         #     inds = (rng[0] < tke_eqn['eps']) & (tke_eqn['eps'] < rng[1])
         #     xval = np.mean(rng)
 
-        axs[-1].set_xlabel('$\epsilon\ \mathrm{[W/kg]}$')
+        axs[-1].set_xlabel('$\epsilon\ \mathrm{[W\,kg^{-1}]}$')
         axs[0].set_ylim([1e-6, 1e-2])
         axs[0].set_xlim([1e-6, 1e-2])
 

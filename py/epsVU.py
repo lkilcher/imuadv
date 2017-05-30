@@ -49,7 +49,7 @@ for idat, (datky, dnow) in enumerate(dat.iteritems()):
             ax.set_xlim([1e-2, 1e1])
             ax.set_ylim([1e-6, 1e-2])
 
-            ax.set_ylabel(r'$\epsilon\ \mathrm{[W/kg]}$')
+            ax.set_ylabel(r'$\epsilon\ \mathrm{[W\,kg^{-1}]}$')
             ax.set_xlabel(r'$\bar{U}$')
 
             if flag.get('save figs'):
@@ -135,7 +135,7 @@ for idat, (datky, dnow) in enumerate(dat.iteritems()):
             # axs[1].plot(Utmp, 2e-5 * (Utmp ** 3), 'r-')
             ax.set_xlim([0.6, 2.4])
             ax.set_ylim([1e-6, 3e-3])
-            axs[0].set_ylabel(r'$\epsilon\ \mathrm{[W/kg]}$')
+            axs[0].set_ylabel(r'$\epsilon\ \mathrm{[W\,kg^{-1}]}$')
             if flag.get('save figs'):
                 fig.savefig(pt.figdir + 'EpsVU_{}_02.pdf'.format(datky.upper()))
 
@@ -220,7 +220,7 @@ if flag.get('epsVu both'):
         # axs[1].plot(Utmp, 2e-5 * (Utmp ** 3), 'r-')
         ax.set_xlim([0.6, 2.4])
         ax.set_ylim([1e-6, 3e-3])
-        axs[0].set_ylabel(r'$\epsilon\ \mathrm{[W/kg]}$')
+        axs[0].set_ylabel(r'$\epsilon\ \mathrm{[W\,kg^{-1}]}$')
         axs[1].legend(loc='upper left', bbox_to_anchor=[1.02, 1.0],
                       numpoints=1, handlelength=1, handletextpad=0.2)
         if flag.get('save figs'):

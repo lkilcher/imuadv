@@ -107,7 +107,7 @@ with pt.style['onecol']():
                           zorder=10, label='Kaimal')
     for irow in range(axs.shape[0]):
         # The col-only loop
-        axs[irow, 0].set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')
+        axs[irow, 0].set_ylabel('$\mathrm{[m^2\,s^{-2}\,Hz^{-1}]}$')
         axs[irow, -1].text(1.05, 0.05, '$S\{%s\}$' % (pt.vel_comps[irow]),
                            ha='left', va='bottom', fontsize='large',
                            transform=axs[irow, -1].transAxes, clip_on=False)

@@ -171,7 +171,7 @@ if flag.get('bt_filt_spec', False):
             # axs[-1].legend(bbox_to_anchor=[1.02, 1], loc='upper left')
             axs[0].legend(loc='lower left',
                           prop=dict(size='small'))
-            axs[0].set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')
+            axs[0].set_ylabel('$\mathrm{[m^2\,s^{-2}\,Hz^{-1}]}$')
             axs[0].set_xlabel('$f\ \mathrm{[Hz]}$')
 
             if flag.get('save figs'):
@@ -230,7 +230,7 @@ if flag.get('all spec'):
         #     axs[0].set_title('{} filter'.format(filt_tag))
         ax.legend(bbox_to_anchor=[1.02, 1], loc='upper left')
         ax.set_xlabel('$f\ \mathrm{[hz]}$')
-        ax.set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')
+        ax.set_ylabel('$\mathrm{[m^2\,s^{-2}\,Hz^{-1}]}$')
         if flag.get('save figs'):
             fig.savefig(pt.figdir + 'VelSpec_filt{}.pdf'.format(filt_tag))
 
@@ -304,7 +304,7 @@ if flag.get('multi spec'):
 
         for irow in range(axs.shape[0]):
             # The row-only loop
-            axs[irow, 0].set_ylabel('$\mathrm{[m^2s^{-2}/Hz]}$')
+            axs[irow, 0].set_ylabel('$\mathrm{[m^2\,s^{-2}\,Hz^{-1}]}$')
             axs[irow, -1].text(1.05, 0.05, '$S\{%s\}$' % (pt.vel_comps[irow]),
                                ha='left', va='bottom', fontsize='large',
                                transform=axs[irow, -1].transAxes, clip_on=False)

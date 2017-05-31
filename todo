@@ -1,16 +1,15 @@
 - Q for editor: What is this comment about funding info (AU9)?
-- Add correct \ell^* to images
+
+- Clear unnecessary files from releases (v1.1?)
 
 - Data to MHKDR:
   - All dropbox links (replace the links with mhkdr links)
 
 - Tag/DOI data and code
   - Clean up this repo?
-  - Add DOLfYN tag to pypi
-  - Upload data and DRs (tags) to MHKDR
   - Finalise READMEs (<root>/README.md, and <root>/py/README.md)
   - Finalize edits to this paper
   - Tag this repo, and upload it to MHKDR (w/ DOI), with extra data files.
   - Cite data at MHKDR (DOI's)
 
-- Clear unnecessary files from releases (v1.1?)
+- Changes into proof.

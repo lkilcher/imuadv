@@ -7,7 +7,7 @@ fname = 'tripod_data'
 def pull():
     print("Retrieving tripod data...")
     tbx.retrieve(
-        'https://www.dropbox.com/s/qppgv82xwxrcs0u/TTT_Vector_Feb2011.vec?dl=1',
+        'http://mhkdir.openei.org/files/223/tripod_data.VEC',
         tbx.datdir + fname + '.VEC',
         hash='d95c230aa67f53ae'
     )

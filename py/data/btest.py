@@ -10,7 +10,7 @@ fnm = 'btest-C'
 def pull():
     print("Retrieving btest data...")
     tbx.retrieve(
-        'https://www.dropbox.com/s/t4dscm1tqdjgx0d/B0115C02.VEC?dl=1',
+        'http://mhkdr.openei.org/files/223/Bench_test_data.VEC',
         tbx.datdir + fnm + '.VEC',
         hash='d4a1e3555a40e13b'
     )

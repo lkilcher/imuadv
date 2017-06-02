@@ -25,7 +25,7 @@ py/tmpdat
 
 Kilcher_etal_IMU-ADV.zip
 
-diff/diff_*
+diff/*
 !diff/diff_*.pdf
 
 *flymake*

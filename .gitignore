@@ -8,6 +8,7 @@
 *.log
 *.out
 *.pyc
+*.bib.sav
 
 .#*
 \#*#

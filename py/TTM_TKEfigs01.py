@@ -91,7 +91,7 @@ if flg.get('turb time01'):
         ax.legend(**lgnd_kws)
 
         ax = axs[1]
-        ax.semilogy(t_hours, dnow.tke, 'k-', label=r"tke")
+        ax.semilogy(t_hours, dnow.tke, 'k-', label=r"TKE")
         ax.semilogy(t_hours, dnow.upup_, 'b-', label=r"$\overline{u^2}$")
         ax.semilogy(t_hours, dnow.vpvp_, 'g-', label=r"$\overline{v^2}$")
         ax.semilogy(t_hours, dnow.wpwp_, 'r-', label=r"$\overline{w^2}$")
